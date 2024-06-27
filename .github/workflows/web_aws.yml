@@ -4,7 +4,7 @@ name: Reword Web Build
 # This allows manual start of the pipeline as needed.
 on:
   push:
-    branches: [main, staging]
+    branches: [main, dev]
 
 # The list of jobs to run 
 jobs:
