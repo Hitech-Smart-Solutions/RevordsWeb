@@ -151,6 +151,11 @@ const routes: Routes = [
           import('./demo/pages/revenueanalysis/revenueanalysis.module').then((m) => m.RevenueanalysisModule)
       },
       {
+        path: 'upcomingbusiness',
+        loadChildren: () =>
+          import('./demo/pages/UpcomingBusiness/UpcomingBusiness.module').then((m) => m.UpcomingBusinessModule)
+      },
+      {
         path: 'admin-panel',
         loadChildren: () =>
           import('./demo/pages/admin-panel/admin-panel-routing.module').then((m) => m.AdminPanelRoutingModule)

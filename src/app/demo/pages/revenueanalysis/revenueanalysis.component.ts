@@ -37,6 +37,7 @@ export type ChartOptions = {
 interface datalinechart {
   name: string;
   data: any[];
+  color: string;
 }
 @Component({
   selector: 'app-revenueanalysis',
@@ -147,6 +148,11 @@ export class RevenueanalysisComponent {
     this.selectedYear = newValue.id;
     await this.GenerateDayWiseChart();
   }
+  numberWithCommas(x) {
+    var parts = x.toString().split(".");
+    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return parts.join(".");
+  }
   async GenerateDayWiseChart() {
     this.isLoadingDayWiseChart = true;
     let businessLocationID: any, distance: any, MonthID: any, YearID: any
@@ -175,14 +181,16 @@ export class RevenueanalysisComponent {
           this.insightsDayWise.forEach(element => {
             let dbaName = [];
             if (element.dbaName.length > 18) {
-              dbaName.push(element.dbaName.substring(0, 18));
-              dbaName.push(element.dbaName.substring(18, element.dbaName.length));
+              var lastIndex = element.dbaName.substring(0, 18).lastIndexOf(" ");
+              dbaName.push(element.dbaName.substring(0, lastIndex));
+              dbaName.push(element.dbaName.substring(lastIndex, element.dbaName.length));
             }
             else {
               dbaName = element.dbaName;
             }
-            console.log(dbaName);
-            let newx: any = { x: dbaName, y: element.amountPlayed, zdesc: element.licenseName, isCurrentLocation: element.isCurrentLocation };
+            let commasepratedAmount = element.amountPlayed;//.toString().replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+
+            let newx: any = { x: dbaName, y: commasepratedAmount, zdesc: element.licenseName, isCurrentLocation: element.isCurrentLocation, Address: element.address, City: element.city, State: element.state };
             this.chartOptions2AmountPlayedData.push(newx);
             this.chartOptions2AmountPlayedXaxis.push(dbaName);
           });
@@ -190,13 +198,14 @@ export class RevenueanalysisComponent {
           this.NTIData.forEach(element => {
             let dbaName = [];
             if (element.dbaName.length > 18) {
-              dbaName.push(element.dbaName.substring(0, 18));
-              dbaName.push(element.dbaName.substring(18, element.dbaName.length));
+              var lastIndex = element.dbaName.substring(0, 18).lastIndexOf(" ");
+              dbaName.push(element.dbaName.substring(0, lastIndex));
+              dbaName.push(element.dbaName.substring(lastIndex, element.dbaName.length));
             }
             else {
               dbaName = element.dbaName;
             }
-            let newx: any = { x: element.dbaName, y: element.nti, zdesc: element.licenseName, isCurrentLocation: element.isCurrentLocation };
+            let newx: any = { x: element.dbaName, y: element.nti, zdesc: element.licenseName, isCurrentLocation: element.isCurrentLocation, Address: element.address, City: element.city, State: element.state };
             this.chartOptions3NTIData.push(newx);
             this.chartOptions3NTIXaxis.push(dbaName);
           });
@@ -228,7 +237,6 @@ export class RevenueanalysisComponent {
     this.chartOptions5NTIData = [];
     this.chartOptions5NTIXaxis = [];
 
-
     if (businessLocationID != 0 && distance != 0) {
       await this._dashBoardservice.GetRevenueDataYearwise(businessLocationID, distance).subscribe({
         next: async (data) => {
@@ -238,43 +246,45 @@ export class RevenueanalysisComponent {
           //for NTI
           let tempData: any = [];
           tempData = [...new Map(this.lineChartYearwiseNTI.map(item =>
-            [item['licenseName'], item.licenseName])).values()];
+            [item['dbaName'], item.dbaName])).values()];
           this.chartOptions5NTIXaxis = [...new Map(this.lineChartYearwiseNTI.map(item =>
             [item['monthName'], item.monthName])).values()];
-          tempData.forEach(element => {
+          let colors = ["#7da3ba", "#003943", "#6d6d6d", "#a17c43", "#83c5be", "#b4bec9", "#FDD835"];
+          tempData.forEach((element, index) => {
             console.log(this.lineChartYearwiseNTI)
-            let newobj = []
+            let newobj = [];
             this.lineChartYearwiseNTI.forEach(async element1 => {
-              console.log(element);
-              if (element == element1.licenseName) {
+              if (element == element1.dbaName) {
                 await newobj.push(element1.nti)
               }
             })
-            console.log(newobj);
-            let m: datalinechart = { name: "", data: [] };
+
+            let m: datalinechart = { name: "", data: [], color: "" };
             m.name = element;
             m.data = newobj;
+            m.color = colors[index];
             this.chartOptions5NTIName.push(m)
           });
           //For Amount played
           let tempData1: any = [];
           tempData1 = [...new Map(this.lineChartYearwiseAmountPlayed.map(item =>
-            [item['licenseName'], item.licenseName])).values()];
+            [item['dbaName'], item.dbaName])).values()];
           this.chartOptions4AmountPlayedXaxis = [...new Map(this.lineChartYearwiseAmountPlayed.map(item =>
             [item['monthName'], item.monthName])).values()];
-          tempData1.forEach(element => {
+          tempData1.forEach((element,index) => {
             console.log(this.lineChartYearwiseAmountPlayed)
             let newobj = []
             this.lineChartYearwiseAmountPlayed.forEach(async element1 => {
               console.log(element);
-              if (element == element1.licenseName) {
+              if (element == element1.dbaName) {
                 await newobj.push(element1.amountPlayed)
               }
             })
             console.log(newobj);
-            let m: datalinechart = { name: "", data: [] };
+            let m: datalinechart = { name: "", data: [], color: "" };
             m.name = element;
             m.data = newobj;
+            m.color = colors[index];
             this.chartOptions4AmountPlayedData.push(m)
           });
           await this.BindYearWiseAmountPlayedChart();
@@ -347,7 +357,7 @@ export class RevenueanalysisComponent {
       yaxis: {
         labels: {
           formatter: function (val) {
-            return val.toFixed(0);
+            return "$" + val.toFixed(0).toString().replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
           }
         },
         decimalsInFloat: 0,
@@ -382,11 +392,25 @@ export class RevenueanalysisComponent {
             opts.ctx.w.config.series[opts.seriesIndex].data[
               opts.dataPointIndex
             ].x
-
-          const value = opts.series[opts.seriesIndex][opts.dataPointIndex]
-          return '<div style="padding: 15px;"> <span> Business Name :  </span> <b>' + desc + '</b>'
-            + '<br/> <span> DBA Name :  </span> <b>' + dbaName + '</b>'
-            + '<br/> <span> Amount Played :  </span> <b>' + '$' + value + '</b>'
+          const address =
+            opts.ctx.w.config.series[opts.seriesIndex].data[
+              opts.dataPointIndex
+            ].Address
+          const city =
+            opts.ctx.w.config.series[opts.seriesIndex].data[
+              opts.dataPointIndex
+            ].City
+          const state =
+            opts.ctx.w.config.series[opts.seriesIndex].data[
+              opts.dataPointIndex
+            ].State
+          const value = opts.series[opts.seriesIndex][opts.dataPointIndex].toFixed(0).toString().replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+          return '<div style="padding: 15px;"> <span> Business Name:  </span> <b>' + desc + '</b>'
+            + '<br/> <span> DBA Name:  </span> <b>' + dbaName + '</b>'
+            + '<br/> <span> Address:  </span> <b>' + address + '</b>'
+            + '<br/> <span> City:  </span> <b>' + city + '</b>'
+            + '<br/> <span> State:  </span> <b>' + state + '</b>'
+            + '<br/> <span> Amount Played:  </span> <b>' + '$' + value + '</b>'
             + '</div>'
         }
       },
@@ -448,7 +472,7 @@ export class RevenueanalysisComponent {
       yaxis: {
         labels: {
           formatter: function (val) {
-            return val.toFixed(0);
+            return "$" + val.toFixed(0).toString().replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
           }
         },
         decimalsInFloat: 0,
@@ -483,11 +507,25 @@ export class RevenueanalysisComponent {
             opts.ctx.w.config.series[opts.seriesIndex].data[
               opts.dataPointIndex
             ].x
-
-          const value = opts.series[opts.seriesIndex][opts.dataPointIndex]
-          return '<div style="padding: 15px;"> <span> Business Name :  </span> <b>' + desc + '</b>'
-            + '<br/> <span> DBA Name :  </span> <b>' + dbaName + '</b>'
-            + '<br/> <span> Net Terminal Income :  </span> <b>' + '$' + value + '</b>'
+          const address =
+            opts.ctx.w.config.series[opts.seriesIndex].data[
+              opts.dataPointIndex
+            ].Address
+          const city =
+            opts.ctx.w.config.series[opts.seriesIndex].data[
+              opts.dataPointIndex
+            ].City
+          const state =
+            opts.ctx.w.config.series[opts.seriesIndex].data[
+              opts.dataPointIndex
+            ].State
+          const value = opts.series[opts.seriesIndex][opts.dataPointIndex].toFixed(0).toString().replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+          return '<div style="padding: 15px;"> <span> Business Name:  </span> <b>' + desc + '</b>'
+            + '<br/> <span> DBA Name:  </span> <b>' + dbaName + '</b>'
+            + '<br/> <span> Address:  </span> <b>' + address + '</b>'
+            + '<br/> <span> City:  </span> <b>' + city + '</b>'
+            + '<br/> <span> State:  </span> <b>' + state + '</b>'
+            + '<br/> <span> Net Terminal Income:  </span> <b>' + '$' + value + '</b>'
             + '</div>'
         }
       },
@@ -542,9 +580,17 @@ export class RevenueanalysisComponent {
         }
       },
       fill: {
-        type: ['solid'],
-        opacity: 1,
-        colors: ['#7da3ba', '#003943', '#6d6d6d', '#a17c43', '#83c5be', '#b4bec9']
+        type: "gradient",
+        gradient: {
+          shade: "dark",
+          gradientToColors: ["#7da3ba", "#003943", "#6d6d6d", "#a17c43", "#83c5be", "#b4bec9", "#FDD835"],
+          shadeIntensity: 1,
+          type: "horizontal",
+          opacityFrom: 1,
+          opacityTo: 1,
+          stops: [100, 100, 100, 100]
+        },
+        colors: ["#7da3ba", "#003943", "#6d6d6d", "#a17c43", "#83c5be", "#b4bec9", "#FDD835"]
       },
       markers: {
         size: 4,
@@ -558,7 +604,12 @@ export class RevenueanalysisComponent {
       yaxis: {
         title: {
           text: ""
-        }
+        },
+        labels: {
+          formatter: function (val) {
+            return "$" + val.toFixed(0).toString().replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+          }
+        },
       }
     };
   }
@@ -589,8 +640,16 @@ export class RevenueanalysisComponent {
         }
       },
       fill: {
-        type: ['solid'],
-        colors: ['#7da3ba', '#003943', '#6d6d6d', '#a17c43', '#83c5be', '#b4bec9']
+        type: "gradient",
+        gradient: {
+          shade: "dark",
+          gradientToColors: ["#7da3ba", "#003943", "#6d6d6d", "#a17c43", "#83c5be", "#b4bec9", "#FDD835"],
+          shadeIntensity: 1,
+          type: "horizontal",
+          opacityFrom: 1,
+          opacityTo: 1,
+          stops: [100, 100, 100, 100]
+        }
       },
       dataLabels: {
         enabled: false,
@@ -607,6 +666,11 @@ export class RevenueanalysisComponent {
       yaxis: {
         title: {
           text: ""
+        },
+        labels: {
+          formatter: function (val) {
+            return "$" + val.toFixed(0).toString().replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+          }
         }
       }
     };

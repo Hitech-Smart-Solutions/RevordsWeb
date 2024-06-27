@@ -280,7 +280,6 @@ export class MemberProfileComponent {
     this.dropdownSettingsSingle = {
       idField: 'id',
       textField: 'name',
-      singleSelection: true
     }
     this.dropdownSettingsSingleBusiness = {
       idField: 'id',
@@ -521,7 +520,7 @@ export class MemberProfileComponent {
   GetMembersData() {
     this.button = 'Processing';
     this.isLoading = true;
-    let tagInput = this.MemeberProfileGroup.controls['tags'].value != null && this.MemeberProfileGroup.controls['tags'].value.length > 0 ? this.MemeberProfileGroup.controls['tags'].value : 0;
+    let tagInput = this.MemeberProfileGroup.controls['tags'].value;
     let businessInput = this.MemeberProfileGroup.controls['business'].value;
     let searchInput = this.MemeberProfileGroup.controls['search'].value;
     this.SelectedTagName = tagInput;
@@ -532,6 +531,13 @@ export class MemberProfileComponent {
         businessId += businessInput[index].id + ','
       }
     }
+    let tagId = "";
+    if (tagInput != null && tagInput != undefined && tagInput != '' && tagInput.length > 0) {
+      for (let index = 0; index < tagInput.length; index++) {
+        tagId += tagInput[index].id + ','
+      }
+    }
+
     let details = {
       "businessGroupId": this.businessGroupID.id,
       "BusinessLocationId": businessId,
@@ -541,8 +547,9 @@ export class MemberProfileComponent {
       "PageSize": this.pageSize,
       "SortColumn": 't."ID" desc',
       "BadgeId": this.selectedBadgeID,
-      "TagId": tagInput != 0 ? tagInput[0].id : 0
+      "TagId": tagId
     }
+
     this._memberservice.GetMemberProfileByBusinessGroupId(details).pipe()
       .subscribe({
         next: async (data) => {
@@ -618,7 +625,7 @@ export class MemberProfileComponent {
   exportexcel(): void {
     this.button = 'Processing';
     this.isLoading = true;
-    let tagInput = this.MemeberProfileGroup.controls['tags'].value != null && this.MemeberProfileGroup.controls['tags'].value.length > 0 ? this.MemeberProfileGroup.controls['tags'].value : 0;
+    let tagInput = this.MemeberProfileGroup.controls['tags'].value;
     let businessInput1 = this.MemeberProfileGroup.controls['business'].value;
     let searchInput = this.MemeberProfileGroup.controls['search'].value;
     this.SelectedTagName = tagInput;
@@ -629,6 +636,13 @@ export class MemberProfileComponent {
         businessId += businessInput1[index].id + ','
       }
     }
+    let tagId = "";
+    if (tagInput != null && tagInput != undefined && tagInput != '' && tagInput.length) {
+      for (let index = 0; index < tagInput.length; index++) {
+        tagId += tagInput[index].id + ','
+      }
+    }
+
     let details = {
       "businessGroupId": this.businessGroupID.id,
       "BusinessLocationId": businessId,
@@ -638,7 +652,7 @@ export class MemberProfileComponent {
       "PageSize": 100000,
       "SortColumn": 't."ID" desc',
       "BadgeId": this.selectedBadgeID,
-      "TagId": tagInput != 0 ? tagInput[0].id : 0
+      "TagId": tagId
     }
 
     this._memberservice.GetMemberProfileByBusinessGroupId(details).pipe()
@@ -683,9 +697,16 @@ export class MemberProfileComponent {
           var row1 = table.insertRow(1);
           var cell1 = row1.insertCell(0);
           var cell2 = row1.insertCell(1);
+
+          this.SelectedTagName = "";
+          if (tagInput != null && tagInput != undefined && tagInput != '' && tagInput.length) {
+            for (let index = 0; index < tagInput.length; index++) {
+              this.SelectedTagName += tagInput[index].name + ', '
+            }
+          }
+
           cell1.innerHTML = "Tag Name : ";
-          cell2.innerHTML = this.SelectedTagName != null && this.SelectedTagName != '' && this.SelectedTagName != undefined
-            ? this.SelectedTagName[0].name : '';
+          cell2.innerHTML = this.SelectedTagName;
 
           var row2 = table.insertRow(2);
           var cell3 = row2.insertCell(0);

@@ -30,7 +30,8 @@ export interface PeriodicElement {
   points: string;
   rewardName: string;
   timeDuration: Time;
-  businessLocationId: string
+  businessLocationId: string;
+  businessName: string;
 }
 export interface Activityhistory {
   'Name': string;
@@ -41,6 +42,7 @@ export interface Activityhistory {
   'Activity Details': string;
   'Duration': string;
   'Points': string;
+  'Business Location Name': string;
 }
 @Component({
   selector: 'app-activitydashboard',
@@ -68,7 +70,7 @@ export class ActivitydashboardComponent {
   SelectedBUisnessName: any = "";
   SelectedSearchText: any = "";
   fileName = 'ExcelSheet.xlsx';
-  displayedColumns: string[] = ['membername', 'phone', 'datetime', 'activityType', 'rewardName', 'timeDuration', 'points'];
+  displayedColumns: string[] = ['membername', 'phone', 'datetime', 'businessName','activityType', 'rewardName', 'timeDuration', 'points'];
   public dataSource = new MatTableDataSource<PeriodicElement>();
   public dataSourceForFilter: any = new MatTableDataSource<PeriodicElement>();
   public filtereddata: any = [];
@@ -123,7 +125,6 @@ export class ActivitydashboardComponent {
     this.dropdownSettingsSingle = {
       idField: 'id',
       textField: 'activityName',
-      singleSelection: true
     }
     this.selected = {
       startDate: dayjs().subtract(6, 'days'),
@@ -204,6 +205,16 @@ export class ActivitydashboardComponent {
       }
     }
 
+    if (activityInput != null && activityInput != undefined) {
+      for (let index = 0; index < activityInput.length; index++) {
+        if (index == 0) {
+          this.filtereddata = this.filtereddata.filter((t: any) => t.activityID == activityInput[index].id.toString());
+        } else {
+          this.filtereddata = this.filtereddata.concat(this.dataSourceForFilter.data.filter((t) => t.activityID == activityInput[index].id));
+        }
+      }
+    }
+
     if (searchInput != null && searchInput != undefined && searchInput != '') {
       if (searchInput.length >= 3) {
         this.filtereddata = this.filtereddata.
@@ -266,7 +277,6 @@ export class ActivitydashboardComponent {
   }
 
   ngAfterViewInit() {
-    console.log(this.paginator);
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
   }
@@ -290,14 +300,15 @@ export class ActivitydashboardComponent {
       let d: any = {};
       d.Name = x.membername;
       d['Tag Name'] = x.tagname;
-      d['Date Time'] = this._dateConverter.convertUtcToLocalTime(x.datetime, UtcToLocalTimeFormat.SHORT);
       d.Phone = this.formatPhoneNumber(x.phone);
+      d['Date Time'] = this._dateConverter.convertUtcToLocalTime(x.datetime, UtcToLocalTimeFormat.SHORT);
+      d['Business Location Name'] = x.businessName;
       d['Activity Type'] = x.activityType;
       d['Activity Details'] = x.rewardName;
       d.Duration = x.timeDuration;
       d.Points = x.points;
       datadump.push(d);
-    })
+    });
 
     var table1: HTMLTableElement = <HTMLTableElement>document.getElementById("tabl");
 
@@ -308,9 +319,16 @@ export class ActivitydashboardComponent {
     var row1 = table1.insertRow(1);
     var cell1 = row1.insertCell(0);
     var cell2 = row1.insertCell(1);
+
+    let activityInput = this.ActivityDashboardGroup.controls['activity'].value;
+    this.SelectedActivityName = "";
+    if (activityInput != null && activityInput != undefined && activityInput != '' && activityInput.length) {
+      for (let index = 0; index < activityInput.length; index++) {
+        this.SelectedActivityName += activityInput[index].activityName + ', '
+      }
+    }
     cell1.innerHTML = "ActivityName : ";
-    cell2.innerHTML = this.SelectedActivityName != '' && this.SelectedActivityName != null && this.SelectedActivityName != undefined
-      ? this.SelectedActivityName[0].activityName : '';
+    cell2.innerHTML = this.SelectedActivityName;
 
     var row2 = table1.insertRow(2);
     var cell3 = row2.insertCell(0);
@@ -386,7 +404,6 @@ export class ActivitydashboardComponent {
     this._activityHistoryService.GetActivityDashboardByBusinessGroupId(this.businessGroupID.id, start, end).pipe()
       .subscribe({
         next: async (data) => {
-          console.log(data);
           this.dataSource.data = data;
           this.dataSource.data.forEach(async element => {
             element.phone = await element.phone.toString()
@@ -422,6 +439,18 @@ export class ActivitydashboardComponent {
 
   async onDeSelectAll(items) {
     this.ActivityDashboardGroup.controls['business'].setValue(items);
+    this.common(0);
+  }
+  //#endregion
+
+  //#region ActivityDropdown
+  async onActivitySelectAll(items) {
+    this.ActivityDashboardGroup.controls['activity'].setValue(items);
+    this.common(0);
+  }
+
+  async onDeActivitySelectAll(items) {
+    this.ActivityDashboardGroup.controls['activity'].setValue(items);
     this.common(0);
   }
   //#endregion
