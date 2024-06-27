@@ -58,6 +58,7 @@ jobs:
           bucket-region: eu-west-1
           dist-id: E23EZL5A1TYJLZ
           invalidation: /
+          delete-removed: true
           no-cache: true
           private: true
           filesToInclude: ".*/*,*/*,**"
