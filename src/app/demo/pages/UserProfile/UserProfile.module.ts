@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { UserProfileRoutingModule } from './Userprofile-routing.module';
+import { UserProfileRoutingModule } from './UserProfile-routing.module';
 import { RouterModule } from '@angular/router';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
@@ -25,8 +25,8 @@ import { UtcToLocalTimePipeModule } from 'src/app/utctolocaltime.pipe.module';
     FormsModule,
     MatTableModule,
     NgbTooltipModule,
-    PhonePipeModule, 
-    MatFormFieldModule, 
+    PhonePipeModule,
+    MatFormFieldModule,
     MatSelectModule,
     MatButtonModule,
     UtcToLocalTimePipeModule,
@@ -37,11 +37,10 @@ import { UtcToLocalTimePipeModule } from 'src/app/utctolocaltime.pipe.module';
     NgxSkeletonLoaderModule.forRoot({
       theme: {
         extendsFromRoot: true,
-        height: '30px',
-      },
-    }),
+        height: '30px'
+      }
+    })
   ],
   declarations: []
 })
-export class UserProfileModule {
-}
+export class UserProfileModule {}

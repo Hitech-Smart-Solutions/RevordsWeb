@@ -37,7 +37,7 @@ import { ToastrModule, ToastrService } from 'ngx-toastr';
 import { ToastService } from './services/ToastService';
 import { DefinationService } from './services/DefinationService';
 import { ToastsContainer } from './demo/pages/toastcontainer.component';
-import { MatCardModule } from "@angular/material/card";
+import { MatCardModule } from '@angular/material/card';
 import { MatListModule } from '@angular/material/list';
 import { CommonService } from './services/CommonService';
 import { ActivityHistoryService } from './services/ActivityHistoryService';
@@ -75,7 +75,7 @@ import { UtcToLocalTimePipeModule } from './utctolocaltime.pipe.module';
 import { BillingComponent } from './demo/pages/billing/billing.component';
 import { BillingService } from '../app/services/billingService';
 import { BusinessGroupComponent } from './demo/pages/BusinessGroup/BusinessGroup.component';
-import { UserProfileComponent } from './demo/pages/UserProfile/Userprofile.component';
+import { UserProfileComponent } from './demo/pages/UserProfile/UserProfile.component';
 import { BusinessGroupService } from './services/BusinessGroupService';
 import { SourceService } from './services/SourceService';
 import { UserService } from './services/UserService';
@@ -83,6 +83,7 @@ import { SourcesComponent } from './demo/pages/Sources/Sources.component';
 import { AdminPanelComponent } from './demo/pages/admin-panel/admin-panel.component';
 import { BusinessProfileComponent } from './demo/pages/BusinessProfile/BusinessProfile.component';
 import { GoogleMapsModule } from '@angular/google-maps';
+import { RouterModule } from '@angular/router';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { LicenseApplicantService } from './services/LicenseApplicantService';
 
@@ -113,9 +114,14 @@ import { LicenseApplicantService } from './services/LicenseApplicantService';
     UserProfileComponent,
     SourcesComponent,
     AdminPanelComponent,
-    BusinessProfileComponent,
+    BusinessProfileComponent
   ],
-  imports: [BrowserModule, AppRoutingModule, SharedModule, BrowserAnimationsModule, FormsModule,
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    SharedModule,
+    BrowserAnimationsModule,
+    FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
     MatButtonModule,
@@ -155,13 +161,20 @@ import { LicenseApplicantService } from './services/LicenseApplicantService';
     NgxSkeletonLoaderModule.forRoot({
       theme: {
         extendsFromRoot: true,
-        height: '30px',
-      },
+        height: '30px'
+      }
     }),
-    MatIconModule, MatCheckboxModule, MatTreeModule, PhonePipeModule, AngularEditorModule, PromotionFilterpipeModule, ToastrModule.forRoot({
+    MatIconModule,
+    MatCheckboxModule,
+    MatTreeModule,
+    PhonePipeModule,
+    AngularEditorModule,
+    PromotionFilterpipeModule,
+    ToastrModule.forRoot({
       positionClass: 'toast-bottom-right'
     }),
-    GoogleMapsModule],
+    GoogleMapsModule
+  ],
   exports: [
     MatAutocompleteModule,
     MatChipsModule,
@@ -181,6 +194,7 @@ import { LicenseApplicantService } from './services/LicenseApplicantService';
     NgMultiSelectDropDownModule,
     NgxSkeletonLoaderModule,
     UtcToLocalTimePipeModule,
+    RouterModule
   ],
   providers: [
     NavigationItem,
@@ -208,4 +222,4 @@ import { LicenseApplicantService } from './services/LicenseApplicantService';
   ],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+export class AppModule {}
