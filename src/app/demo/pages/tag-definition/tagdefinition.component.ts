@@ -61,10 +61,12 @@ export class TagDefinitionComponent {
   memberCount: any;
   loadingApply = false;
   timesCalledFakeCheck = 0;
-  constructor(public toastService: ToastService, private fb: FormBuilder, private _tagDefinationService: TagDefinationService) { }
+  tagCharacterCount: number = 19;
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild('paginatorPageSize') paginatorPageSize: MatPaginator;
+
+  constructor(public toastService: ToastService, private fb: FormBuilder, private _tagDefinationService: TagDefinationService) { }
 
   AddNew() {
     this.iseditmode = true;
@@ -342,5 +344,10 @@ export class TagDefinitionComponent {
 
         }
       });
+  }
+
+  ontextchanged(length) {
+      let l = (this.jobForm.controls['rewardName'].value).length;
+      this.tagCharacterCount = length - l;
   }
 }

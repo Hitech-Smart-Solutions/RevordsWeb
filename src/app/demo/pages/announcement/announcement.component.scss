@@ -222,11 +222,11 @@
 
 .preview.cashier .message-content {
   position: absolute;
-  top: 120px;
-  left: 66px;
+  top: 42%;
+  left: 12%;
   color: white;
-  font-size: 12px;
-  width: 212px;
+  font-size: 8px;
+  width: 75%;
   line-height: 15px;
 }
 
@@ -275,13 +275,13 @@
 }
 
 ::ng-deep .mat-step-header[aria-selected="true"] {
-  background-color: rgba(0,0,0,.04);
+  background-color: rgba(0, 0, 0, .04);
   border-radius: 32px;
   // width: 100%;
   font-weight: 10px;
 
   & div.mat-step-label.mat-step-label-active.mat-step-label-selected {
-      color: black;
+    color: black;
   }
 }
 
@@ -293,4 +293,25 @@ i.icon-fs-info {
   display: inline-block;
   margin-left: 5px;
   margin-top: -3px;
+}
+
+.rewardCardLeft {
+  background: #673ab7;
+  border-radius: 45px 0 0 45px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2%;
+}
+
+.rewardCardRight {
+  overflow-wrap: anywhere;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  background: #fff;
+  color: #203139;
+  border-radius: 0px 45px 45px 0;
+  padding: 2%;
 }
