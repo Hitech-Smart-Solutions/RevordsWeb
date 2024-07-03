@@ -1,10 +1,8 @@
 import { Component, ViewChild } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
-import { ApexAxisChartSeries, ApexChart, ApexDataLabels, ApexFill, ApexGrid, ApexLegend, ApexMarkers, ApexNoData, ApexPlotOptions, ApexStroke, ApexTitleSubtitle, ApexTooltip, ApexXAxis, ApexYAxis } from 'ng-apexcharts';
 import { IDropdownSettings } from 'ng-multiselect-dropdown';
 import { CommonService } from 'src/app/services/CommonService';
-import { DashboardService } from 'src/app/services/DashboardService';
 import { LicenseApplicantService } from 'src/app/services/LicenseApplicantService';
 import { PeriodicElement } from '../autopilotsetting/autopilotsetting.component';
 import { MatPaginator } from '@angular/material/paginator';
@@ -28,12 +26,12 @@ export class UpcomingBusinessComponent {
   @ViewChild('paginatorPageSize') paginatorPageSize: MatPaginator;
   displayedColumns: string[] = ['LicenseName', 'LicenseNumber', 'DBAName', 'Address', 'City', 'Zip', 'StatusDate', 'LicenseType', 'Distance'];
   miles = [
-    { id: 1, name: '1' },
-    { id: 2, name: '2' },
-    { id: 3, name: '3' },
-    { id: 4, name: '4' },
-    { id: 5, name: '5' },
-    { id: 10, name: '10' }
+    { id: 1, name: '1 mile' },
+    { id: 2, name: '2 miles' },
+    { id: 3, name: '3 miles' },
+    { id: 4, name: '4 miles' },
+    { id: 5, name: '5 miles' },
+    { id: 10, name: '10 miles' }
   ];
   constructor(private _commonService: CommonService, private router: Router,
     private _dashBoardservice: LicenseApplicantService) {
@@ -63,6 +61,7 @@ export class UpcomingBusinessComponent {
     await this.GenerateDayWiseChart();
   }
   async milesChange(newValue) {
+    console.log(newValue)
     this.selectedmiles = newValue.id;
     await this.GenerateDayWiseChart();
   }

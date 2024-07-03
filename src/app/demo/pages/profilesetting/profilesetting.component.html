@@ -10,8 +10,8 @@
             <div class="col-md-6 text-right mt-3 pr-4" *ngIf="iseditmode">
                 <button class="btn btn-danger cancel mt-2" (click)="Cancle()">
                     Cancel</button>
-                <a class="btn btn-green viewRevorde mt-2 ml-2" target="_blank" href="http://revords.com/fortunesgroup.html"
-                    style="background: #6c4da9;color:white;">
+                <a class="btn btn-green viewRevorde mt-2 ml-2" target="_blank"
+                    href="http://revords.com/fortunesgroup.html" style="background: #6c4da9;color:white;">
                     <i class="bi bi-eye"></i> View Revords Page
                 </a>
             </div>
@@ -135,10 +135,14 @@
                         <label for="stateCodeId">
                             State
                         </label>
-                        <ng-multiselect-dropdown [placeholder]="'Select State'" id="stateCodeId"
-                            [settings]="dropdownSettingsSingleState" [data]="statesData" formControlName="stateCodeId"
+                        <ng-select [searchable]="true" id="stateCodeId" placeholder="Select State"
+                            formControlName="stateCodeId"
                             [ngClass]="{ 'is-invalid': submitted && ProfileFormGroup.controls['stateCodeId'].errors }">
-                        </ng-multiselect-dropdown>
+                            <ng-option *ngFor="let option of statesData" [value]="option.id">
+                                {{ option.name }}
+                            </ng-option>
+                        </ng-select>
+
                         <div *ngIf="submitted && ProfileFormGroup.controls['stateCodeId'].errors"
                             class="invalid-feedback">
                             <div *ngIf="ProfileFormGroup.controls['stateCodeId'].errors['required']">

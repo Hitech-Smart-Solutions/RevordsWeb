@@ -199,11 +199,11 @@
                 </ng-container>
                 
                 <ng-container matColumnDef="activityType">
-                    <th style="width: 15%;" mat-header-cell class="custom-mat-header-styling tableHeaderCellDiv"
+                    <th style="width: 15%;text-align: center;" mat-header-cell class="custom-mat-header-styling tableHeaderCellDiv"
                         *matHeaderCellDef mat-sort-header>
                         Activity Type
                     </th>
-                    <td mat-cell class="tabletd" *matCellDef="let element" style="width: 15%;"
+                    <td mat-cell class="tabletd" *matCellDef="let element" style="width: 15%;text-align: center;"
                         [ngStyle]="{'color': (element.activityType=='Points Earned') ? '#13ce66' : (element.activityType=='Autopilot Redeemed') ? '#13ce66' : (element.activityType=='Promotion Redeemed') ? '#A17C43' : (element.activityType=='Rewards Redeemed') ? '#A17C43' : ''}">
                         <span>{{element.activityType}}</span>
                     </td>
