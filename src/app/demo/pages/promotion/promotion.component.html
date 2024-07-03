@@ -1176,21 +1176,41 @@
                                                                     src="../../../../assets/promotion/POS.svg">
                                                                 <span class="ml-1">POS</span>
                                                             </ng-template>
-                                                            <div class="cashier preview" style="text-align: center;">
-                                                                <img src="../../../../assets/images/preview-pos.png"
-                                                                    style="width: 360px;" />
+                                                            <div class="cashier preview" style="margin: 4%;">
+                                                                <img src="../../../../assets/images/unnamed-Photoroom.png"
+                                                                    style="width: 100%;" />
                                                                 <div class="message-content">
-                                                                    <div>
-                                                                        <div>
-                                                                            {{this.firstFormGroup.controls['promotionalMessage1'].value}}
+                                                                    <div class="row">
+                                                                        <div class="col-md-12 d-flex">
+                                                                            <div class="col-md-3 rewardCardLeft">
+                                                                                Promotion
+                                                                            </div>
+                                                                            <div class="col-md-9 rewardCardRight">
+                                                                                <div class="row">
+                                                                                    <div class="col-md-12">
+                                                                                        <b>
+                                                                                            {{this.firstFormGroup.controls['promotionalMessage1'].value}}
+                                                                                        </b>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
                                                                         </div>
-                                                                        <div *ngIf='showPromo2 == true'>
-                                                                            {{this.firstFormGroup.controls['promotionalMessage2'].value}}
-                                                                        </div>
-                                                                        <div>
-                                                                            Exp.
-                                                                            {{this.firstFormGroup.controls['offerEndDate'].value|
-                                                                            date: 'dd MMM, YYYY'}}
+                                                                    </div>
+                                                                    <div class="row mt-3">
+                                                                        <div class="col-md-12 d-flex"
+                                                                            *ngIf='showPromo2 == true'>
+                                                                            <div class="col-md-3 rewardCardLeft">
+                                                                                Promotion
+                                                                            </div>
+                                                                            <div class="col-md-9 rewardCardRight">
+                                                                                <div class="row">
+                                                                                    <div class="col-md-12">
+                                                                                        <b>
+                                                                                            {{this.firstFormGroup.controls['promotionalMessage2'].value}}
+                                                                                        </b>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
                                                                         </div>
                                                                     </div>
                                                                 </div>

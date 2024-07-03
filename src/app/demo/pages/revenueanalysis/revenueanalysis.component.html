@@ -1,7 +1,7 @@
 <div>
     <div class="row">
         <div class="col-md-12 d-flex">
-            <div class="col-md-6">
+            <div class="col-md-3">
                 <h2 style="color: #263a57; font-size: 25px; font-weight: 500;">Revenue Analysis</h2>
             </div>
             <div class="col-md-3">
@@ -9,15 +9,29 @@
                     (change)="businessChange($event)" (clear)="resetCalculationsYearWise();">
                 </ng-select>
             </div>
-            <div class="col-md-3">
-                <div style="display: flex;">
-                    <div style="width: 70%;">
-                        <ng-select [items]="miles" bindLabel="name" placeholder="Select miles"
-                            (change)="milesChange($event)" (clear)="resetCalculationsYearWise();">
-                        </ng-select>
-                    </div>
+            <div class="col-md-2">
+                <div>
+                    <ng-select [items]="miles" bindLabel="name" placeholder="Select radius(miles)"
+                        (change)="milesChange($event)" (clear)="resetCalculationsYearWise();">
+                    </ng-select>
                 </div>
             </div>
+            <div class="col-md-2" style="text-align: start;">
+                <ng-select [items]="months" bindLabel="name" placeholder="Select month" (change)="monthChange($event)"
+                    (clear)="resetCalculationsMonthWise();">
+                </ng-select>
+            </div>
+            <div class="col-md-2" style="text-align: start;">
+                <ng-select [items]="years" bindLabel="name" placeholder="Select year" (change)="yearChange($event)"
+                    (clear)="resetCalculationsMonthWise();">
+                </ng-select>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 d-flex">
+            <span style="margin-left: 15px;">Source: 
+                <a target="_blank" href="https://www.igb.illinois.gov">https://www.igb.illinois.gov</a></span>
         </div>
     </div>
     <div class="row" style="margin-top: 1%;">
@@ -26,18 +40,9 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-12 text-center" style="height: 39px;">
-                            <div class="col-md-6" style="padding-left: 0px;display: flex;align-items: center;">
-                                <h3 style="margin-bottom: 0px;font-size: 1.10rem;">Top 10 + Self Amount played</h3>
-                            </div>
-                            <div class="col-md-3" style="text-align: start;">
-                                <ng-select [items]="months" bindLabel="name" placeholder="Select month"
-                                    (change)="monthChange($event)"  (clear)="resetCalculationsMonthWise();">
-                                </ng-select>
-                            </div>
-                            <div class="col-md-3" style="text-align: start;">
-                                <ng-select [items]="years" bindLabel="name" placeholder="Select year"
-                                    (change)="yearChange($event)" (clear)="resetCalculationsMonthWise();">
-                                </ng-select>
+                            <div class="col-md-12" style="padding-left: 0px;display: flex;align-items: center;">
+                                <h3 style="margin-bottom: 0px;font-size: 1.10rem;">Top 10+ Amount played
+                                </h3>
                             </div>
                         </div>
                     </div>
@@ -67,7 +72,7 @@
                     <div class="row">
                         <div class="col-md-12 text-center" style="height: 39px;">
                             <div class="col-md-12" style="padding-left: 0px;display: flex;align-items: center;">
-                                <h3 style="margin-bottom: 0px;font-size: 1.10rem;">Top 10 + Self Net Terminal Income
+                                <h3 style="margin-bottom: 0px;font-size: 1.10rem;">Top 10+ Net Terminal Income
                                 </h3>
                             </div>
                         </div>
@@ -100,7 +105,7 @@
                     <div class="row">
                         <div class="col-md-12 text-center" style="height: 39px;">
                             <div class="col-md-12" style="padding-left: 0px;display: flex;align-items: center;">
-                                <h3 style="margin-bottom: 0px;font-size: 1.10rem;">Top 5 + Self Amount played
+                                <h3 style="margin-bottom: 0px;font-size: 1.10rem;">Top 5+ Amount played
                                 </h3>
                             </div>
                         </div>
@@ -129,7 +134,7 @@
                         <div class="row">
                             <div class="col-md-12 text-center" style="height: 39px;">
                                 <div class="col-md-12" style="padding-left: 0px;display: flex;align-items: center;">
-                                    <h3 style="margin-bottom: 0px;font-size: 1.10rem;">Top 5 + Self Net Terminal Income
+                                    <h3 style="margin-bottom: 0px;font-size: 1.10rem;">Top 5+ Net Terminal Income
                                     </h3>
                                 </div>
                             </div>

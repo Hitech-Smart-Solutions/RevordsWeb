@@ -178,6 +178,7 @@
                                                                 *ngIf="iseditmode" />
                                                             <input type="text" formControlName="subject"
                                                                 placeholder="Enter Subject here"
+                                                                maxlength="50"
                                                                 (keyup)="ontextchanged(50,'subject')"
                                                                 class="form-control"
                                                                 [ngClass]="{ 'is-invalid': submitted && f['subject'].errors }" />
@@ -736,19 +737,24 @@
                                                                         src="../../../../assets/promotion/POS.svg">
                                                                     <span class="ml-1">POS</span>
                                                                 </ng-template>
-                                                                <div class="cashier preview"
-                                                                    style="text-align: center;">
-                                                                    <img src="../../../../assets/images/preview-pos.png"
-                                                                        style="width: 360px;" />
+                                                                <div class="cashier preview" style="margin: 4%;">
+                                                                    <img src="../../../../assets/images/unnamed-Photoroom (1).png"
+                                                                        style="width: 100%;" />
                                                                     <div class="message-content">
-                                                                        <div>
-                                                                            <div>
-                                                                                {{this.jobForm.controls['subject'].value}}
-                                                                            </div>
-                                                                            <div>
-                                                                                Exp.
-                                                                                {{this.jobForm.controls['validDate'].value|
-                                                                                date: 'dd MMM, YYYY'}}
+                                                                        <div class="row" style="margin-top: 18%;">
+                                                                            <div class="col-md-12 d-flex">
+                                                                                <div class="col-md-3 rewardCardLeft">
+                                                                                    Announcement
+                                                                                </div>
+                                                                                <div class="col-md-9 rewardCardRight">
+                                                                                    <div class="row">
+                                                                                        <div class="col-md-12">
+                                                                                            <b>
+                                                                                                {{this.jobForm.controls['subject'].value}}
+                                                                                            </b>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
                                                                             </div>
                                                                         </div>
                                                                     </div>

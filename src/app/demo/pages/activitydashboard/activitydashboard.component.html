@@ -89,8 +89,8 @@
     <div class="row" style="margin-bottom: 1%;">
         <div class="col-md-3">
             <ng-multiselect-dropdown [placeholder]="'All Activity'" formControlName="activity" (onSelect)="common(0)"
-                (onSelectAll)="common(0)" [settings]="dropdownSettingsSingle" [data]="activityType"
-                (onDeSelect)="common(0)" (onDeSelectAll)="common(0)">
+                (onSelectAll)="onActivitySelectAll($event)" [settings]="dropdownSettingsSingle" [data]="activityType"
+                (onDeSelect)="common(0)" (onDeSelectAll)="onDeActivitySelectAll($event)">
             </ng-multiselect-dropdown>
         </div>
         <div class="col-md-3">
@@ -121,17 +121,17 @@
                 style="position: absolute;right: 8%;top: 19%;height: 20px;width: 20px;" />
         </div>
         <div class="col-md-3">
-            <div class="row">
-                <div class="col-md-10">
+            <div class="col-md-12 d-flex pl-0 pr-0">
+                <div class="col-md-9 pl-0 pr-0">
                     <ng-multiselect-dropdown placeholder="Choose business locations" (onSelect)="common(0)"
                         (onSelectAll)="onItemSelectAll($event)" formControlName="business" [settings]="dropdownSettings"
                         (onDeSelect)="common(0)" (onDeSelectAll)="onDeSelectAll($event)" [data]="bussinessData">
                     </ng-multiselect-dropdown>
                 </div>
-                <div class="col-md-2">
-                    <button type="button" style="width: 100%;text-align: center;" class="btn btn-success"
-                        (click)="exportexcel()">
-                        <i class="fa fa-file-excel-o" style="text-align: center;margin-left: -6px;"></i>
+                <div class="col-md-3 pr-0">
+                    <button type="button" class="btn btn-success" style="width: 100%;height: 100%;display: flex;
+                    align-items: center;justify-content: center;" (click)="exportexcel()">
+                        <i class="fa fa-file-excel-o"></i>
                     </button>
                 </div>
             </div>
@@ -148,49 +148,12 @@
 
             <mat-table class="mat-elevation-z8" mat-table [dataSource]="dataSource"
                 (matSortChange)="announceSortChange($event)" multiTemplateDataRows matSort>
-                <ng-container matColumnDef="datetime">
-                    <th style="width: 15%;" mat-header-cell class="custom-mat-header-styling tableHeaderCellDiv"
-                        *matHeaderCellDef mat-sort-header sortActionDescription="Sort by datetime">
-                        Date & Time
-                    </th>
-                    <td style="width: 15%;" mat-cell class="tabletd" *matCellDef="let element">
-                        {{element.datetime | utcToLocalTime:'short'}}
-                    </td>
-                </ng-container>
-                <ng-container matColumnDef="activityType">
-                    <th style="width: 15%;" mat-header-cell class="custom-mat-header-styling tableHeaderCellDiv"
-                        *matHeaderCellDef mat-sort-header>
-                        Activity Type
-                    </th>
-                    <td mat-cell class="tabletd" *matCellDef="let element" style="width: 15%;"
-                        [ngStyle]="{'color': (element.activityType=='Points Earned') ? '#13ce66' : (element.activityType=='Autopilot Redeemed') ? '#13ce66' : (element.activityType=='Promotion Redeemed') ? '#A17C43' : (element.activityType=='Rewards Redeemed') ? '#A17C43' : ''}">
-                        <span>{{element.activityType}}</span>
-                    </td>
-                </ng-container>
-                <ng-container matColumnDef="rewardName">
-                    <th style="width: 20%;" mat-header-cell class="custom-mat-header-styling tableHeaderCellDiv"
-                        *matHeaderCellDef mat-sort-header sortActionDescription="Sort by rewardName">
-                        Activity Details
-                    </th>
-                    <td mat-cell class="tabletd" *matCellDef="let element" style="width: 20%;">
-                        <span style="color: #748596;">{{element.rewardName}}</span>
-                    </td>
-                </ng-container>
-                <ng-container matColumnDef="timeDuration">
-                    <th style="width: 5%;" mat-header-cell class="custom-mat-header-styling tableHeaderCellDiv"
-                        *matHeaderCellDef mat-sort-header sortActionDescription="Sort by timeDuration">
-                        Duration
-                    </th>
-                    <td mat-cell class="tabletd" *matCellDef="let element" style="width: 5%;text-align: center;">
-                        <span style="color: #748596;">{{element.timeDuration}}</span>
-                    </td>
-                </ng-container>
                 <ng-container matColumnDef="membername">
-                    <th style="width: 20%;" mat-header-cell class="custom-mat-header-styling tableHeaderCellDiv"
+                    <th style="width: 15%;" mat-header-cell class="custom-mat-header-styling tableHeaderCellDiv"
                         *matHeaderCellDef mat-sort-header sortActionDescription="Sort by membername">
                         Name
                     </th>
-                    <td mat-cell *matCellDef="let element" class="tabletd" style="width: 20%;">
+                    <td mat-cell *matCellDef="let element" class="tabletd" style="width: 15%;">
                         <div style="display: flex;">
                             <div>
                                 <img src="../../../assets/img/empty-profile.png" />
@@ -204,22 +167,79 @@
                     </td>
                 </ng-container>
                 <ng-container matColumnDef="phone">
-                    <th style="width: 10%;text-align: center;" mat-header-cell class="custom-mat-header-styling tableHeaderCellDiv"
-                        *matHeaderCellDef mat-sort-header sortActionDescription="Sort by phone">
+                    <th style="width: 14%;text-align: center;" mat-header-cell
+                        class="custom-mat-header-styling tableHeaderCellDiv" *matHeaderCellDef mat-sort-header
+                        sortActionDescription="Sort by phone">
                         Phone
                     </th>
-                    <td mat-cell class="tabletd" *matCellDef="let element" style="width: 10%;color:#13ce66;text-align: center;">
+                    <td mat-cell class="tabletd" *matCellDef="let element"
+                        style="width: 14%;color:#13ce66;text-align: center;">
                         {{element.phone | phone}}
                     </td>
                 </ng-container>
-                <ng-container matColumnDef="points">
-                    <th style="width: 5%;text-align: center;" mat-header-cell class="custom-mat-header-styling tableHeaderCellDiv"
-                        *matHeaderCellDef mat-sort-header sortActionDescription="Sort by points">
-                        Points
+
+                <ng-container matColumnDef="datetime">
+                    <th style="width: 15%;" mat-header-cell class="custom-mat-header-styling tableHeaderCellDiv"
+                        *matHeaderCellDef mat-sort-header sortActionDescription="Sort by datetime">
+                        Date & Time
                     </th>
-                    <td style="width: 5%;text-align: center;" mat-cell class="tabletd" *matCellDef="let element"> {{element.points}}pt
+                    <td style="width: 15%;" mat-cell class="tabletd" *matCellDef="let element">
+                        {{element.datetime | utcToLocalTime:'short'}}
                     </td>
                 </ng-container>
+
+                <ng-container matColumnDef="businessName">
+                    <th style="width: 15%;" mat-header-cell class="custom-mat-header-styling tableHeaderCellDiv"
+                        *matHeaderCellDef mat-sort-header>
+                        Business Location Name
+                    </th>
+                    <td style="width: 15%;" mat-cell class="tabletd" *matCellDef="let element">
+                        <span>{{element.businessName}}</span>
+                    </td>
+                </ng-container>
+                
+                <ng-container matColumnDef="activityType">
+                    <th style="width: 15%;text-align: center;" mat-header-cell class="custom-mat-header-styling tableHeaderCellDiv"
+                        *matHeaderCellDef mat-sort-header>
+                        Activity Type
+                    </th>
+                    <td mat-cell class="tabletd" *matCellDef="let element" style="width: 15%;text-align: center;"
+                        [ngStyle]="{'color': (element.activityType=='Points Earned') ? '#13ce66' : (element.activityType=='Autopilot Redeemed') ? '#13ce66' : (element.activityType=='Promotion Redeemed') ? '#A17C43' : (element.activityType=='Rewards Redeemed') ? '#A17C43' : ''}">
+                        <span>{{element.activityType}}</span>
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="rewardName">
+                    <th style="width: 20%;text-align: center;" mat-header-cell class="custom-mat-header-styling tableHeaderCellDiv"
+                        *matHeaderCellDef mat-sort-header sortActionDescription="Sort by rewardName">
+                        Activity Details
+                    </th>
+                    <td mat-cell class="tabletd" *matCellDef="let element" style="width: 20%;text-align: center;">
+                        <span style="color: #748596;">{{element.rewardName}}</span>
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="timeDuration">
+                    <th style="width: 3%;text-align: center;" mat-header-cell class="custom-mat-header-styling tableHeaderCellDiv"
+                        *matHeaderCellDef mat-sort-header sortActionDescription="Sort by timeDuration">
+                        Duration
+                    </th>
+                    <td mat-cell class="tabletd" *matCellDef="let element" style="width: 3%;text-align: center;">
+                        <span style="color: #748596;">{{element.timeDuration}}</span>
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="points">
+                    <th style="width: 3%;text-align: center;" mat-header-cell
+                        class="custom-mat-header-styling tableHeaderCellDiv" *matHeaderCellDef mat-sort-header
+                        sortActionDescription="Sort by points">
+                        Points
+                    </th>
+                    <td style="width: 3%;text-align: center;" mat-cell class="tabletd" *matCellDef="let element">
+                        {{element.points}}pt
+                    </td>
+                </ng-container>
+
                 <tr mat-header-row class="tableHeaderCellDiv" *matHeaderRowDef="displayedColumns; sticky: true"></tr>
                 <tr mat-row *matRowDef="let row; columns: displayedColumns; "></tr>
             </mat-table>

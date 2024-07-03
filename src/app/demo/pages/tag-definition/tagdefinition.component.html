@@ -98,10 +98,14 @@
                   </div>
                   <div>
                     <input type="text" formControlName="rewardName" class="form-control" *ngIf="iseditmode"
-                      [ngClass]="{ 'is-invalid': submitted && f['rewardName'].errors }" />
+                      [ngClass]="{ 'is-invalid': submitted && f['rewardName'].errors }" maxlength="19"
+                      (keyup)="ontextchanged(19)" />
                     <div *ngIf="submitted && f['rewardName'].errors" class="invalid-feedback">
                       <div *ngIf="f['rewardName'].errors['required']">Tagname is required</div>
                     </div>
+                  </div>
+                  <div class="displayMSG">
+                    {{tagCharacterCount}} characters left
                   </div>
                 </div>
 

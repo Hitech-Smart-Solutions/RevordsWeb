@@ -29,7 +29,7 @@ export class PromotionComponent {
   @ViewChild('wizard') public wizardRef: TemplateRef<any>;
   isLoading = false;
   isLoadingMembers = false;
-  messageString = ("\n" + "Valid: " + "-" + "\n" + "Redeem at : " + "\n" + "Reply STOP to opt out" + "\n"
+  messageString = ("\n" + "Valid: " + "-" + "\n" + "Redeem at: " + "\n" + "Reply STOP to opt out" + "\n"
     + "Download Revords.com/app to save your reward");
   submitted = false;
   businessGroupID: any;
@@ -778,7 +778,7 @@ export class PromotionComponent {
     this.notificationCount = 0;
     this.emailCount = 0;
     this.smsCount = 0;
-    this.messageString = ("\n" + "Valid: " + "-" + "\n" + "Redeem at : " + "\n" + "Reply STOP to opt out" + "\n"
+    this.messageString = ("\n" + "Valid: " + "-" + "\n" + "Redeem at: " + "\n" + "Reply STOP to opt out" + "\n"
       + "Download Revords.com/app to save your reward");
   }
 
@@ -1262,7 +1262,7 @@ export class PromotionComponent {
     let endDate = this.datePipe.transform(this.firstFormGroup.controls['offerEndDate'].value, dateFormat);
 
     this.messageString += ("\n" + "Valid: " + (startDate == null ? "" : startDate) + "-" + (endDate == null ? "" : endDate)
-      + "\n" + "Redeem at : " + this.selectedRedemtionOption + "\n" + "Reply STOP to opt out" + "\n"
+      + "\n" + "Redeem at: " + this.selectedRedemtionOption + "\n" + "Reply STOP to opt out" + "\n"
       + "Download Revords.com/app to save your reward");
   }
 
@@ -1539,7 +1539,7 @@ export class PromotionComponent {
     this.selectedBusinessName = '';
     this.sendToCustomers = '';
     this.selectedRedemtionOption = '';
-    this.messageString = ("\n" + "Valid: " + "-" + "\n" + "Redeem at : " + "\n" + "Reply STOP to opt out" + "\n"
+    this.messageString = ("\n" + "Valid: " + "-" + "\n" + "Redeem at: " + "\n" + "Reply STOP to opt out" + "\n"
       + "Download Revords.com/app to save your reward");
     this.isValidPromoMSG1 = null;
     this.isValidPromoMSG1MSG = "";
