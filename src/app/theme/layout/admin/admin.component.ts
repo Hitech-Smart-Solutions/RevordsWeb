@@ -59,7 +59,8 @@ export class AdminComponent implements OnInit {
           this.bussinessData = data;
           this.selectedBusinessGroup = JSON.parse(localStorage.getItem('BusinessGroup'));
           this.logoPath = "";
-          this.logoPath = AppSettings.API_ENDPOINT + AppSettings.Root_ENDPOINT + "/" + this.selectedBusinessGroup.logoPath;
+          this.logoPath = AppSettings.Root_ENDPOINT + this.selectedBusinessGroup.logoPath;
+          //this.logoPath = AppSettings.API_ENDPOINT + AppSettings.Root_ENDPOINT + "/" + this.selectedBusinessGroup.logoPath;
         },
         error: error => { }
       });
@@ -101,7 +102,7 @@ export class AdminComponent implements OnInit {
     localStorage.setItem('BusinessGroup', JSON.stringify(b));
     this.selectedBusinessGroup = b;
     this.logoPath = "";
-    this.logoPath = AppSettings.API_ENDPOINT + AppSettings.Root_ENDPOINT + "/" + this.selectedBusinessGroup.logoPath;
+    this.logoPath = AppSettings.Root_ENDPOINT + this.selectedBusinessGroup.logoPath;
     await this.getBussiness();
     await this.GetSpinWheeldefaultConfigByBusinessGroupID();
     this._Route.navigate(['dashboard']);

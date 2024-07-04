@@ -240,6 +240,7 @@ export class RevenueanalysisComponent {
           this.lineChartYearwiseAmountPlayed = data.amountplayedDTO;
           this.lineChartYearwiseNTI = data.netTerminalIncomeDTO;
           //for NTI
+          console.log(this.lineChartYearwiseNTI);
           let tempData: any = [];
           tempData = [...new Map(this.lineChartYearwiseNTI.map(item =>
             [item['licensedApplicantID'], item.licensedApplicantID])).values()];
@@ -249,13 +250,13 @@ export class RevenueanalysisComponent {
           tempData.forEach((element, index) => {
             let newobj = [];
             this.lineChartYearwiseNTI.forEach(async element1 => {
-              if (element == element1.licensedApplicantID ) {
+              if (element == element1.licensedApplicantID) {
                 await newobj.push(element1.nti)
               }
             })
 
             let m: datalinechart = { name: "", data: [], color: "" };
-            m.name = element;
+            m.name = this.lineChartYearwiseAmountPlayed.filter(x => x.licensedApplicantID == element)[0].dbaName;;
             m.data = newobj;
             m.color = colors[index];
             this.chartOptions5NTIName.push(m)
@@ -274,7 +275,7 @@ export class RevenueanalysisComponent {
               }
             })
             let m: datalinechart = { name: "", data: [], color: "" };
-            m.name =  this.lineChartYearwiseAmountPlayed.filter(x=> x.licensedApplicantID == element)[0].dbaName;
+            m.name = this.lineChartYearwiseAmountPlayed.filter(x => x.licensedApplicantID == element)[0].dbaName;
             m.data = newobj;
             m.color = colors[index];
             this.chartOptions4AmountPlayedData.push(m)

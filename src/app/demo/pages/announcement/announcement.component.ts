@@ -473,7 +473,7 @@ export class AnnouncementComponent {
             if (event.partialText != undefined && event.partialText.split('|')[0] == "file uploaded") {
               this.loadingLoading = false; // Flag variable
               this.isfileUploaded = true;
-              this.annImage = AppSettings.API_ENDPOINT + AppSettings.Root_ENDPOINT + "/" + this.file.name;
+              this.annImage = AppSettings.Root_ENDPOINT + this.file.name;
               console.log(this.annImage);
               let array = event.partialText.split('|')[1].split('\\');
               console.log(array);
@@ -482,7 +482,7 @@ export class AnnouncementComponent {
               this.jobForm.controls['ImageInput'].setValue(this.fileName);
               console.log(this.fileName);
 
-              this.filePath = AppSettings.API_ENDPOINT + AppSettings.Root_ENDPOINT + "/" + this.fileName;
+              this.filePath = AppSettings.Root_ENDPOINT + this.fileName;
             } else {
               this.loadingLoading = false;
               this.isfileUploaded = false;
@@ -538,7 +538,7 @@ export class AnnouncementComponent {
       "description": this.jobForm.controls['description'].value,
       "fileName": this.file != null && this.file != undefined ? this.file.name : "",
       "fileContentType": this.file != null && this.file != undefined ? this.file.type : "",
-      "filePath": AppSettings.API_ENDPOINT + AppSettings.Root_ENDPOINT + "/" + this.fileName,
+      "filePath": AppSettings.Root_ENDPOINT + this.fileName,
       "isSendImmediately": !this.senditlater,
       "isScheduledLater": this.senditlater,
       "createdDate": AppSettings.GetDate(),
@@ -797,7 +797,7 @@ export class AnnouncementComponent {
             description: [data.description, Validators.required],
             fileName: [data.fileName],
             fileContentType: [data.fileContentType],
-            filePath: [AppSettings.API_ENDPOINT + AppSettings.Root_ENDPOINT + "/" + data.fileName],
+            filePath: [ AppSettings.Root_ENDPOINT+ data.fileName],
             ImageInput: [data.fileName, Validators.required],
             isSendImmediately: [data.isSendImmediately],
             isScheduledLater: [data.isScheduledLater],
@@ -828,7 +828,7 @@ export class AnnouncementComponent {
             this.fileName = data.fileName;
             this.isfileUploaded = false;
             this.uploadProgress = '100%';
-            this.filePath = AppSettings.API_ENDPOINT + AppSettings.Root_ENDPOINT + "/" + data.fileName;
+            this.filePath =  AppSettings.Root_ENDPOINT + data.fileName;
           }
           else {
             this.uploadProgress = null;
