@@ -237,23 +237,19 @@ export class RevenueanalysisComponent {
     if (businessLocationID != 0 && distance != 0) {
       await this._dashBoardservice.GetRevenueDataYearwise(businessLocationID, distance).subscribe({
         next: async (data) => {
-
-console.log(data)
-
           this.lineChartYearwiseAmountPlayed = data.amountplayedDTO;
           this.lineChartYearwiseNTI = data.netTerminalIncomeDTO;
-
           //for NTI
           let tempData: any = [];
           tempData = [...new Map(this.lineChartYearwiseNTI.map(item =>
-            [item['dbaName'], item.dbaName])).values()];
+            [item['licensedApplicantID'], item.licensedApplicantID])).values()];
           this.chartOptions5NTIXaxis = [...new Map(this.lineChartYearwiseNTI.map(item =>
             [item['monthName'], item.monthName])).values()];
           let colors = ["#7da3ba", "#003943", "#6d6d6d", "#a17c43", "#83c5be", "#b4bec9", "#FDD835"];
           tempData.forEach((element, index) => {
             let newobj = [];
             this.lineChartYearwiseNTI.forEach(async element1 => {
-              if (element == element1.dbaName) {
+              if (element == element1.licensedApplicantID ) {
                 await newobj.push(element1.nti)
               }
             })
@@ -267,18 +263,18 @@ console.log(data)
           //For Amount played
           let tempData1: any = [];
           tempData1 = [...new Map(this.lineChartYearwiseAmountPlayed.map(item =>
-            [item['dbaName'], item.dbaName])).values()];
+            [item['licensedApplicantID'], item.licensedApplicantID])).values()];
           this.chartOptions4AmountPlayedXaxis = [...new Map(this.lineChartYearwiseAmountPlayed.map(item =>
             [item['monthName'], item.monthName])).values()];
-          tempData1.forEach((element,index) => {
+          tempData1.forEach((element, index) => {
             let newobj = []
             this.lineChartYearwiseAmountPlayed.forEach(async element1 => {
-              if (element == element1.dbaName) {
+              if (element == element1.licensedApplicantID) {
                 await newobj.push(element1.amountPlayed)
               }
             })
             let m: datalinechart = { name: "", data: [], color: "" };
-            m.name = element;
+            m.name =  this.lineChartYearwiseAmountPlayed.filter(x=> x.licensedApplicantID == element)[0].dbaName;
             m.data = newobj;
             m.color = colors[index];
             this.chartOptions4AmountPlayedData.push(m)
@@ -548,8 +544,6 @@ console.log(data)
       });
   }
   BindYearWiseAmountPlayedChart() {
-
-    console.log(this.chartOptions4AmountPlayedXaxis)
     this.chartOptions4 = {
       series: this.chartOptions4AmountPlayedData,
       chart: {
