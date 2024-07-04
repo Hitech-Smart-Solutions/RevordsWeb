@@ -4,6 +4,7 @@ export class AppSettings {
     public static API_ENDPOINT = "https://api.dev.revords.com";
     public static DocAPI_ENDPOINT = "/wwwroot/Templates";
     // public static Root_ENDPOINT = "/wwwroot"; 
+    
     public static Root_ENDPOINT = "https://s3-us-west-1.amazonaws.com/revords.live.files/";
     public static Approved = 3;
     public static Draft = 1;

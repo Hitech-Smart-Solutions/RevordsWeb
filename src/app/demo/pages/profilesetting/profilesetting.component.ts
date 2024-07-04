@@ -194,10 +194,10 @@ export class ProfilesettingComponent {
         if (event.partialText != undefined && event.partialText.split('|')[0] == "file uploaded") {
           this.loadingBusinessLogo = false; // Flag variable
           this.isfileUploadedBusinessLogo = true;
-          this.annImageBusinessLogo = AppSettings.API_ENDPOINT + AppSettings.Root_ENDPOINT + "/" + this.fileBusinessLogo.name;
+          this.annImageBusinessLogo = AppSettings.Root_ENDPOINT + this.fileBusinessLogo.name;
           let array = event.partialText.split('|')[1].split('\\');
           this.fileNameBusinessLogo = array[array.length - 1];
-          this.filePathBusinessLogo = AppSettings.API_ENDPOINT + AppSettings.Root_ENDPOINT + "/" + this.fileNameBusinessLogo;
+          this.filePathBusinessLogo = AppSettings.Root_ENDPOINT + this.fileNameBusinessLogo;
         } else {
           this.loadingBusinessLogo = false;
           this.isfileUploadedBusinessLogo = false;
@@ -238,10 +238,10 @@ export class ProfilesettingComponent {
         if (event.partialText != undefined && event.partialText.split('|')[0] == "file uploaded") {
           this.loadingBusinessDisplayImage = false; // Flag variable
           this.isfileUploadedBusinessDisplayImage = true;
-          this.annImageBusinessDisplayImage = AppSettings.API_ENDPOINT + AppSettings.Root_ENDPOINT + "/" + this.fileBusinessDisplayImage.name;
+          this.annImageBusinessDisplayImage = AppSettings.Root_ENDPOINT + this.fileBusinessDisplayImage.name;
           let array = event.partialText.split('|')[1].split('\\');
           this.fileNameBusinessDisplayImage = array[array.length - 1];
-          this.filePathBusinessDisplayImage = AppSettings.API_ENDPOINT + AppSettings.Root_ENDPOINT + "/" + this.fileNameBusinessDisplayImage;
+          this.filePathBusinessDisplayImage = AppSettings.Root_ENDPOINT + this.fileNameBusinessDisplayImage;
         } else {
           this.loadingBusinessDisplayImage = false;
           this.isfileUploadedBusinessDisplayImage = false;
@@ -283,10 +283,10 @@ export class ProfilesettingComponent {
         if (event.partialText != undefined && event.partialText.split('|')[0] == "file uploaded") {
           this.loadingBusinessImage1 = false; // Flag variable
           this.isfileUploadedBusinessImage1 = true;
-          this.annImageBusinessImage1 = AppSettings.API_ENDPOINT + AppSettings.Root_ENDPOINT + "/" + this.fileBusinessImage1.name;
+          this.annImageBusinessImage1 = AppSettings.Root_ENDPOINT + this.fileBusinessImage1.name;
           let array = event.partialText.split('|')[1].split('\\');
           this.fileNameBusinessImage1 = array[array.length - 1];
-          this.filePathBusinessImage1 = AppSettings.API_ENDPOINT + AppSettings.Root_ENDPOINT + "/" + this.fileNameBusinessImage1;
+          this.filePathBusinessImage1 = AppSettings.Root_ENDPOINT + this.fileNameBusinessImage1;
         } else {
           this.loadingBusinessImage1 = false;
           this.isfileUploadedBusinessImage1 = false;
@@ -327,10 +327,10 @@ export class ProfilesettingComponent {
         if (event.partialText != undefined && event.partialText.split('|')[0] == "file uploaded") {
           this.loadingBusinessImage2 = false; // Flag variable
           this.isfileUploadedBusinessImage2 = true;
-          this.annImageBusinessImage2 = AppSettings.API_ENDPOINT + AppSettings.Root_ENDPOINT + "/" + this.fileBusinessImage2.name;
+          this.annImageBusinessImage2 = AppSettings.Root_ENDPOINT + this.fileBusinessImage2.name;
           let array = event.partialText.split('|')[1].split('\\');
           this.fileNameBusinessImage2 = array[array.length - 1];
-          this.filePathBusinessImage2 = AppSettings.API_ENDPOINT + AppSettings.Root_ENDPOINT + "/" + this.fileNameBusinessImage2;
+          this.filePathBusinessImage2 = AppSettings.Root_ENDPOINT + this.fileNameBusinessImage2;
         } else {
           this.loadingBusinessImage2 = false;
           this.isfileUploadedBusinessImage2 = false;
@@ -371,10 +371,10 @@ export class ProfilesettingComponent {
         if (event.partialText != undefined && event.partialText.split('|')[0] == "file uploaded") {
           this.loadingBusinessImage3 = false; // Flag variable
           this.isfileUploadedBusinessImage3 = true;
-          this.annImageBusinessImage3 = AppSettings.API_ENDPOINT + AppSettings.Root_ENDPOINT + "/" + this.fileBusinessImage3.name;
+          this.annImageBusinessImage3 = AppSettings.Root_ENDPOINT + this.fileBusinessImage3.name;
           let array = event.partialText.split('|')[1].split('\\');
           this.fileNameBusinessImage3 = array[array.length - 1];
-          this.filePathBusinessImage3 = AppSettings.API_ENDPOINT + AppSettings.Root_ENDPOINT + "/" + this.fileNameBusinessImage3;
+          this.filePathBusinessImage3 = AppSettings.Root_ENDPOINT + this.fileNameBusinessImage3;
         } else {
           this.loadingBusinessImage3 = false;
           this.isfileUploadedBusinessImage3 = false;
@@ -415,10 +415,10 @@ export class ProfilesettingComponent {
         if (event.partialText != undefined && event.partialText.split('|')[0] == "file uploaded") {
           this.loadingBusinessImage4 = false; // Flag variable
           this.isfileUploadedBusinessImage4 = true;
-          this.annImageBusinessImage4 = AppSettings.API_ENDPOINT + AppSettings.Root_ENDPOINT + "/" + this.fileBusinessImage4.name;
+          this.annImageBusinessImage4 = AppSettings.Root_ENDPOINT + this.fileBusinessImage4.name;
           let array = event.partialText.split('|')[1].split('\\');
           this.fileNameBusinessImage4 = array[array.length - 1];
-          this.filePathBusinessImage4 = AppSettings.API_ENDPOINT + AppSettings.Root_ENDPOINT + "/" + this.fileNameBusinessImage4;
+          this.filePathBusinessImage4 = AppSettings.Root_ENDPOINT + this.fileNameBusinessImage4;
         } else {
           this.loadingBusinessImage4 = false;
           this.isfileUploadedBusinessImage4 = false;
@@ -587,7 +587,7 @@ export class ProfilesettingComponent {
         });
 
         if (data.logoPath != '' && data.logoPath != null && data.logoPath != undefined) {
-          this.filePathBusinessLogo = AppSettings.API_ENDPOINT + AppSettings.Root_ENDPOINT + "/" + data.logoPath;
+          this.filePathBusinessLogo = AppSettings.Root_ENDPOINT + data.logoPath;
           this.uploadProgressBusinessLogo = (100).toString() + "%";
           this.fileNameBusinessLogo = data.logoPath;
         }
@@ -596,7 +596,7 @@ export class ProfilesettingComponent {
         }
 
         if (data.imagePath != '' && data.imagePath != null && data.imagePath != undefined) {
-          this.filePathBusinessDisplayImage = AppSettings.API_ENDPOINT + AppSettings.Root_ENDPOINT + "/" + data.imagePath;
+          this.filePathBusinessDisplayImage = AppSettings.Root_ENDPOINT + data.imagePath;
           this.uploadProgressBusinessDisplayImage = (100).toString() + "%";
           this.fileNameBusinessDisplayImage = data.imagePath;
         }
@@ -605,7 +605,7 @@ export class ProfilesettingComponent {
         }
 
         if (data.galleryImagePath1 != '' && data.galleryImagePath1 != null && data.galleryImagePath1 != undefined) {
-          this.filePathBusinessImage1 = AppSettings.API_ENDPOINT + AppSettings.Root_ENDPOINT + "/" + data.galleryImagePath1;
+          this.filePathBusinessImage1 = AppSettings.Root_ENDPOINT + data.galleryImagePath1;
           this.uploadProgressBusinessImage1 = (100).toString() + "%";
           this.fileNameBusinessImage1 = data.galleryImagePath1;
         }
@@ -614,7 +614,7 @@ export class ProfilesettingComponent {
         }
 
         if (data.galleryImagePath2 != '' && data.galleryImagePath2 != null && data.galleryImagePath2 != undefined) {
-          this.filePathBusinessImage2 = AppSettings.API_ENDPOINT + AppSettings.Root_ENDPOINT + "/" + data.galleryImagePath2;
+          this.filePathBusinessImage2 = AppSettings.Root_ENDPOINT + data.galleryImagePath2;
           this.uploadProgressBusinessImage2 = (100).toString() + "%";
           this.fileNameBusinessImage2 = data.galleryImagePath2;
         }
@@ -623,7 +623,7 @@ export class ProfilesettingComponent {
         }
 
         if (data.galleryImagePath3 != '' && data.galleryImagePath3 != null && data.galleryImagePath3 != undefined) {
-          this.filePathBusinessImage3 = AppSettings.API_ENDPOINT + AppSettings.Root_ENDPOINT + "/" + data.galleryImagePath3;
+          this.filePathBusinessImage3 = AppSettings.Root_ENDPOINT + data.galleryImagePath3;
           this.uploadProgressBusinessImage3 = (100).toString() + "%";
           this.fileNameBusinessImage3 = data.galleryImagePath3;
         }
@@ -632,7 +632,7 @@ export class ProfilesettingComponent {
         }
 
         if (data.galleryImagePath4 != '' && data.galleryImagePath4 != null && data.galleryImagePath4 != undefined) {
-          this.filePathBusinessImage4 = AppSettings.API_ENDPOINT + AppSettings.Root_ENDPOINT + "/" + data.galleryImagePath4;
+          this.filePathBusinessImage4 =  AppSettings.Root_ENDPOINT  + data.galleryImagePath4;
           this.uploadProgressBusinessImage4 = (100).toString() + "%";
           this.fileNameBusinessImage4 = data.galleryImagePath4;
         }
