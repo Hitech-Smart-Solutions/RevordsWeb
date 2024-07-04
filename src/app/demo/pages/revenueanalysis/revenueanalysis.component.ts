@@ -3,7 +3,6 @@ import { Router } from '@angular/router';
 import { ApexAxisChartSeries, ApexChart, ApexDataLabels, ApexFill, ApexGrid, ApexLegend, ApexMarkers, ApexNoData, ApexPlotOptions, ApexStroke, ApexTitleSubtitle, ApexTooltip, ApexXAxis, ApexYAxis } from 'ng-apexcharts';
 import { IDropdownSettings } from 'ng-multiselect-dropdown';
 import { CommonService } from 'src/app/services/CommonService';
-import { DashboardService } from 'src/app/services/DashboardService';
 import { LicenseApplicantService } from 'src/app/services/LicenseApplicantService';
 
 export type ChartOptions2 = {
@@ -75,12 +74,12 @@ export class RevenueanalysisComponent {
   chartOptions5NTIXaxis: any = [];
 
   miles = [
-    { id: 1, name: '1' },
-    { id: 2, name: '2' },
-    { id: 3, name: '3' },
-    { id: 4, name: '4' },
-    { id: 5, name: '5' },
-    { id: 10, name: '10' }
+    { id: 1, name: '1 mile' },
+    { id: 2, name: '2 miles' },
+    { id: 3, name: '3 miles' },
+    { id: 4, name: '4 miles' },
+    { id: 5, name: '5 miles' },
+    { id: 10, name: '10 miles' }
   ];
   months = [
     { id: 1, name: 'January' },
@@ -177,7 +176,6 @@ export class RevenueanalysisComponent {
           this.chartOptions3NTIXaxis = [];
           this.insightsDayWise = data.amountplayedDTO;
           this.NTIData = data.netTerminalIncomeDTO;
-          console.log(this.insightsDayWise);
           this.insightsDayWise.forEach(element => {
             let dbaName = [];
             if (element.dbaName.length > 18) {
@@ -194,7 +192,6 @@ export class RevenueanalysisComponent {
             this.chartOptions2AmountPlayedData.push(newx);
             this.chartOptions2AmountPlayedXaxis.push(dbaName);
           });
-          console.log(this.chartOptions2AmountPlayedData);
           this.NTIData.forEach(element => {
             let dbaName = [];
             if (element.dbaName.length > 18) {
@@ -242,19 +239,17 @@ export class RevenueanalysisComponent {
         next: async (data) => {
           this.lineChartYearwiseAmountPlayed = data.amountplayedDTO;
           this.lineChartYearwiseNTI = data.netTerminalIncomeDTO;
-
           //for NTI
           let tempData: any = [];
           tempData = [...new Map(this.lineChartYearwiseNTI.map(item =>
-            [item['dbaName'], item.dbaName])).values()];
+            [item['licensedApplicantID'], item.licensedApplicantID])).values()];
           this.chartOptions5NTIXaxis = [...new Map(this.lineChartYearwiseNTI.map(item =>
             [item['monthName'], item.monthName])).values()];
           let colors = ["#7da3ba", "#003943", "#6d6d6d", "#a17c43", "#83c5be", "#b4bec9", "#FDD835"];
           tempData.forEach((element, index) => {
-            console.log(this.lineChartYearwiseNTI)
             let newobj = [];
             this.lineChartYearwiseNTI.forEach(async element1 => {
-              if (element == element1.dbaName) {
+              if (element == element1.licensedApplicantID ) {
                 await newobj.push(element1.nti)
               }
             })
@@ -268,21 +263,18 @@ export class RevenueanalysisComponent {
           //For Amount played
           let tempData1: any = [];
           tempData1 = [...new Map(this.lineChartYearwiseAmountPlayed.map(item =>
-            [item['dbaName'], item.dbaName])).values()];
+            [item['licensedApplicantID'], item.licensedApplicantID])).values()];
           this.chartOptions4AmountPlayedXaxis = [...new Map(this.lineChartYearwiseAmountPlayed.map(item =>
             [item['monthName'], item.monthName])).values()];
-          tempData1.forEach((element,index) => {
-            console.log(this.lineChartYearwiseAmountPlayed)
+          tempData1.forEach((element, index) => {
             let newobj = []
             this.lineChartYearwiseAmountPlayed.forEach(async element1 => {
-              console.log(element);
-              if (element == element1.dbaName) {
+              if (element == element1.licensedApplicantID) {
                 await newobj.push(element1.amountPlayed)
               }
             })
-            console.log(newobj);
             let m: datalinechart = { name: "", data: [], color: "" };
-            m.name = element;
+            m.name =  this.lineChartYearwiseAmountPlayed.filter(x=> x.licensedApplicantID == element)[0].dbaName;
             m.data = newobj;
             m.color = colors[index];
             this.chartOptions4AmountPlayedData.push(m)
@@ -369,7 +361,6 @@ export class RevenueanalysisComponent {
         opacity: 1,
         colors: [
           function (opts) {
-            console.log(opts);
             const desc =
               opts.w.config.series[opts.seriesIndex].data[
                 opts.dataPointIndex
@@ -484,7 +475,6 @@ export class RevenueanalysisComponent {
         opacity: 1,
         colors: [
           function (opts) {
-            console.log(opts);
             const desc =
               opts.w.config.series[opts.seriesIndex].data[
                 opts.dataPointIndex

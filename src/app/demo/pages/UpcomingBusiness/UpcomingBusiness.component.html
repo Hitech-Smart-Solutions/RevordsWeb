@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col-md-12 d-flex">
             <div class="col-md-3">
-                <h2 style="color: #263a57; font-size: 25px; font-weight: 500;">Upcoming Business</h2>
+                <h2 style="color: #263a57; font-size: 25px; font-weight: 500;">Upcoming Businesses</h2>
             </div>
             <div class="col-md-3">
                 <ng-select [items]="bussinessData" bindLabel="businessName" placeholder="Select business location"
@@ -20,8 +20,8 @@
     </div>
     <div class="row">
         <div class="col-md-12 d-flex">
-            <span style="margin-left: 15px;">* The data on this dashboard is sourced from the
-                <a target="_blank" href="https://www.igb.illinois.gov">https://www.igb.illinois.gov</a> site.</span>
+            <span style="margin-left: 15px;">Source: 
+                <a target="_blank" href="https://www.igb.illinois.gov">https://www.igb.illinois.gov</a></span>
         </div>
     </div>
     <div class="row" style="margin-top: 2%;">
@@ -57,7 +57,7 @@
                     <th style="width: 15%;    vertical-align: middle;text-align: center;" mat-header-cell
                         class="custom-mat-header-styling tableHeaderCellDiv" *matHeaderCellDef mat-sort-header
                         sortActionDescription="Sort by DBAName">
-                        DBAName
+                        DBA Name
                     </th>
                     <td mat-cell class="tabletd" *matCellDef="let element" style="width: 15%;vertical-align: middle;">
                         <span style="color: #3c3c3c;">{{element.dbaName}}</span>
@@ -101,7 +101,7 @@
                     <th style="width: 5%;    vertical-align: middle;text-align: center;" mat-header-cell
                         class="custom-mat-header-styling tableHeaderCellDiv" *matHeaderCellDef mat-sort-header
                         sortActionDescription="Sort by StatusDate">
-                        StatusDate
+                        Status Date
                     </th>
                     <td style="width: 5%;text-align: center;vertical-align: middle;" mat-cell class="tabletd"
                         *matCellDef="let element">
@@ -113,7 +113,7 @@
                     <th style="width: 5%;vertical-align: middle;text-align: center;" mat-header-cell
                         class="custom-mat-header-styling tableHeaderCellDiv" *matHeaderCellDef mat-sort-header
                         sortActionDescription="Sort by LicenseType">
-                        LicenseType
+                        License Type
                     </th>
                     <td style="width: 5%;text-align: center;vertical-align: middle;" mat-cell class="tabletd"
                         *matCellDef="let element">

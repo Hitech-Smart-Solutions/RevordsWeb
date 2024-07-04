@@ -600,7 +600,7 @@ export class AnnouncementComponent {
     this._announcementService.PreviewAnnouncmentMail(badgeDetails)
       .subscribe({
         next: (data) => {
-          this.url = AppSettings.API_ENDPOINT + AppSettings.DocAPI_ENDPOINT + "/" + data.filepath;
+          this.url = AppSettings.Root_ENDPOINT + "/" + data.filepath;
           this.urlSafe = this.sanitizer.bypassSecurityTrustResourceUrl(this.url);
         },
         error: error => {

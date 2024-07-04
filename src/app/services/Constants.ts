@@ -1,9 +1,11 @@
 import * as uuid from "uuid";
 
 export class AppSettings {
-    public static API_ENDPOINT = "https://dashboard.revords.com/testapi";
+    public static API_ENDPOINT = "https://dashboard.revords.com/liveapi";
     public static DocAPI_ENDPOINT = "/wwwroot/Templates";
-    public static Root_ENDPOINT = "/wwwroot";
+    public static Root_ENDPOINT = "/wwwroot"; 
+    
+    // public static Root_ENDPOINT = "https://s3-us-west-1.amazonaws.com/revords.live.files/";
     public static Approved = 3;
     public static Draft = 1;
     public static Active = true;
