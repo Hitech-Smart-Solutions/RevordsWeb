@@ -795,6 +795,17 @@ export class MemberProfileComponent {
   }
   //#endregion
 
+  //#region TagDropdown
+  async onTagSelectAll(items) {
+    this.MemeberProfileGroup.controls['tags'].setValue(items);
+    this.common(0);
+  }
+  async onTagDeSelectAll(items) {
+    this.MemeberProfileGroup.controls['tags'].setValue(items);
+    this.common(0);
+  }
+  //#endregion
+
   formatPhoneNumber(num) {
     var s2 = ("" + num).replace(/\D/g, '');
     var m = s2.match(/^(\d{3})(\d{3})(\d{4})$/);

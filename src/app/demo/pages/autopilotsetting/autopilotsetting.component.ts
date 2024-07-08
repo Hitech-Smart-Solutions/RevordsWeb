@@ -1,13 +1,11 @@
 import { Component, ViewChild, Output, EventEmitter } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Router, RouterModule } from '@angular/router';
-import { MemberService } from '../../../services/MemberService';
+import { Router } from '@angular/router';
 import { MatSort, Sort } from '@angular/material/sort';
-import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { MatTableDataSource } from '@angular/material/table';
 import { LiveAnnouncer } from '@angular/cdk/a11y';
-import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
-import { FormsModule, FormGroup, FormBuilder, FormControl, Validators, FormArray, AbstractControl } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+import { MatPaginator } from '@angular/material/paginator';
+import {FormGroup, FormBuilder, FormControl, Validators, FormArray, AbstractControl } from '@angular/forms';
 import { AutopilotConfigService } from '../../../services/AutopilotConfigService';
 import { ToastService } from '../../../services/ToastService';
 

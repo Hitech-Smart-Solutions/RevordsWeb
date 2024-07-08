@@ -57,7 +57,7 @@ export class AnnouncementComponent {
     placeholder: 'Enter text here...',
     translate: 'no',
     showToolbar: false,
-    defaultFontName: 'Arial',
+    // defaultFontName: 'Arial',
     toolbarHiddenButtons: [
       ['bold']
     ],

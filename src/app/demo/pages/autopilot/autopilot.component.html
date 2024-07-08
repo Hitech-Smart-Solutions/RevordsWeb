@@ -114,7 +114,8 @@
             <thead>
                 <tr>
                     <td colspan="12" class="colorwithnobroder">
-                        <b> {{d.reward}} ({{d.campaignType}})
+                        <b> {{d.rewardName}}
+                            <!-- ({{d.campaignType}}) -->
                         </b>
                     </td>
                 </tr>
@@ -122,8 +123,10 @@
             <tbody>
                 <tr>
                     <td class="Incolorwithnobroderleftalign" style="width: 15%;">Business Name</td>
-                    <td colspan="3" class="Incolorwithnobroder" style="width: 18%;">Delivered ({{d.totalDelivered}})</td>
-                    <td colspan="3" class="Incolorwithnobroder" style="width: 18%;">Customer Engagements ({{d.totalEngagements}})
+                    <td colspan="3" class="Incolorwithnobroder" style="width: 18%;">Delivered ({{d.totalDelivered}})
+                    </td>
+                    <td colspan="3" class="Incolorwithnobroder" style="width: 18%;">Customer Engagements
+                        ({{d.totalEngagements}})
                     </td>
                     <td colspan="3" class="Incolorwithnobroder" style="width: 18%;">Engagement Rates</td>
                 </tr>
@@ -139,34 +142,36 @@
                     <td class="SubInSecondcolorwithnobroder widtheightPerc">Redemptions %</td>
                     <td class="SubInSecondcolorwithnobroder widtheightPerc">Opt-outs %</td>
                 </tr>
-                <tr *ngFor="let g of displayData | myfilter : d.id">
-                    <td
-                        class="IncolorTextwithnobroderleftalign" style="width: 15%;">{{g.businessLocationName}}
+                <tr *ngFor="let g of d.analyticsDetails">
+                    <td class="IncolorTextwithnobroderleftalign" style="width: 15%;">{{g.businessName}}
                     </td>
-                    <td 
-                        class="IncolorTextwithnobroder fourpxBorder">
-                        {{g.delivered[0].notificationCount}}
+                    <td class="IncolorTextwithnobroder fourpxBorder">
+                        {{g.notificationCount}}
                     </td>
-                    <td  class="IncolorTextwithnobroder">
-                        {{g.delivered[0].emailCount}}
+                    <td class="IncolorTextwithnobroder">
+                        {{g.emailCount}}
                     </td>
-                    <td  class="IncolorTextwithnobroder">
-                        {{g.delivered[0].smsMmsCount}}
+                    <td class="IncolorTextwithnobroder">
+                        {{g.smsMmsCount}}
                     </td>
-                    <td 
-                        class="IncolorTextwithnobroder fourpxBorder">
-                        {{g.visits[0].claims}}</td>
-                    <td  class="IncolorTextwithnobroder">
-                        {{g.visits[0].redemptions}}</td>
-                    <td  class="IncolorTextwithnobroder">
-                        {{g.visits[0].optOuts}}</td>
-                    <td 
-                        class="IncolorTextwithnobroder fourpxBorder">
-                        {{g.visitRate[0].claims}} %</td>
-                    <td  class="IncolorTextwithnobroder">
-                        {{g.visitRate[0].redemptions}} %</td>
-                    <td  class="IncolorTextwithnobroder">
-                        {{g.visitRate[0].optOuts}} %</td>
+                    <td class="IncolorTextwithnobroder fourpxBorder">
+                        {{g.claims}}
+                    </td>
+                    <td class="IncolorTextwithnobroder">
+                        {{g.redemptions}}
+                    </td>
+                    <td class="IncolorTextwithnobroder">
+                        {{g.optOuts}}
+                    </td>
+                    <td class="IncolorTextwithnobroder fourpxBorder">
+                        {{g.totalClaimRate}} %
+                    </td>
+                    <td class="IncolorTextwithnobroder">
+                        {{g.totalredeemRate}} %
+                    </td>
+                    <td class="IncolorTextwithnobroder">
+                        {{g.totaloptoutRate}} %
+                    </td>
                 </tr>
             </tbody>
         </table>
