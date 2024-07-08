@@ -146,7 +146,7 @@ export class AutopilotComponent {
     this.getBussiness();
     let bussinessData = JSON.parse(localStorage.getItem('selectedBusiness'));
   }
-
+  //Commit
   GetAutopilotHistory(start: string, end: string) {
     this.isLoading = true;
     this._autopilotService.GetAutoPilotHistoryByBusinessGroupID(this.businessGroupID.id, start, end, this.location).pipe()
