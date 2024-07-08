@@ -142,10 +142,12 @@ export class RevenueanalysisComponent {
   async monthChange(newValue) {
     this.selectedMonth = newValue.id;
     await this.GenerateDayWiseChart();
+    await this.GenerateYearWiseChart();
   }
   async yearChange(newValue) {
     this.selectedYear = newValue.id;
     await this.GenerateDayWiseChart();
+    await this.GenerateYearWiseChart();
   }
   numberWithCommas(x) {
     var parts = x.toString().split(".");
@@ -226,7 +228,8 @@ export class RevenueanalysisComponent {
     let businessLocationID: any, distance: any, MonthID: any, YearID: any
     businessLocationID = this.selectedItems != undefined ? this.selectedItems : 0;
     distance = this.selectedmiles != undefined ? this.selectedmiles : 0;
-
+    MonthID = this.selectedMonth != undefined ? this.selectedMonth : 0;
+    YearID = this.selectedYear != undefined ? this.selectedYear : 0;
     this.chartOptions4AmountPlayedData = [];
     this.chartOptions4AmountPlayedXaxis = [];
 
@@ -234,7 +237,7 @@ export class RevenueanalysisComponent {
     this.chartOptions5NTIData = [];
     this.chartOptions5NTIXaxis = [];
 
-    if (businessLocationID != 0 && distance != 0) {
+    if (businessLocationID != 0 && distance != 0 && MonthID != 0 && YearID != 0) {
       await this._dashBoardservice.GetRevenueDataYearwise(businessLocationID, distance).subscribe({
         next: async (data) => {
           this.lineChartYearwiseAmountPlayed = data.amountplayedDTO;
@@ -256,7 +259,11 @@ export class RevenueanalysisComponent {
             })
 
             let m: datalinechart = { name: "", data: [], color: "" };
-            m.name = this.lineChartYearwiseAmountPlayed.filter(x => x.licensedApplicantID == element)[0].dbaName;;
+            console.log(element);
+            console.log(this.lineChartYearwiseAmountPlayed);
+            if (this.lineChartYearwiseAmountPlayed.filter(x => parseInt(x.licensedApplicantID) == parseInt(element)).length > 0) {
+              m.name = this.lineChartYearwiseAmountPlayed.filter(x => parseInt(x.licensedApplicantID) == parseInt(element))[0].dbaName;
+            }
             m.data = newobj;
             m.color = colors[index];
             this.chartOptions5NTIName.push(m)
@@ -397,14 +404,20 @@ export class RevenueanalysisComponent {
               opts.dataPointIndex
             ].State
           const value = opts.series[opts.seriesIndex][opts.dataPointIndex].toFixed(0).toString().replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-          return '<div style="padding: 15px;"> <span> Business Name:  </span> <b>' + desc + '</b>'
+          return '<div style="padding: 15px;width:350px;text-wrap: wrap;"> <span> Business Name:  </span> <b>' + desc + '</b>'
             + '<br/> <span> DBA Name:  </span> <b>' + dbaName + '</b>'
             + '<br/> <span> Address:  </span> <b>' + address + '</b>'
             + '<br/> <span> City:  </span> <b>' + city + '</b>'
             + '<br/> <span> State:  </span> <b>' + state + '</b>'
             + '<br/> <span> Amount Played:  </span> <b>' + '$' + value + '</b>'
             + '</div>'
-        }
+        },
+        fixed: {
+          enabled: false,
+          position: 'topRight',
+          offsetX: 0,
+          offsetY: 0,
+      },
       },
       grid: {
         show: false
@@ -511,7 +524,7 @@ export class RevenueanalysisComponent {
               opts.dataPointIndex
             ].State
           const value = opts.series[opts.seriesIndex][opts.dataPointIndex].toFixed(0).toString().replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-          return '<div style="padding: 15px;"> <span> Business Name:  </span> <b>' + desc + '</b>'
+          return '<div style="padding: 15px;width:350px;text-wrap: wrap;"> <span> Business Name:  </span> <b>' + desc + '</b>'
             + '<br/> <span> DBA Name:  </span> <b>' + dbaName + '</b>'
             + '<br/> <span> Address:  </span> <b>' + address + '</b>'
             + '<br/> <span> City:  </span> <b>' + city + '</b>'
