@@ -112,7 +112,8 @@
 
       <div class="col">
         <ng-multiselect-dropdown [placeholder]="'Choose Tag'" (onSelect)="common(0)" [settings]="dropdownSettingsSingle"
-          [data]="tagList" (onDeSelect)="common(0)" formControlName="tags">
+          [data]="tagList" (onDeSelect)="common(0)" formControlName="tags"
+          (onSelectAll)="onTagSelectAll($event)" (onDeSelectAll)="onTagDeSelectAll($event)">
         </ng-multiselect-dropdown>
       </div>
 
@@ -565,7 +566,7 @@
             sortActionDescription="Sort by status">
             Badge
           </th>
-          <td mat-cell class="tabletd" *matCellDef="let element" style="width: 10%; text-align: center">
+          <td mat-cell class="tabletd" *matCellDef="let element" style="width: 10%;">
             <div class="chip">
               <div class="chip-head" [ngStyle]="{
                   'background-image':

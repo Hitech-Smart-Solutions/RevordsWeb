@@ -1,7 +1,4 @@
 import { Component, ViewChild } from '@angular/core';
-import { Router } from 'express';
-import { ToastService } from '../../../services/ToastService';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import * as moment from "moment";
 import { DaterangepickerDirective } from 'ngx-daterangepicker-material';
 import { MatOption } from '@angular/material/core';
@@ -13,6 +10,30 @@ import { FormBuilder } from '@angular/forms';
 import { IDropdownSettings, } from 'ng-multiselect-dropdown';
 import * as dayjs from 'dayjs';
 import { AutopilotConfigService } from 'src/app/services/AutopilotConfigService';
+
+export class AnalyticsDetails {
+  businessLocationID: number;
+  businessName: string;
+  claims: number;
+  emailCount: number;
+  notificationCount: number;
+  optOuts: number;
+  autoPilotID: number;
+  redemptions: number;
+  smsMmsCount: number;
+  totalClaimRate: number;
+  totaloptoutRate: number;
+  totalredeemRate: number;
+}
+
+export class AnalyticsHeader {
+  id: number;
+  rewardName: string;
+  totalDelivered: number;
+  totalEngagements: number;
+  totalVisitsRate: number;
+  analyticsDetails: AnalyticsDetails[] = [];
+}
 
 @Component({
   selector: 'app-autopilot',
@@ -60,8 +81,8 @@ export class AutopilotComponent {
   location: string = "";
   dropdown: string[] = [];
 
-  constructor(private _promotionService: PromotionService, private _commonService: CommonService, 
-    private _formBuilder: FormBuilder,private _autopilotService:AutopilotConfigService) {
+  constructor(private _promotionService: PromotionService, private _commonService: CommonService,
+    private _formBuilder: FormBuilder, private _autopilotService: AutopilotConfigService) {
     this.businessGroupID = JSON.parse(localStorage.getItem('BusinessGroup'));
     this.selected = {
       startDate: dayjs().subtract(6, 'days'),
@@ -92,9 +113,9 @@ export class AutopilotComponent {
     this.bussinessData.forEach(element => {
       this.location += element.id + ',';
     });
-    let s = formatDate((moment().subtract(30, 'days'))['_d'], 'yyyy-MM-dd', 'en-US');
-    let e = formatDate((moment().add(1, 'days'))['_d'], 'yyyy-MM-dd', 'en-US');
-    this.GetAutopilotHistory(s, e);
+    this.startDate = formatDate((moment().subtract(6, 'days'))['_d'], 'yyyy-MM-dd', 'en-US');
+    this.endDate = formatDate((moment())['_d'], 'yyyy-MM-dd', 'en-US');
+    this.GetAutopilotHistory(this.startDate, this.endDate);
   }
 
   open() {
@@ -125,44 +146,54 @@ export class AutopilotComponent {
     this.getBussiness();
     let bussinessData = JSON.parse(localStorage.getItem('selectedBusiness'));
   }
-
+  //Commit
   GetAutopilotHistory(start: string, end: string) {
     this.isLoading = true;
-    this._autopilotService.GetAutoPilotHistoryByBusinessGroupID(this.businessGroupID.id, start, end,this.location).pipe()
+    this._autopilotService.GetAutoPilotHistoryByBusinessGroupID(this.businessGroupID.id, start, end, this.location).pipe()
       .subscribe({
         next: (data) => {
-          console.log(data)
-          this.displayData = data;
           this.totalDelivered = 0;
           this.totalVisitRate = 0;
           this.totalVisit = 0;
 
-          this.distinctData = data.filter(
-            (thing, i, arr) => arr.findIndex(t => t.id === thing.id) === i
-          );
+          this.displayData = data['table2'];
 
-          this.displayData.forEach(element => {
-            this.totalDelivered += element.totalDelivered;
-            this.totalVisit += element.totalEngagements + element.totalOtherEngagements
-          });
-          this.totalVisitRate = this.totalDelivered > 0 ? (this.totalVisit * 100) / this.totalDelivered : 0;
+          let header: AnalyticsHeader[] = [];
+          let details: AnalyticsDetails[] = [];
 
-          this.distinctData.forEach((element: any) => {
-            let delivered = 0;
-            let engagements = 0;
-            let otherEngagements = 0;
-            data.forEach((x: any) => {
-              if (x.id == element.id) {
-                delivered += x.totalDelivered;
-                engagements += x.totalEngagements;
-                otherEngagements += x.totalOtherEngagements;
+          data['table1'].forEach(h => {
+            details = [];
+            data['table2'].forEach(d => {
+              if (d.autoPilotID == h.id) {
+                details.push({
+                  businessLocationID: d.businessLocationID,
+                  businessName: d.businessName,
+                  claims: d.claims,
+                  emailCount: d.emailCount,
+                  notificationCount: d.notificationCount,
+                  optOuts: d.optOuts,
+                  autoPilotID: d.autoPilotID,
+                  redemptions: d.redemptions,
+                  smsMmsCount: d.smsMmsCount,
+                  totalClaimRate: d.totalClaimRate,
+                  totaloptoutRate: d.totaloptoutRate,
+                  totalredeemRate: d.totalredeemRate
+                })
               }
             });
-            element.totalDelivered = delivered;
-            element.totalEngagements = engagements;
-            element.totalOtherEngagements = otherEngagements;
+            header.push({
+              id: h.id,
+              rewardName: h.rewardName,
+              totalDelivered: h.totalDelivered,
+              totalEngagements: h.totalEngagements,
+              totalVisitsRate: h.totalVisitsRate,
+              analyticsDetails: details
+            })
+            this.totalDelivered += h.totalDelivered;
+            this.totalVisit += h.totalEngagements + h.totalOtherEngagements;
+            this.totalVisitRate = this.totalDelivered > 0 ? (this.totalVisit * 100) / this.totalDelivered : 0;
           });
-
+          this.distinctData = header;
           this.isLoading = false;
         },
         error: error => {
