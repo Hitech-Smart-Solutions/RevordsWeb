@@ -239,9 +239,6 @@ export class RevenueanalysisComponent {
         next: async (data) => {
           this.lineChartYearwiseAmountPlayed = data.amountplayedDTO;
           this.lineChartYearwiseNTI = data.netTerminalIncomeDTO;
-
-          console.log(this.lineChartYearwiseNTI)
-
           //for NTI
           let tempData: any = [];
           tempData = [...new Map(this.lineChartYearwiseNTI.map(item =>
@@ -272,7 +269,6 @@ export class RevenueanalysisComponent {
           tempData1.forEach((element, index) => {
             let newobj = []
             this.lineChartYearwiseAmountPlayed.forEach(async element1 => {
-              console.log(element1)
               if (element == element1.licensedApplicantID) {
                 await newobj.push(element1.amountPlayed)
               }
@@ -548,7 +544,6 @@ export class RevenueanalysisComponent {
       });
   }
   BindYearWiseAmountPlayedChart() {
-    console.log(this.chartOptions4AmountPlayedData)
     this.chartOptions4 = {
       series: this.chartOptions4AmountPlayedData,
       chart: {
