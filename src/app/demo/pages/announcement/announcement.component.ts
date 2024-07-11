@@ -469,19 +469,14 @@ export class AnnouncementComponent {
             if (event.type == HttpEventType.UploadProgress) {
               this.uploadProgress = Math.round(100 * (event.loaded / event.total)).toString() + "%";
             }
-            console.log(event.partialText);
             if (event.partialText != undefined && event.partialText.split('|')[0] == "file uploaded") {
               this.loadingLoading = false; // Flag variable
               this.isfileUploaded = true;
               this.annImage = AppSettings.Root_ENDPOINT + this.file.name;
-              console.log(this.annImage);
-              let array = event.partialText.split('|')[1].split('\\');
-              console.log(array);
+              let array = event.partialText.split('|')[1].split('/');
               this.fileName = array[array.length - 1];
               this.jobForm.controls['fileName'].setValue(this.fileName);
               this.jobForm.controls['ImageInput'].setValue(this.fileName);
-              console.log(this.fileName);
-
               this.filePath = AppSettings.Root_ENDPOINT + this.fileName;
             } else {
               this.loadingLoading = false;
@@ -600,7 +595,7 @@ export class AnnouncementComponent {
     this._announcementService.PreviewAnnouncmentMail(badgeDetails)
       .subscribe({
         next: (data) => {
-          this.url = AppSettings.Root_ENDPOINT + "/" + data.filepath;
+          this.url = AppSettings.Root_ENDPOINT + data.filepath;
           this.urlSafe = this.sanitizer.bypassSecurityTrustResourceUrl(this.url);
         },
         error: error => {

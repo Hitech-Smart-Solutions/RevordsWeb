@@ -404,7 +404,7 @@ export class RevenueanalysisComponent {
               opts.dataPointIndex
             ].State
           const value = opts.series[opts.seriesIndex][opts.dataPointIndex].toFixed(0).toString().replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-          return '<div style="padding: 15px;width:300px;text-wrap: wrap;"> <span> Business Name:  </span> <b>' + desc + '</b>'
+          return '<div style="padding: 15px;width:290px;text-wrap: wrap;"> <span> Business Name:  </span> <b>' + desc + '</b>'
             + '<br/> <span> DBA Name:  </span> <b>' + dbaName + '</b>'
             + '<br/> <span> Address:  </span> <b>' + address + '</b>'
             + '<br/> <span> City:  </span> <b>' + city + '</b>'
@@ -524,7 +524,7 @@ export class RevenueanalysisComponent {
               opts.dataPointIndex
             ].State
           const value = opts.series[opts.seriesIndex][opts.dataPointIndex].toFixed(0).toString().replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-          return '<div style="padding: 15px;width:300px;text-wrap: wrap;"> <span> Business Name:  </span> <b>' + desc + '</b>'
+          return '<div style="padding: 15px;width:290px;text-wrap: wrap;"> <span> Business Name:  </span> <b>' + desc + '</b>'
             + '<br/> <span> DBA Name:  </span> <b>' + dbaName + '</b>'
             + '<br/> <span> Address:  </span> <b>' + address + '</b>'
             + '<br/> <span> City:  </span> <b>' + city + '</b>'

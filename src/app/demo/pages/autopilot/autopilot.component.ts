@@ -190,7 +190,7 @@ export class AutopilotComponent {
               analyticsDetails: details
             })
             this.totalDelivered += h.totalDelivered;
-            this.totalVisit += h.totalEngagements + h.totalOtherEngagements;
+            this.totalVisit += h.totalEngagements;
             this.totalVisitRate = this.totalDelivered > 0 ? (this.totalVisit * 100) / this.totalDelivered : 0;
           });
           this.distinctData = header;
