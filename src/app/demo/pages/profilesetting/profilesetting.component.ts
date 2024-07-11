@@ -39,6 +39,8 @@ export class ProfilesettingComponent {
   iseditmode: any = false;
   isAgeRestriction: Boolean = false;
   isSponsored: Boolean = false;
+  licenseNumber: any = '';
+  timeZone: any = '';
   ChkMakeDefaultTime = false;
   dropdownSettingsSingleState: IDropdownSettings = {};
   statesData: any = [];
@@ -195,7 +197,7 @@ export class ProfilesettingComponent {
           this.loadingBusinessLogo = false; // Flag variable
           this.isfileUploadedBusinessLogo = true;
           this.annImageBusinessLogo = AppSettings.Root_ENDPOINT + this.fileBusinessLogo.name;
-          let array = event.partialText.split('|')[1].split('\\');
+          let array = event.partialText.split('|')[1].split('/');
           this.fileNameBusinessLogo = array[array.length - 1];
           this.filePathBusinessLogo = AppSettings.Root_ENDPOINT + this.fileNameBusinessLogo;
         } else {
@@ -239,7 +241,7 @@ export class ProfilesettingComponent {
           this.loadingBusinessDisplayImage = false; // Flag variable
           this.isfileUploadedBusinessDisplayImage = true;
           this.annImageBusinessDisplayImage = AppSettings.Root_ENDPOINT + this.fileBusinessDisplayImage.name;
-          let array = event.partialText.split('|')[1].split('\\');
+          let array = event.partialText.split('|')[1].split('/');
           this.fileNameBusinessDisplayImage = array[array.length - 1];
           this.filePathBusinessDisplayImage = AppSettings.Root_ENDPOINT + this.fileNameBusinessDisplayImage;
         } else {
@@ -283,8 +285,8 @@ export class ProfilesettingComponent {
         if (event.partialText != undefined && event.partialText.split('|')[0] == "file uploaded") {
           this.loadingBusinessImage1 = false; // Flag variable
           this.isfileUploadedBusinessImage1 = true;
-          this.annImageBusinessImage1 = AppSettings.Root_ENDPOINT + this.fileBusinessImage1.name;
-          let array = event.partialText.split('|')[1].split('\\');
+          this.annImageBusinessImage1 = AppSettings.Root_ENDPOINT  + this.fileBusinessImage1.name;
+          let array = event.partialText.split('|')[1].split('/');
           this.fileNameBusinessImage1 = array[array.length - 1];
           this.filePathBusinessImage1 = AppSettings.Root_ENDPOINT + this.fileNameBusinessImage1;
         } else {
@@ -328,7 +330,7 @@ export class ProfilesettingComponent {
           this.loadingBusinessImage2 = false; // Flag variable
           this.isfileUploadedBusinessImage2 = true;
           this.annImageBusinessImage2 = AppSettings.Root_ENDPOINT + this.fileBusinessImage2.name;
-          let array = event.partialText.split('|')[1].split('\\');
+          let array = event.partialText.split('|')[1].split('/');
           this.fileNameBusinessImage2 = array[array.length - 1];
           this.filePathBusinessImage2 = AppSettings.Root_ENDPOINT + this.fileNameBusinessImage2;
         } else {
@@ -372,7 +374,7 @@ export class ProfilesettingComponent {
           this.loadingBusinessImage3 = false; // Flag variable
           this.isfileUploadedBusinessImage3 = true;
           this.annImageBusinessImage3 = AppSettings.Root_ENDPOINT + this.fileBusinessImage3.name;
-          let array = event.partialText.split('|')[1].split('\\');
+          let array = event.partialText.split('|')[1].split('/');
           this.fileNameBusinessImage3 = array[array.length - 1];
           this.filePathBusinessImage3 = AppSettings.Root_ENDPOINT + this.fileNameBusinessImage3;
         } else {
@@ -416,7 +418,7 @@ export class ProfilesettingComponent {
           this.loadingBusinessImage4 = false; // Flag variable
           this.isfileUploadedBusinessImage4 = true;
           this.annImageBusinessImage4 = AppSettings.Root_ENDPOINT + this.fileBusinessImage4.name;
-          let array = event.partialText.split('|')[1].split('\\');
+          let array = event.partialText.split('|')[1].split('/');
           this.fileNameBusinessImage4 = array[array.length - 1];
           this.filePathBusinessImage4 = AppSettings.Root_ENDPOINT + this.fileNameBusinessImage4;
         } else {
@@ -463,6 +465,8 @@ export class ProfilesettingComponent {
     this.isAgeRestriction = false;
     this.isSponsored = false;
     this.customerID = '';
+    this.licenseNumber = '';
+    this.timeZone = '';
   }
 
   GetBusinessProfilesByGroupID() {
@@ -474,7 +478,6 @@ export class ProfilesettingComponent {
   Edit(e) {
     this.profileSettingService.GetBusinessProfilesByID(e.id).subscribe({
       next: (data: any) => {
-        console.log(data)
         this.businessLocationID = e.id;
         this.latitude = data.latitude;
         this.longitude = data.longitude;
@@ -482,6 +485,8 @@ export class ProfilesettingComponent {
         this.isAgeRestriction = data.isAgeRestriction;
         this.isSponsored = data.isSponsored;
         this.customerID = data.customerID;
+        this.licenseNumber = data.licenseNumber;
+        this.timeZone = data.timeZone;
 
         this.ProfileFormGroup.controls['businessName'].setValue(data.legalName);
         this.ProfileFormGroup.controls['shortName'].setValue(data.businessName);
@@ -632,7 +637,7 @@ export class ProfilesettingComponent {
         }
 
         if (data.galleryImagePath4 != '' && data.galleryImagePath4 != null && data.galleryImagePath4 != undefined) {
-          this.filePathBusinessImage4 =  AppSettings.Root_ENDPOINT  + data.galleryImagePath4;
+          this.filePathBusinessImage4 = AppSettings.Root_ENDPOINT + data.galleryImagePath4;
           this.uploadProgressBusinessImage4 = (100).toString() + "%";
           this.fileNameBusinessImage4 = data.galleryImagePath4;
         }
@@ -825,7 +830,7 @@ export class ProfilesettingComponent {
       "createdDate": AppSettings.GetDate(),
       "lastModifiedBy": AppSettings.GetCreatedBy(),
       "lastModifiedDate": AppSettings.GetDate(),
-      "stateCodeID": this.ProfileFormGroup.controls['stateCodeId'].value[0].id,
+      "stateCodeID": this.ProfileFormGroup.controls['stateCodeId'].value,
       "city": this.ProfileFormGroup.controls['city'].value,
       "businesswiseLabels": this.GetBusinessLabels(),
       "businesswiseWorkingDays": this.GetBusinessWorkingHours(),
@@ -835,7 +840,9 @@ export class ProfilesettingComponent {
       "galleryImagePath4": this.fileNameBusinessImage4,
       "isAgeRestriction": this.isAgeRestriction,
       "isSponsored": this.isSponsored,
-      "customerID": this.customerID
+      "customerID": this.customerID,
+      "licenseNumber": this.licenseNumber,
+      "timeZone": this.timeZone,
     }
 
     this.profileSettingService.PutBusinessProfile(details.id, details)
@@ -847,6 +854,8 @@ export class ProfilesettingComponent {
           this.isAgeRestriction = false;
           this.isSponsored = false;
           this.customerID = '';
+          this.licenseNumber = '';
+          this.timeZone = '';
           this.ProfileFormGroup.reset();
           this.GetBusinessProfilesByGroupID();
         },

@@ -136,13 +136,12 @@ i.icon-fs-x-button {
   color: #7DA3BA;
 }
 
-.dropdown-item.active,
-.dropdown-item:active {
-  background-color: black
-}
+// .dropdown-menu:active {
+  // background-color: black
+// }
 
-.dropdown-menu:active {
-  background-color: black
+.dropdown-item.active, .dropdown-item:active {
+  background-color: black;
 }
 
 .navbar-light .navbar-nav .nav-link:focus,

@@ -668,7 +668,8 @@ export class PromotionComponent {
 
     this._promotionService.GetPromotionByID(id).pipe()
       .subscribe({
-        next: async (data) => {
+        next: async (res) => {
+          let data = res[0];
           let year = new Date().getFullYear();
           let month = (new Date().getMonth() + 1);
           let date = new Date().getDate();
@@ -679,7 +680,7 @@ export class PromotionComponent {
             promotionalMessage1: [data.promotionalMessage, Validators.required],
             promotionalMessage2: [data.promotionalMessage2],
             isWordOfMouth1: [data.isWordOfMouth],
-            isWordOfMouth2: [false],
+            isWordOfMouth2: [data.isWordOfMouth2],
             occasion: [data.occasion, Validators.compose([Validators.required, Validators.maxLength(length)])],
             occasionHTML: [data.occasionHtml],
             offerStartDate: [this.startDate, Validators.required],
@@ -688,12 +689,12 @@ export class PromotionComponent {
             date: [''],
             time: [''],
             isSpinWheelAllowed1: [data.isSpinWheel],
-            isSpinWheelAllowed2: [false],
+            isSpinWheelAllowed2: [data.isSpinWheel2],
             isRedeemable1: [data.isRedeemable],
-            isRedeemable2: [false],
+            isRedeemable2: [data.isRedeemable2],
             fileName: [data.fileName],
             fileContentType: [data.fileContentType],
-            filePath: [ AppSettings.Root_ENDPOINT  + data.fileName],
+            filePath: [AppSettings.Root_ENDPOINT + data.fileName],
             isSpinMulti: [data.isSpinMulti],
             MuliplePromo: [data.promotionalMessage2 != '' && data.promotionalMessage2 != null ? true : false]
           });
@@ -718,7 +719,7 @@ export class PromotionComponent {
           if (data.fileName != null && data.fileName != '') {
             this.isfileUploaded = false;
             this.fileName = data.fileName;
-            this.filePath =  AppSettings.Root_ENDPOINT + data.fileName;
+            this.filePath = AppSettings.Root_ENDPOINT + data.fileName;
             this.uploadProgress = '100%';
           }
           else {
@@ -1352,7 +1353,7 @@ export class PromotionComponent {
         "redemptionOptionID": val.length > 0 ? val[0].id : 0,
         "fileName": this.file != null && this.file != undefined ? this.file.name : "",
         "fileContentType": this.file != null && this.file != undefined ? this.file.type : "",
-        "filePath":  AppSettings.Root_ENDPOINT + this.fileName,
+        "filePath": AppSettings.Root_ENDPOINT + this.fileName,
         "stateID": 3,
         "promotionReferenceID": 0,
         "messageBody": this.messageString,
@@ -1390,7 +1391,7 @@ export class PromotionComponent {
         "redemptionOptionID": val.length > 0 ? val[0].id : 0,
         "fileName": this.file != null && this.file != undefined ? this.file.name : "",
         "fileContentType": this.file != null && this.file != undefined ? this.file.type : "",
-        "filePath":  AppSettings.Root_ENDPOINT  + this.fileName,
+        "filePath": AppSettings.Root_ENDPOINT + this.fileName,
         "stateID": 3,
         "promotionReferenceID": 0,
         "messageBody": this.messageString,
@@ -1639,10 +1640,10 @@ export class PromotionComponent {
             if (event.partialText != undefined && event.partialText.split('|')[0] == "file uploaded") {
               this.loadingLoading = false; // Flag variable
               this.isfileUploaded = true;
-              this.annImage =  AppSettings.Root_ENDPOINT+ this.file.name;
-              let array = event.partialText.split('|')[1].split('\\');
+              this.annImage = AppSettings.Root_ENDPOINT + this.file.name;
+              let array = event.partialText.split('|')[1].split('/');
               this.fileName = array[array.length - 1];
-              this.filePath =  AppSettings.Root_ENDPOINT  + this.fileName;
+              this.filePath = AppSettings.Root_ENDPOINT + this.fileName;
             } else {
               this.loadingLoading = false;
               this.isfileUploaded = false;
