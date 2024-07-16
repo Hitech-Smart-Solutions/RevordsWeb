@@ -11,6 +11,7 @@ import { ToastService } from 'src/app/services/ToastService';
 })
 export class SpinwheelSettingComponent {
   isLoading = false;
+  isReset = false;
   spinWheelControls: any;
   submitted = false;
   businessGroupID: any;
@@ -140,9 +141,11 @@ export class SpinwheelSettingComponent {
         length: 15 - spinWheelData[i].arctext.length
       });
     }
+    this.isReset = false;
   }
 
   resetSpinWheelData() {
+    this.isReset = true;
     this.GetSpinWheeldefaultConfigByBusinessGroupID();
   }
 
@@ -214,8 +217,11 @@ export class SpinwheelSettingComponent {
   }
 
   Save() {
-    this.isLoading = true;
     this.submitted = true;
+    if (this.firstFormGroup.invalid || this.spinFormGroup.invalid) {
+      return;
+    }
+    this.isLoading = true;
     let obj = {
       uniqueId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
       id: 0,
@@ -229,13 +235,11 @@ export class SpinwheelSettingComponent {
       spinWheelDefaultConfigurationDetails: this.GetSpinWheelDetails()
     };
 
-    console.log('obj', obj);
     let isSpin = this.firstFormGroup.controls['spinRequired'].value;
-    console.log(isSpin);
-    console.log(this.headerId);
 
     this._spinwheel.PutSpinWheeldefaultConfigurationDetails(this.headerId, isSpin, obj).subscribe({
       next: (data) => {
+        this.isLoading = false;
         localStorage.removeItem('OPTS');
         this.toastService.showSuccess('Changed Successfully!');
         this.GetSpinWheeldefaultConfigByBusinessGroupID();

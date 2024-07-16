@@ -381,38 +381,33 @@ export class PromotionComponent {
       "sendDate": this.firstFormGroup.controls['isSendSoon'].value == '1' ? formatDate(new Date(), 'yyyy-MM-dd', 'en-US') : sentDate
     }
 
-    this._memberservice.GetMembersDataForPromotion(details).pipe()
-      .subscribe({
-        next: async (data) => {
-          let badgeData = data['table1'];
-          let tagData = data['table2'];
-          this.membersData = data['table3'];
-          let summary = data['table4'];
-          this.lastSmsSentNotes = data['table5'][0].notes;
+    await this._memberservice.GetMembersDataForPromotion(details).then(async (data) => {
+      let badgeData = data['table1'];
+      let tagData = data['table2'];
+      this.membersData = data['table3'];
+      let summary = data['table4'];
+      this.lastSmsSentNotes = data['table5'][0].notes;
 
-          badgeData.forEach(element => {
-            let x = { "id": element.id, "badgeName": element.name, "counts": element.count.toString(), "checked": false };
-            this.badgeDataForStep3.push(x);
-          });
-
-          tagData.forEach(element => {
-            let x = { "id": element.id, "tagName": element.name, "counts": element.count.toString(), "checked": false, "isNegativeFlag": element.isNegativeFlag };
-            this.tagDataForStep3.push(x);
-          });
-
-          this.totalDelivered = summary[0].totalDelivered;
-          this.notificationCount = summary[0].notificationCount
-          this.emailCount = summary[0].emailCount;
-          this.smsCount = summary[0].smsCount;
-
-          await this.setBusiness();
-          this.isLoading = false;
-        },
-        error: error => {
-          console.log(error);
-          this.isLoading = false;
-        }
+      badgeData.forEach(element => {
+        let x = { "id": element.id, "badgeName": element.name, "counts": element.count.toString(), "checked": false };
+        this.badgeDataForStep3.push(x);
       });
+
+      tagData.forEach(element => {
+        let x = { "id": element.id, "tagName": element.name, "counts": element.count.toString(), "checked": false, "isNegativeFlag": element.isNegativeFlag };
+        this.tagDataForStep3.push(x);
+      });
+
+      this.totalDelivered = summary[0].totalDelivered;
+      this.notificationCount = summary[0].notificationCount
+      this.emailCount = summary[0].emailCount;
+      this.smsCount = summary[0].smsCount;
+      await this.setBusiness();
+      this.isLoading = false;
+    }).catch((error) => {
+      this.isLoading = false;
+      console.log(error)
+    });
   }
 
   async setSpinWheelData() {
@@ -522,40 +517,37 @@ export class PromotionComponent {
       "sendDate": this.firstFormGroup.controls['isSendSoon'].value == '1' ? formatDate(new Date(), 'yyyy-MM-dd', 'en-US') : sentDate
     }
 
-    this._memberservice.GetMembersDataForPromotion(details).pipe()
-      .subscribe({
-        next: async (data) => {
-          let badgeData = data['table1'];
-          let tagData = data['table2'];
-          this.membersData = data['table3'];
-          let summary = data['table4'];
-          this.lastSmsSentNotes = data['table5'][0].notes;
+    this._memberservice.GetMembersDataForPromotion(details).then(
+      async (data) => {
+        let badgeData = data['table1'];
+        let tagData = data['table2'];
+        this.membersData = data['table3'];
+        let summary = data['table4'];
+        this.lastSmsSentNotes = data['table5'][0].notes;
 
-          this.badgeDataForStep3.forEach(element => {
-            element.counts = badgeData.filter(x => x.id == element.id)[0].count;
-          });
-          this.tagDataForStep3.forEach(element => {
-            element.counts = tagData.filter(x => x.id == element.id)[0].count;
-          });
+        this.badgeDataForStep3.forEach(element => {
+          element.counts = badgeData.filter(x => x.id == element.id)[0].count;
+        });
+        this.tagDataForStep3.forEach(element => {
+          element.counts = tagData.filter(x => x.id == element.id)[0].count;
+        });
 
-          this.totalDelivered = summary[0].totalDelivered;
-          this.notificationCount = summary[0].notificationCount;
-          this.emailCount = summary[0].emailCount;
-          this.smsCount = summary[0].smsCount;
+        this.totalDelivered = summary[0].totalDelivered;
+        this.notificationCount = summary[0].notificationCount;
+        this.emailCount = summary[0].emailCount;
+        this.smsCount = summary[0].smsCount;
 
-          let business = JSON.parse(localStorage.getItem('Business'));
-          this.bussinessDataForStep3 = [];
-          business.forEach(element => {
-            this.bussinessDataForRedemption.filter(x => x.id == element.id)[0].memberCount =
-              this.membersData != null && this.membersData != undefined && this.membersData.length > 0 ?
-                (this.membersData.filter(x => x.id == element.id).length > 0 ? this.membersData.filter(x => x.id == element.id)[0].count : 0) : 0
-          });
-          this.bussinessDataForStep3 = this.bussinessDataForRedemption;
-        },
-        error: error => {
-          console.log(error);
-        }
-      });
+        let business = JSON.parse(localStorage.getItem('Business'));
+        this.bussinessDataForStep3 = [];
+        business.forEach(element => {
+          this.bussinessDataForRedemption.filter(x => x.id == element.id)[0].memberCount =
+            this.membersData != null && this.membersData != undefined && this.membersData.length > 0 ?
+              (this.membersData.filter(x => x.id == element.id).length > 0 ? this.membersData.filter(x => x.id == element.id)[0].count : 0) : 0
+        });
+        this.bussinessDataForStep3 = this.bussinessDataForRedemption;
+      }).catch((error) => {
+        console.log(error)
+      });;
   }
   selectAllBadges() {
     if (this.isAllBadgeChecked) {
@@ -702,20 +694,40 @@ export class PromotionComponent {
           this.subjectCharacterCount2 = 50 - this.firstFormGroup.controls['promotionalMessage2'].value.length;
           this.descriptionCharacterCount = length - this.firstFormGroup.controls['occasion'].value.length;
 
+          data.locationwisePromotionRedemption.filter(x => x.isSent == true).forEach(element => {
+            this.bussinessDataForStep3.filter(d => d.id == element.businessLocationId)[0].checked = true;
+          });
+          this.isAllChecked = (this.bussinessDataForStep3.filter(x => x.id != -1).length) ==
+            (this.bussinessDataForStep3.filter(x => x.id != -1 && x.checked == true).length) ? true : false;
+
+          data.promotionalDetails.filter(x => x.badgeId != 0).forEach(element => {
+            this.badgeDataForStep3.filter(b => b.id == element.badgeId)[0].checked = true;
+          });
+          this.isAllBadgeChecked = this.badgeDataForStep3.filter(x => x.checked == false).length > 0 ? false : true;
+
+          data.promotionalDetails.filter(x => x.tagId != 0).forEach(element => {
+            this.tagDataForStep3.filter(t => t.id == element.tagId)[0].checked = true;
+          });
+          this.isAllTagChecked = this.tagDataForStep3.filter(x => x.checked == false).length > 0 ? false : true;
+
+          this.onMembersOfSelected();
+          this.BusinessNameForSummary();
+          this.BadgeTagForSummary();
+
+          if (data.promotionalMessage2 != '' && data.promotionalMessage2 != null) {
+            this.btnAddPromo();
+          }
           this.allowSpinwheel();
 
           this.secondFormGroup = await this._formBuilder.group({
-            RedemptionAt: [data.redemptionOptionID, Validators.required],
+            RedemptionAt: [data.redemptionOptionId, Validators.required],
             membersOf: ['', Validators.required],
             sendToCustomers: ['', Validators.required]
           });
           await this.BusinessNameForSummary();
 
           this.secondFormGroup.controls['sendToCustomers'].setValue(this.sendToCustomers);
-          // await this.allowSpinwheel();
-          if (data.promotionalMessage2 != '' && data.promotionalMessage2 != null) {
-            this.btnAddPromo();
-          }
+
           if (data.fileName != null && data.fileName != '') {
             this.isfileUploaded = false;
             this.fileName = data.fileName;
@@ -997,14 +1009,23 @@ export class PromotionComponent {
             this.messageString += ("\n" + "1: " + element.reward + " reward!");
             break;
           }
-        } else if (checkwordspromotionalMessage1.toLowerCase().includes('spin the wheel')) {
+        }
+        else if (checkwordspromotionalMessage1.toLowerCase().includes('spin the wheel')) {
+          this.isValidPromoMSG1 = true;
+          this.isValidPromoMSG1MSG = "Hey!!! A Spin wheel reward has been detected. "
           this.messageString += ("\n" + "1: Spin wheel reward!");
           break;
-        } else {
+        }
+        else {
           this.isValidPromoMSG1 = false;
           this.isValidPromoMSG1MSG = "No Reward detected";
         }
       }
+
+      if (!this.isValidPromoMSG1) {
+        this.messageString += ("\n" + "1: Special reward!");
+      }
+
       //for promo 2
       for (let index = 0; index < this.allowedWords.length; index++) {
         const element = this.allowedWords[index];
@@ -1124,13 +1145,21 @@ export class PromotionComponent {
             this.messageString += ("\n" + "2: " + element.reward + " reward!");
             break;
           }
-        } else if (checkwordspromotionalMessage2.toLowerCase().includes('spin the wheel')) {
+        }
+        else if (checkwordspromotionalMessage2.toLowerCase().includes('spin the wheel')) {
+          this.isValidPromoMSG2 = true;
+          this.isValidPromoMSG2MSG = "Hey!!! A Spin wheel reward has been detected. "
           this.messageString += ("\n" + "2: Spin wheel reward!");
           break;
-        } else {
+        }
+        else {
           this.isValidPromoMSG2 = false;
           this.isValidPromoMSG2MSG = "No Reward detected";
         }
+      }
+
+      if (!this.isValidPromoMSG2) {
+        this.messageString += ("\n" + "2: Special reward!");
       }
     }
 
@@ -1148,10 +1177,8 @@ export class PromotionComponent {
             break;
           }
           else if (element.reward == 'beverages') {
-            console.log('in')
             let x = checkwordspromotionalMessage1;
             let setstring = this.extractIntegersFromString(x).toString();
-            console.log(setstring)
             if (setstring == "") {
               setstring = "Offer on your favorite beverages!";
             }
@@ -1240,21 +1267,27 @@ export class PromotionComponent {
             this.messageString = this.businessGroupID.businessGroupName + " sent you a " + element.reward + " reward!";
             break;
           }
-        } else if (checkwordspromotionalMessage1.toLowerCase().includes('spin the wheel')) {
+        }
+        else if (checkwordspromotionalMessage1.toLowerCase().includes('spin the wheel')) {
+          this.isValidPromoMSG1 = true;
+          this.isValidPromoMSG1MSG = "Hey!!! A Spin wheel reward has been detected. "
           this.messageString = this.businessGroupID.businessGroupName + " sent you a Spin wheel reward!";
           break;
-        } else {
+        }
+        else {
+          this.messageString = this.businessGroupID.businessGroupName + " sent you a reward!";
           this.isValidPromoMSG1 = false;
           this.isValidPromoMSG1MSG = "No Reward detected";
         }
-        if (valueCheckspromotionalMessage2.includes(element.text.toLowerCase())) {
-          this.isValidPromoMSG2 = true;
-          this.isValidPromoMSG2MSG = "Hey!!! A " + element.reward + "" + " Reward has been detected. "
-          break;
-        } else {
-          this.isValidPromoMSG2 = false;
-          this.isValidPromoMSG2MSG = "No Reward detected";
-        }
+        // if (valueCheckspromotionalMessage2.includes(element.text.toLowerCase())) {
+        //   this.isValidPromoMSG2 = true;
+        //   this.isValidPromoMSG2MSG = "Hey!!! A " + element.reward + "" + " Reward has been detected. "
+        //   break;
+        // } 
+        // else {
+        //   this.isValidPromoMSG2 = false;
+        //   this.isValidPromoMSG2MSG = "No Reward detected";
+        // }
       }
     }
 
@@ -1327,7 +1360,7 @@ export class PromotionComponent {
       new Date(new Date(date).getFullYear(), new Date(date).getMonth(), new Date(date).getDate(), time, 0, 0) : "";
     if (index == 1) {
       let isSpinWheel1: Boolean = this.firstFormGroup.controls['isSpinWheelAllowed1'].value;
-      let val = this.secondFormGroup.controls['RedemptionAt'].value != null ? this.secondFormGroup.controls['RedemptionAt'].value : [];
+      let val = this.secondFormGroup.controls['RedemptionAt'].value;
       let badgeDetails = {
         "uniqueId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
         "id": 0,
@@ -1350,7 +1383,7 @@ export class PromotionComponent {
         "lastModifiedBy": AppSettings.GetLastModifiedBy(),
         "lastModifiedDate": AppSettings.GetDate(),
         "businessGroupID": this.businessGroupID.id,
-        "redemptionOptionID": val.length > 0 ? val[0].id : 0,
+        "redemptionOptionID": val != null ? val : 0,
         "fileName": this.file != null && this.file != undefined ? this.file.name : "",
         "fileContentType": this.file != null && this.file != undefined ? this.file.type : "",
         "filePath": AppSettings.Root_ENDPOINT + this.fileName,
@@ -1365,7 +1398,7 @@ export class PromotionComponent {
     }
     else if (index == 2) {
       let isSpinWheel2: Boolean = this.firstFormGroup.controls['isSpinWheelAllowed2'].value;
-      let val = this.secondFormGroup.controls['RedemptionAt'].value != null ? this.secondFormGroup.controls['RedemptionAt'].value : [];
+      let val = this.secondFormGroup.controls['RedemptionAt'].value;
       let badgeDetailsindex2 = {
         "uniqueId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
         "id": 0,
@@ -1388,7 +1421,7 @@ export class PromotionComponent {
         "lastModifiedBy": AppSettings.GetLastModifiedBy(),
         "lastModifiedDate": AppSettings.GetDate(),
         "businessGroupID": this.businessGroupID.id,
-        "redemptionOptionID": val.length > 0 ? val[0].id : 0,
+        "redemptionOptionID": val != null ? val : 0,
         "fileName": this.file != null && this.file != undefined ? this.file.name : "",
         "fileContentType": this.file != null && this.file != undefined ? this.file.type : "",
         "filePath": AppSettings.Root_ENDPOINT + this.fileName,
@@ -1469,7 +1502,7 @@ export class PromotionComponent {
 
   GetRedemptionDetails() {
     let details = [];
-    let redemptionAt = this.secondFormGroup.controls['RedemptionAt'].value != null ? this.secondFormGroup.controls['RedemptionAt'].value : [];
+    let redemptionAt = this.secondFormGroup.controls['RedemptionAt'].value;
     this.bussinessDataForRedemption.forEach(element => {
       if (element.id != -1) {
         let tempDetails = {
@@ -1479,7 +1512,7 @@ export class PromotionComponent {
           "businessLocationID": element.id,
           "locationName": this.selectedBusinessName,
           "isSent": this.bussinessDataForStep3.filter(x => x.id == element.id)[0].checked,
-          "redeemableAt": redemptionAt.length > 0 ? redemptionAt[0].id : 0,
+          "redeemableAt": redemptionAt != null ? redemptionAt : 0,
           "isActive": AppSettings.Active,
           "createdBy": AppSettings.GetCreatedBy(),
           "createdDate": AppSettings.GetDate(),
@@ -1610,16 +1643,16 @@ export class PromotionComponent {
     this.onMembersOfSelected();
   }
   onRedemptionOptionChanged() {
-    let val = this.secondFormGroup.controls['RedemptionAt'].value != null ? this.secondFormGroup.controls['RedemptionAt'].value : [];
-    if (val.length > 0) {
-      if (val[0].id == -1) {
+    let val = this.secondFormGroup.controls['RedemptionAt'].value;
+    if (val != null) {
+      if (val == -1) {
         this.selectedRedemtionOption = "Any Location"
       }
       else {
-        this.selectedRedemtionOption = this.bussinessDataForRedemption.filter(x => x.id == val[0].id)[0].businessName;
+        this.selectedRedemtionOption = this.bussinessDataForRedemption.filter(x => x.id == val)[0].businessName;
       }
     }
-    else if (val.length == 0) {
+    else {
       this.selectedRedemtionOption = '';
     }
     this.getRewardstring();

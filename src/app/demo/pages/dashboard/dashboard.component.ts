@@ -1107,36 +1107,34 @@ export class DashboardComponent implements OnInit {
   }
   async UpdateGoals() {
     var today = new Date();
-    today = today.getHours() <= 2 ? (new Date(today.setDate(today.getDate() - 1))) : today;
+    today = today.getHours() <= 2 ? new Date(today.setDate(today.getDate() - 1)) : today;
 
-    let action: any;
-    this.goalData.forEach(element => {
+    let Goaldata: any = [];
+    this.goalData.forEach((element) => {
       let MonthlyGoal = {
-        "uniqueId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
-        "id": 0,
-        "signUpGoals": element.Goal,
-        "monthId": (today.getMonth() + 1).toString(),
-        "yearId": (today.getFullYear()).toString(),
-        "stateId": 3,
-        "isActive": 1,
-        "createdBy": 1,
-        "createdDate": AppSettings.GetDate(),
-        "lastModifiedBy": 1,
-        "lastModifiedDate": AppSettings.GetDate(),
-        "businessGroupId": this.selectedbusinessGroup.id,
-        "businessLocationId": element.businessLocationId,
-      }
-      action = this._dashBoardservice.PutMonthlyGoal(MonthlyGoal)
-        .subscribe({
-          next: async (data) => {
-            await this.GenerateDayWiseChart(this.selectedbusinessGroup.id, this.charttype);
-          },
-          error: error => {
-            console.log(error);
-          }
-        });
+        uniqueId: '3fa85f64-5717-4562-b3fc-2c963f66afa6',
+        id: 0,
+        signUpGoals: element.Goal,
+        monthId: (today.getMonth() + 1).toString(),
+        yearId: today.getFullYear().toString(),
+        stateId: 3,
+        isActive: 1,
+        createdBy: 1,
+        createdDate: AppSettings.GetDate(),
+        lastModifiedBy: 1,
+        lastModifiedDate: AppSettings.GetDate(),
+        businessGroupId: this.selectedbusinessGroup.id,
+        businessLocationId: element.businessLocationId
+      };
+      Goaldata.push(MonthlyGoal);
     });
-    await Promise.resolve(action).then(() => {
+    this._dashBoardservice.PutMonthlyGoal(Goaldata).subscribe({
+      next: async (data) => {
+        await this.GenerateDayWiseChart(this.selectedbusinessGroup.id, this.charttype);
+      },
+      error: (error) => {
+        console.log(error);
+      }
     });
   }
   showSnackbarAction(message: string, action: string) {

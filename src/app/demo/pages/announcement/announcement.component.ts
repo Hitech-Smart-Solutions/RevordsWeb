@@ -353,35 +353,31 @@ export class AnnouncementComponent {
       "sendDate": this.jobForm.controls['isSendImmediately'].value == 'true' ? formatDate(new Date(), 'yyyy-MM-dd', 'en-US') : sentDate
     }
 
-    this._memberservice.GetMembersDataForPromotion(details).pipe()
-      .subscribe({
-        next: async (data) => {
-          let badgeData = data['table1'];
-          let tagData = data['table2'];
-          this.membersData = data['table3'];
-          let summary = data['table4'];
+    this._memberservice.GetMembersDataForPromotion(details).then(async (data) => {
+      let badgeData = data['table1'];
+      let tagData = data['table2'];
+      this.membersData = data['table3'];
+      let summary = data['table4'];
 
-          badgeData.forEach(element => {
-            let x = { "id": element.id, "badgeName": element.name, "counts": element.count.toString(), "checked": false };
-            this.badgeDataForStep3.push(x);
-          });
-
-          tagData.forEach(element => {
-            let x = { "id": element.id, "tagName": element.name, "counts": element.count.toString(), "checked": false, "isNegativeFlag": element.isNegativeFlag };
-            this.tagDataForStep3.push(x);
-          });
-
-          this.totalDelivered = summary[0].totalDelivered;
-          this.notificationCount = summary[0].notificationCount
-          this.emailCount = summary[0].emailCount;
-          this.smsCount = summary[0].smsCount;
-
-          await this.setBusiness();
-        },
-        error: error => {
-          console.log(error);
-        }
+      badgeData.forEach(element => {
+        let x = { "id": element.id, "badgeName": element.name, "counts": element.count.toString(), "checked": false };
+        this.badgeDataForStep3.push(x);
       });
+
+      tagData.forEach(element => {
+        let x = { "id": element.id, "tagName": element.name, "counts": element.count.toString(), "checked": false, "isNegativeFlag": element.isNegativeFlag };
+        this.tagDataForStep3.push(x);
+      });
+
+      this.totalDelivered = summary[0].totalDelivered;
+      this.notificationCount = summary[0].notificationCount
+      this.emailCount = summary[0].emailCount;
+      this.smsCount = summary[0].smsCount;
+
+      await this.setBusiness();
+    }).catch((error) => {
+      console.log(error)
+    });;
   }
   onMembersOfSelected() {
     this.membersData = [];
@@ -422,39 +418,35 @@ export class AnnouncementComponent {
       "sendDate": this.jobForm.controls['isSendImmediately'].value == 'true' ? formatDate(new Date(), 'yyyy-MM-dd', 'en-US') : sentDate
     }
 
-    this._memberservice.GetMembersDataForPromotion(details).pipe()
-      .subscribe({
-        next: async (data) => {
-          let badgeData = data['table1'];
-          let tagData = data['table2'];
-          this.membersData = data['table3'];
-          let summary = data['table4'];
+    this._memberservice.GetMembersDataForPromotion(details).then(async (data) => {
+      let badgeData = data['table1'];
+      let tagData = data['table2'];
+      this.membersData = data['table3'];
+      let summary = data['table4'];
 
-          this.badgeDataForStep3.forEach(element => {
-            element.counts = badgeData.filter(x => x.id == element.id)[0].count;
-          });
-          this.tagDataForStep3.forEach(element => {
-            element.counts = tagData.filter(x => x.id == element.id)[0].count;
-          });
-
-          this.totalDelivered = summary[0].totalDelivered;
-          this.notificationCount = summary[0].notificationCount;
-          this.emailCount = summary[0].emailCount;
-          this.smsCount = summary[0].smsCount;
-
-          let business = JSON.parse(localStorage.getItem('Business'));
-          this.bussinessDataForStep3 = [];
-          business.forEach(element => {
-            this.bussinessDataForRedemption.filter(x => x.id == element.id)[0].memberCount =
-              this.membersData != null && this.membersData != undefined && this.membersData.length > 0 ?
-                (this.membersData.filter(x => x.id == element.id).length > 0 ? this.membersData.filter(x => x.id == element.id)[0].count : 0) : 0
-          });
-          this.bussinessDataForStep3 = this.bussinessDataForRedemption;
-        },
-        error: error => {
-          console.log(error);
-        }
+      this.badgeDataForStep3.forEach(element => {
+        element.counts = badgeData.filter(x => x.id == element.id)[0].count;
       });
+      this.tagDataForStep3.forEach(element => {
+        element.counts = tagData.filter(x => x.id == element.id)[0].count;
+      });
+
+      this.totalDelivered = summary[0].totalDelivered;
+      this.notificationCount = summary[0].notificationCount;
+      this.emailCount = summary[0].emailCount;
+      this.smsCount = summary[0].smsCount;
+
+      let business = JSON.parse(localStorage.getItem('Business'));
+      this.bussinessDataForStep3 = [];
+      business.forEach(element => {
+        this.bussinessDataForRedemption.filter(x => x.id == element.id)[0].memberCount =
+          this.membersData != null && this.membersData != undefined && this.membersData.length > 0 ?
+            (this.membersData.filter(x => x.id == element.id).length > 0 ? this.membersData.filter(x => x.id == element.id)[0].count : 0) : 0
+      });
+      this.bussinessDataForStep3 = this.bussinessDataForRedemption;
+    }).catch((error) => {
+      console.log(error)
+    });;
   }
 
   // onUpload of button Upload
@@ -792,7 +784,7 @@ export class AnnouncementComponent {
             description: [data.description, Validators.required],
             fileName: [data.fileName],
             fileContentType: [data.fileContentType],
-            filePath: [ AppSettings.Root_ENDPOINT+ data.fileName],
+            filePath: [AppSettings.Root_ENDPOINT + data.fileName],
             ImageInput: [data.fileName, Validators.required],
             isSendImmediately: [data.isSendImmediately],
             isScheduledLater: [data.isScheduledLater],
@@ -823,7 +815,7 @@ export class AnnouncementComponent {
             this.fileName = data.fileName;
             this.isfileUploaded = false;
             this.uploadProgress = '100%';
-            this.filePath =  AppSettings.Root_ENDPOINT + data.fileName;
+            this.filePath = AppSettings.Root_ENDPOINT + data.fileName;
           }
           else {
             this.uploadProgress = null;

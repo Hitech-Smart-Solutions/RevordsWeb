@@ -507,11 +507,6 @@ export class ProfilesettingComponent {
         this.ProfileFormGroup.controls['phoneNo'].setValue(phone);
         this.ProfileFormGroup.controls['address'].setValue(data.adress);
         this.ProfileFormGroup.controls['city'].setValue(data.city);
-        // let selectedState: { id: any, name: any }[] = [];
-        // selectedState.push({
-        //   id: data.stateCodeID,
-        //   name: this.statesData.filter(x => x.id == data.stateCodeID)[0].name
-        // });
         this.ProfileFormGroup.controls['stateCodeId'].setValue(data.stateCodeID);
 
         this.ProfileFormGroup.controls['pinCode'].setValue(data.pinCode);
@@ -951,11 +946,7 @@ export class ProfilesettingComponent {
           this.ProfileFormGroup.controls['pinCode'].setValue(postal_code);
           this.ProfileFormGroup.controls['address'].setValue(formattedAddress);
 
-          let selectedState: { id: any, name: any }[] = [];
-          selectedState.push({
-            id: this.statesData.filter(x => x.name == state)[0].id,
-            name: this.statesData.filter(x => x.name == state)[0].name
-          });
+          let selectedState = this.statesData.filter(x => x.name == state)[0].id;
           this.ProfileFormGroup.controls['stateCodeId'].setValue(selectedState);
         });
       });
