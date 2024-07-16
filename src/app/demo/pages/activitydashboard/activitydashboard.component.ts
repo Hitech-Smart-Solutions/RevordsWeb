@@ -70,7 +70,7 @@ export class ActivitydashboardComponent {
   SelectedBUisnessName: any = "";
   SelectedSearchText: any = "";
   fileName = 'ExcelSheet.xlsx';
-  displayedColumns: string[] = ['membername', 'phone', 'datetime', 'businessName','activityType', 'rewardName', 'timeDuration', 'points'];
+  displayedColumns: string[] = ['membername', 'phone', 'datetime', 'businessName', 'activityType', 'rewardName', 'timeDuration', 'points'];
   public dataSource = new MatTableDataSource<PeriodicElement>();
   public dataSourceForFilter: any = new MatTableDataSource<PeriodicElement>();
   public filtereddata: any = [];
@@ -106,6 +106,7 @@ export class ActivitydashboardComponent {
   };
   label: any;
   selectedRange: any;
+  isGenerating: any = false;
 
   constructor(public _activityTypeService: ActivityTypeService, private _activityHistoryService: ActivityHistoryService,
     public toastService: ToastService, private _liveAnnouncer: LiveAnnouncer, private _dateConverter: UtcConverterService) {
@@ -121,10 +122,12 @@ export class ActivitydashboardComponent {
     this.dropdownSettings = {
       idField: 'id',
       textField: 'businessName',
+      itemsShowLimit: 1
     };
     this.dropdownSettingsSingle = {
       idField: 'id',
       textField: 'activityName',
+      itemsShowLimit: 1
     }
     this.selected = {
       startDate: dayjs().subtract(6, 'days'),
@@ -185,16 +188,61 @@ export class ActivitydashboardComponent {
   async common(type: any) {
     this.isDataLoaded = false;
     this.isLoading = true;
-    let activityInput = this.ActivityDashboardGroup.controls['activity'].value;
+
     let businessInput = this.ActivityDashboardGroup.controls['business'].value;
     let searchInput = this.ActivityDashboardGroup.controls['search'].value;
 
-    this.SelectedActivityName = activityInput;
     this.SelectedBUisnessName = businessInput;
     this.SelectedSearchText = searchInput;
 
     this.filtereddata = this.dataSourceForFilter.data;
     this.paginator.firstPage();
+
+    if (type == 0) {
+      this.filtereddata = this.filtereddata;
+    }
+    let item: { 'id': any; activityName: any }[] = [];
+    if (type == 6) {
+      this.ActivityDashboardGroup.controls['activity'].setValue(null);
+      this.filtereddata = this.filtereddata.filter((t) => t.activityType == "Points Earned");
+      let value = this.activityType.filter(x => x.activityName.toString().toLowerCase() == ("Points Earned").toLowerCase())[0];
+      item.push({
+        id: value.id,
+        activityName: value.activityName.toString()
+      })
+      this.ActivityDashboardGroup.controls['activity'].setValue(item);
+    } else if (type == 7) {
+      this.ActivityDashboardGroup.controls['activity'].setValue(null);
+      this.filtereddata = this.filtereddata.filter((t) => t.activityType == "Rewards Redeemed");
+      let value = this.activityType.filter(x => x.activityName.toString().toLowerCase() == ("Rewards Redeemed").toLowerCase())[0];
+      item.push({
+        id: value.id,
+        activityName: value.activityName.toString()
+      })
+      this.ActivityDashboardGroup.controls['activity'].setValue(item);
+    } else if (type == 8) {
+      this.ActivityDashboardGroup.controls['activity'].setValue(null);
+      this.filtereddata = this.filtereddata.filter((t) => t.activityType == "Autopilot Redeemed");
+      let value = this.activityType.filter(x => x.activityName.toString().toLowerCase() == ("Autopilot Redeemed").toLowerCase())[0];
+      item.push({
+        id: value.id,
+        activityName: value.activityName.toString()
+      })
+      this.ActivityDashboardGroup.controls['activity'].setValue(item);
+    } else if (type == 9) {
+      this.ActivityDashboardGroup.controls['activity'].setValue(null);
+      this.filtereddata = this.filtereddata.filter((t) => t.activityType == "Promotion Redeemed");
+      let value = this.activityType.filter(x => x.activityName.toString().toLowerCase() == ("Promotion Redeemed").toLowerCase())[0];
+      item.push({
+        id: value.id,
+        activityName: value.activityName.toString()
+      })
+      this.ActivityDashboardGroup.controls['activity'].setValue(item);
+    }
+
+    let activityInput = this.ActivityDashboardGroup.controls['activity'].value;
+    this.SelectedActivityName = activityInput;
+
     if (businessInput != null && businessInput != undefined) {
       for (let index = 0; index < businessInput.length; index++) {
         if (index == 0) {
@@ -224,44 +272,6 @@ export class ActivitydashboardComponent {
       }
     }
 
-    if (type == 0) {
-      this.filtereddata = this.filtereddata;
-    }
-    let item: { 'id': any; activityName: any }[] = [];
-    if (type == 6) {
-      this.filtereddata = this.filtereddata.filter((t) => t.activityType == "Points Earned");
-      let value = this.activityType.filter(x => x.activityName.toString().toLowerCase() == ("Points Earned").toLowerCase())[0];
-      item.push({
-        id: value.id,
-        activityName: value.activityName.toString()
-      })
-      this.ActivityDashboardGroup.controls['activity'].setValue(item);
-    } else if (type == 7) {
-      this.filtereddata = this.filtereddata.filter((t) => t.activityType == "Rewards Redeemed");
-      let value = this.activityType.filter(x => x.activityName.toString().toLowerCase() == ("Rewards Redeemed").toLowerCase())[0];
-      item.push({
-        id: value.id,
-        activityName: value.activityName.toString()
-      })
-      this.ActivityDashboardGroup.controls['activity'].setValue(item);
-    } else if (type == 8) {
-      this.filtereddata = this.filtereddata.filter((t) => t.activityType == "Autopilot Redeemed");
-      let value = this.activityType.filter(x => x.activityName.toString().toLowerCase() == ("Autopilot Redeemed").toLowerCase())[0];
-      item.push({
-        id: value.id,
-        activityName: value.activityName.toString()
-      })
-      this.ActivityDashboardGroup.controls['activity'].setValue(item);
-    } else if (type == 9) {
-      this.filtereddata = this.filtereddata.filter((t) => t.activityType == "Promotion Redeemed");
-      let value = this.activityType.filter(x => x.activityName.toString().toLowerCase() == ("Promotion Redeemed").toLowerCase())[0];
-      item.push({
-        id: value.id,
-        activityName: value.activityName.toString()
-      })
-      this.ActivityDashboardGroup.controls['activity'].setValue(item);
-    }
-
     if (businessInput != null && businessInput != undefined && type != 6 && type != 7 && type != 8) {
       let x = this.filtereddata.filter((t) => t.activityType == "Points Earned")?.map((item) => +item.points).reduce((sum, current) => sum + current, 0);
       this.earned = x;
@@ -269,9 +279,8 @@ export class ActivitydashboardComponent {
       this.apredeemed = this.filtereddata.filter((t) => t.activityType == "Autopilot Redeemed").length;
       this.promoredeemed = this.filtereddata.filter((t) => t.activityType == "Promotion Redeemed").length;
     }
+
     this.dataSource.data = this.filtereddata;
-    // if (searchInput == null || searchInput == undefined) {
-    // }
     this.isLoading = false;
     this.isDataLoaded = true;
   }
@@ -292,8 +301,9 @@ export class ActivitydashboardComponent {
     var m = s2.match(/^(\d{3})(\d{3})(\d{4})$/);
     return (!m) ? null : "(" + m[1] + ") " + m[2] + "-" + m[3];
   }
-  
+
   exportexcel(): void {
+    this.isGenerating = true;
     let excelData = this.dataSource.data;
     let datadump: Activityhistory[] = [];
     excelData.forEach(x => {
@@ -375,6 +385,8 @@ export class ActivitydashboardComponent {
     table1.deleteRow(2);
     table1.deleteRow(1);
     table1.deleteRow(0);
+
+    this.isGenerating = false;
   }
   ngOnInit() {
     this.getBussiness();
