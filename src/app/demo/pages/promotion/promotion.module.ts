@@ -25,6 +25,7 @@ import { AngularEditorModule } from '@kolkov/angular-editor';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { UtcToLocalTimePipeModule } from 'src/app/utctolocaltime.pipe.module';
 import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 @NgModule({
   declarations: [
@@ -62,6 +63,7 @@ import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
     MatIconModule,
     UtcToLocalTimePipeModule,
     NgbTooltipModule,
+    NgSelectModule,
     NgMultiSelectDropDownModule.forRoot(),
   ],
 })

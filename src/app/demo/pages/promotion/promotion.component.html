@@ -1527,16 +1527,15 @@
                                                     <b>Redeemable At: </b>
                                                 </div>
                                                 <div class="col-md-4">
-                                                    <ng-multiselect-dropdown placeholder="Choose Redeemable At"
-                                                        (onSelect)="onRedemptionOptionChanged()"
-                                                        (onSelectAll)="onRedemptionOptionChanged()"
-                                                        formControlName="RedemptionAt"
-                                                        [settings]="dropdownSettingsSingle"
-                                                        (onDeSelect)="onRedemptionOptionChanged()"
-                                                        (onDeSelectAll)="onRedemptionOptionChanged()"
-                                                        [data]="bussinessDataForRedemption"
+                                                    <ng-select [searchable]="true"
+                                                        placeholder="Choose Redeemable At" formControlName="RedemptionAt"
+                                                        (change)="onRedemptionOptionChanged()"
                                                         [ngClass]="{ 'is-invalid': submitted && secondFormGroup.controls['RedemptionAt'].errors }">
-                                                    </ng-multiselect-dropdown>
+                                                        <ng-option *ngFor="let option of bussinessDataForRedemption"
+                                                            [value]="option.id">
+                                                            {{ option.businessName }}
+                                                        </ng-option>
+                                                    </ng-select>
                                                     <div *ngIf="submitted && secondFormGroup.controls['RedemptionAt'].errors"
                                                         class="invalid-feedback">
                                                         <div

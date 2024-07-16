@@ -16,6 +16,11 @@
 .subMenu-icon {
   color: #fff;
   width: 20px;
+  display: inline-block;
+  font: normal normal normal 14px / 1 FontAwesome !important;
+  font-size: inherit !important;
+  text-rendering: auto !important;
+  -webkit-font-smoothing: antialiased !important;
 }
 
 .subMenu-text {

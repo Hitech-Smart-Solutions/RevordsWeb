@@ -344,8 +344,9 @@
     <div class="row" style="margin-top: 5px">
       <div class="col-md-6"></div>
       <div class="col-md-4">
-        <button matStepperPrevious class="btn btn-dark flexcenter" (click)="resetSpinWheelData()"> <i
-            class="fa fa-refresh mr-2" aria-hidden="true"></i>Reset</button>
+        <button matStepperPrevious class="btn btn-dark flexcenter" [disabled]="isReset" (click)="resetSpinWheelData()">
+          <i class="fa mr-2" [ngClass]="{ 'fa-spin fa-spinner': isReset, 'fa-refresh': !isReset }"
+            aria-hidden="true"></i>Reset</button>
       </div>
       <div class="col-md-2">
         <button class="btn btn-success flexcenter" [disabled]="isLoading" (click)="Save()">

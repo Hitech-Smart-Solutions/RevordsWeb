@@ -47,8 +47,8 @@ export class MemberService {
             }));
     }
 
-    public GetMembersDataForPromotion(details): Observable<any> {
-        return this._http.get<any>(this.apiUrl + "GetMembersDataForPromotion", { params: details })
+    public GetMembersDataForPromotion(details): Promise<any> {
+        return this._http.get<any>(this.apiUrl + "GetMembersDataForPromotion", { params: details }).toPromise()
     }
     public GetLastSMSDetails(){
         return this._http.get<any>(this.apiUrl + "GetLastSMSDetails");
