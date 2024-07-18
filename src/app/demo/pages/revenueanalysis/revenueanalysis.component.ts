@@ -250,6 +250,7 @@ export class RevenueanalysisComponent {
           this.chartOptions5NTIXaxis = [...new Map(this.lineChartYearwiseNTI.map(item =>
             [item['monthName'], item.monthName])).values()];
           let colors = ["#7da3ba", "#003943", "#6d6d6d", "#a17c43", "#83c5be", "#b4bec9", "#FDD835"];
+          this.chartOptions5NTIName = [];
           tempData.forEach((element, index) => {
             let newobj = [];
             this.lineChartYearwiseNTI.forEach(async element1 => {
@@ -274,6 +275,7 @@ export class RevenueanalysisComponent {
             [item['licensedApplicantID'], item.licensedApplicantID])).values()];
           this.chartOptions4AmountPlayedXaxis = [...new Map(this.lineChartYearwiseAmountPlayed.map(item =>
             [item['monthName'], item.monthName])).values()];
+          this.chartOptions4AmountPlayedData = [];
           tempData1.forEach((element, index) => {
             let newobj = []
             this.lineChartYearwiseAmountPlayed.forEach(async element1 => {
@@ -315,7 +317,10 @@ export class RevenueanalysisComponent {
         toolbar: {
           show: false
         },
-        height: 450
+        height: 450,
+        zoom: {
+          enabled: false
+        }
       },
       noData: {
         text: this.isLoadingDayWiseChart ? "Loading..." : "No Data present in the graph!",
@@ -417,7 +422,7 @@ export class RevenueanalysisComponent {
           position: 'topRight',
           offsetX: 0,
           offsetY: 0,
-      },
+        },
       },
       grid: {
         show: false
@@ -442,7 +447,10 @@ export class RevenueanalysisComponent {
         toolbar: {
           show: false
         },
-        height: 450
+        height: 450,
+        zoom: {
+          enabled: false
+        }
       },
       noData: {
         text: this.isLoadingDayWiseChart ? "Loading..." : "No Data present in the graph!",
@@ -566,6 +574,9 @@ export class RevenueanalysisComponent {
         toolbar: {
           show: false
         },
+        zoom: {
+          enabled: false
+        }
       },
       stroke: {
         width: 3,
@@ -626,6 +637,9 @@ export class RevenueanalysisComponent {
         toolbar: {
           show: false
         },
+        zoom: {
+          enabled: false
+        }
       },
       stroke: {
         width: 3,

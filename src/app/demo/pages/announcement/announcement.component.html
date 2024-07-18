@@ -27,12 +27,14 @@
                 </form>
             </div>
             <div class="col-md-2 p-0 flexRight">
-                <button class="btn btn-success text-center" (click)="AddNew()" *ngIf="!iseditmode">
+                <button class="btn btn-success text-center" (click)="AddNew()" *ngIf="!iseditmode"
+                    [disabled]="isLoading">
                     <img alt="phonevector" class="filter-green"
                         [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-edit' : !isLoading && !iseditmode, 'fa-times' : !isLoading && iseditmode}"
                         src="../../../../assets/promotion/Create Promotion.svg">
                     Add Announcement</button>
-                <button class="btn btn-success text-center brownColor" (click)="Cancle()" *ngIf="iseditmode">
+                <button class="btn btn-success text-center brownColor" (click)="Cancle()" *ngIf="iseditmode"
+                    [disabled]="isLoading">
                     Cancel <img alt="phonevector" class="filter-green"
                         [ngClass]="{'fa-spin fa-spinner': isLoading, 'fa-edit' : !isLoading && !iseditmode, 'fa-times' : !isLoading && iseditmode}"
                         src="../../../../assets/img/icons/Cancel.svg"></button>
@@ -47,98 +49,61 @@
                                 <div class="col-md-4">
                                     <div class="row" class="info">{{p.subject}}</div>
                                     <div class="row" class="summary">
-                                        <span>Sent : </span>
-                                        {{p.lastsentDate | utcToLocalTime : 'short'}}
-                                        <span id='summaryLabel' class="ml-2" (click)="EditReplicate(p.id)">Replicate
-                                        </span>
+                                        <div class="col-md-12 d-flex pr-0 pl-0" style="align-items: center;">
+                                            <div class="col-md-8 pl-0 pr-0">
+                                                <div>
+                                                    <span>Sent: </span>
+                                                    {{p.lastsentDate | utcToLocalTime: 'short'}}
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4 d-flex"
+                                                style="align-items: center;justify-content: center;">
+                                                <span id='summaryLabel' (click)="EditReplicate(p.id)">Replicate</span>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="col-md-8 d-flex">
-                                    <!-- <div class="col-md-4">
-                                        <div class="row d-flex p-3">
-                                            <div class="col-md-6 col-auto p-0">
-                                                <div class="p-0 details">
-                                                    {{p.deliveredCount}}
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6 p-0">
-                                                <div class="mt-2 mr-2">
-                                                    <span class="overview-amount ng-binding inner ">
+                                    <div class="col-md-4" style="text-align: -webkit-center;">
+                                        <div class="row">
+                                            <div class="col-md-12 d-flex">
+                                                <div class="col-md-2"></div>
+                                                <div class="col-md-8">
+                                                    <div class="col-md-12 overview-amount ng-binding inner ">
                                                         Delivered
-                                                    </span>
+                                                    </div>
+                                                    <div class="col-md-12 details">
+                                                        {{p.deliveredCount}}
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </div>
-                                    </div> -->
-
-                                    <div class="col-md-4 text-center">
-                                        <div class="row ">
-                                            <div class="col-md-12">
-                                                <span class="overview-amount ng-binding inner ">
-                                                    Delivered
-                                                </span>
-                                            </div>
-                                            <div class="col-md-12">
-                                                <div class="details">
-                                                    {{p.deliveredCount}}
-                                                </div>
+                                                <div class="col-md-2"></div>
                                             </div>
                                         </div>
                                     </div>
-                                    <!-- <div class="col-md-4">
-                                        <div class="row d-flex p-3">
-                                            <div class="col-md-6 col-auto p-0">
-                                                <div class="p-0 details">
-                                                    {{p.openCount}}
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6 p-0">
-                                                <div class="mt-2 mr-2">
-                                                    <span class="overview-amount ng-binding inner ">
-                                                        Unique opens
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div> -->
-                                    <div class="col-md-4 text-center">
-                                        <div class="row ">
-                                            <div class="col-md-12">
+
+                                    <div class="col-md-4" style="text-align: -webkit-center;">
+                                        <div class="row d-block">
+                                            <div class="col-md-6">
                                                 <span class="overview-amount ng-binding inner ">
                                                     Unique opens
                                                 </span>
                                             </div>
-                                            <div class="col-md-12">
+                                            <div class="col-md-6">
                                                 <div class="details">
                                                     {{p.openCount}}
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <!-- <div class="col-md-4">
-                                        <div class="row d-flex p-3">
-                                            <div class="col-md-6 col-auto p-0">
-                                                <div class="p-0 details">
-                                                    {{p.openPercentages}}
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6 p-0">
-                                                <div class="mt-2 mr-2">
-                                                    <span class="overview-amount ng-binding inner ">
-                                                        Open Rate%
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div> -->
-                                    <div class="col-md-4 text-center">
-                                        <div class="row ">
-                                            <div class="col-md-12">
+
+                                    <div class="col-md-4" style="text-align: -webkit-center;">
+                                        <div class="row d-block">
+                                            <div class="col-md-6">
                                                 <span class="overview-amount ng-binding inner ">
                                                     Open Rate%
                                                 </span>
                                             </div>
-                                            <div class="col-md-12">
+                                            <div class="col-md-6">
                                                 <div class="details">
                                                     {{p.openPercentages}}%
                                                 </div>
@@ -177,8 +142,7 @@
                                                             <input type="hidden" formControlName="id"
                                                                 *ngIf="iseditmode" />
                                                             <input type="text" formControlName="subject"
-                                                                placeholder="Enter Subject here"
-                                                                maxlength="50"
+                                                                placeholder="Enter Subject here" maxlength="50"
                                                                 (keyup)="ontextchanged(50,'subject')"
                                                                 class="form-control"
                                                                 [ngClass]="{ 'is-invalid': submitted && f['subject'].errors }" />
@@ -262,14 +226,6 @@
                                                                     </div>
                                                                 </div>
                                                                 <div style="display: flex;align-items: center;">
-                                                                    <!-- <button class="btn btn-success buttonColor"
-                                                                        *ngIf="!uploadProgress" (click)="onUpload()">
-                                                                        Upload
-                                                                        <mat-icon class="filter-green"
-                                                                            style="margin-bottom: -6px;margin-left: 6px;">
-                                                                            cloud_upload
-                                                                        </mat-icon>
-                                                                    </button> -->
                                                                     <mat-icon class="cancel-upload"
                                                                         (click)="cancelUpload()" *ngIf="uploadProgress"
                                                                         style="color: red;">
@@ -287,15 +243,6 @@
                                                                 image.
                                                             </span>
                                                         </div>
-
-                                                        <!-- <div class="progress">
-                                                            <div class="progress-bar bluecolor" role="progressbar"
-                                                                [style.width]="uploadProgress"
-                                                                aria-valuenow="uploadProgress" aria-valuemin="0"
-                                                                aria-valuemax="100">
-                                                                {{uploadProgress}}
-                                                            </div>
-                                                        </div> -->
                                                     </div>
                                                 </div>
                                                 <div class="row promotionwhite mt-2">
@@ -305,7 +252,7 @@
                                                     <div class="col-lg-12" style="display: flex;padding: 0px;">
                                                         <div class="col-md-6">
                                                             <input type="date" class="form-control"
-                                                                formControlName="validDate">
+                                                                formControlName="validDate" [min]="minDate">
                                                         </div>
                                                         <div class="col-md-6">
 
@@ -330,9 +277,16 @@
                                                             </mat-radio-button>
                                                         </mat-radio-group>
                                                     </div>
+                                                    <div *ngIf="submitted && f['isSendImmediately'].errors"
+                                                        class="invalid-feedback">
+                                                        <div
+                                                            *ngIf="f['isSendImmediately'].errors['required']">
+                                                            Send now/Schedule later is required
+                                                        </div>
+                                                    </div>
                                                     <div *ngIf='f["isSendImmediately"].value == "true"'
                                                         class="col-md-8">
-                                                        <span>SMS and emails will be sent between 9 AM and 10 PM.</span>
+                                                        <span>SMS and emails will be sent between 9 AM and 9 PM.</span>
                                                     </div>
                                                     <div *ngIf='f["isSendImmediately"].value == "false"'
                                                         class="col-md-8">
@@ -342,7 +296,8 @@
                                                 <div class="row promotionwhite mt-2" id="senditlater"
                                                     *ngIf='senditlater==true'>
                                                     <div class="col-md-4">
-                                                        <input type="date" class="form-control" formControlName="date">
+                                                        <input type="date" class="form-control" formControlName="date"
+                                                            [min]="minDate" (change)="onScheduleDateChanged()">
                                                     </div>
                                                     <div class="col-md-1">
                                                         at
@@ -351,7 +306,8 @@
                                                         <select class="form-select" formControlName="time"
                                                             (change)='scheduleTimeChanged()'>
                                                             <option selected value="0">Select</option>
-                                                            <option *ngFor='let t of time' [value]="t.value">{{t.name}}
+                                                            <option *ngFor='let t of time' [value]="t.value"
+                                                                [disabled]="t.disabled">{{t.name}}
                                                             </option>
                                                         </select>
                                                     </div>

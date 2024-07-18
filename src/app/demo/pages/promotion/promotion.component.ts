@@ -1,5 +1,5 @@
 import { Component, TemplateRef, ViewChild } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 import { HttpEventType } from '@angular/common/http';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { PromotionService } from '../../../services/PromotionService';
@@ -19,6 +19,7 @@ import { MemberService } from 'src/app/services/MemberService';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { formatDate } from '@angular/common';
 import { BusinessGroupService } from 'src/app/services/BusinessGroupService';
+import { debounceTime } from 'rxjs/operators';
 
 @Component({
   selector: 'app-promotion',
@@ -102,7 +103,6 @@ export class PromotionComponent {
   isAllChecked: Boolean = false;
   isAllBadgeChecked: Boolean = false;
   isAllTagChecked: Boolean = false;
-  _defaultOpts: { indexID: number, arctext: string, colorCode: string, probability: number, IsPoints: boolean }[] = [];
   time: { name: string, value: number, disabled: boolean }[] = [
     { name: '9-10 AM', value: 9, disabled: false },
     { name: '10-11 AM', value: 10, disabled: false },
@@ -238,10 +238,9 @@ export class PromotionComponent {
   lastSmsSentNotes: any = '';
   @ViewChild('select') select: MatSelect;
   @ViewChild('editor') editor;
-  // @ViewChild('exampleModal') modal: ElementRef;
+  private debouncer: Subject<void> = new Subject<void>();
 
   dropdownSettings: IDropdownSettings = {};
-  dropdownSettingsSingle: IDropdownSettings = {};
   constructor(private _liveAnnouncer: LiveAnnouncer, private _promotionService: PromotionService,
     public toastService: ToastService, private modalService: NgbModal, private _businessGroupService: BusinessGroupService,
     private _formBuilder: FormBuilder, private _memberservice: MemberService, public sanitizer: DomSanitizer,
@@ -257,11 +256,7 @@ export class PromotionComponent {
     this.dropdownSettings = {
       idField: 'id',
       textField: 'businessName',
-    }
-    this.dropdownSettingsSingle = {
-      idField: 'id',
-      textField: 'businessName',
-      singleSelection: true
+      itemsShowLimit: 1
     }
     this.bussiness = JSON.parse(localStorage.getItem('Business'));
     this.bussiness.forEach(element => {
@@ -287,26 +282,7 @@ export class PromotionComponent {
     }
     this.getRewardstring();
   }
-  async GetSpinWheeldefaultConfigByBusinessGroupID() {
-    this._spinwheel.GetSpinWheeldefaultConfigByBusinessGroupID(this.businessGroupID.id).pipe()
-      .subscribe({
-        next: (data) => {
-          data.forEach(element => {
-            this._defaultOpts.push({
-              indexID: element.indexID,
-              arctext: element.arctext,
-              colorCode: element.colorCode,
-              probability: element.probability,
-              IsPoints: element.isInteger
-            });
-          });
-          localStorage.setItem("OPTS", JSON.stringify(this._defaultOpts));
-        },
-        error: error => {
 
-        }
-      });
-  }
   async setBusiness() {
     let data = JSON.parse(localStorage.getItem('Business'));
     this.bussinessDataForStep3 = [];
@@ -337,12 +313,13 @@ export class PromotionComponent {
     this.dropdownSettings = {
       idField: 'id',
       textField: 'businessName',
+      itemsShowLimit: 1
     }
-    this.dropdownSettingsSingle = {
-      idField: 'id',
-      textField: 'businessName',
-      singleSelection: true
-    }
+
+    // this.debouncer.pipe(debounceTime(300)).subscribe(() => {
+    //   console.log("in")
+    //   this.handleButtonClick(); // Replace with your actual method name
+    // });
   }
 
   GetBusinessGroupByID() {
@@ -406,34 +383,36 @@ export class PromotionComponent {
       this.isLoading = false;
     }).catch((error) => {
       this.isLoading = false;
-      console.log(error)
+      console.log(error);
     });
   }
 
   async setSpinWheelData() {
     this.totalPoints = 0;
-    let spinWheelData = JSON.parse(localStorage.getItem('OPTS'));
-    if (spinWheelData != null) {
-      this.spinWheelControls = Object.keys(this.spinFormGroup.controls);
-      for (let index = 0; index < this.spinWheelControls.length; index++) {
-        this.spinFormGroup.controls[index].controls['indexID'].setValue(spinWheelData[index].indexID);
-        this.spinFormGroup.controls[index].controls['text'].setValue(spinWheelData[index].arctext);
-        this.spinFormGroup.controls[index].controls['Probability'].setValue(spinWheelData[index].probability);
-        this.spinFormGroup.controls[index].controls['IsInteger'].setValue(spinWheelData[index].IsPoints);
-        this.totalPoints += parseInt(spinWheelData[index].probability);
-      }
-      this.spinFormGroup.controls[0].controls['totalPoints'].setValue(this.totalPoints);
-      let length = spinWheelData.length;
-      for (let i = 0; i < length; i++) {
-        this.indexwiseCharacters.push({
-          index: i,
-          length: 15 - spinWheelData[i].arctext.length
-        })
-      }
-    }
-    else {
-      await this.GetSpinWheeldefaultConfigByBusinessGroupID();
-    }
+    this._promotionService.GetPreviousPromotionalWheelByBusinessGroupID(this.businessGroupID.id).pipe()
+      .subscribe({
+        next: (data) => {
+          this.spinWheelControls = Object.keys(this.spinFormGroup.controls);
+          for (let index = 0; index < data.length; index++) {
+            this.spinFormGroup.controls[index].controls['indexID'].setValue(data[index].indexID);
+            this.spinFormGroup.controls[index].controls['text'].setValue(data[index].arctext);
+            this.spinFormGroup.controls[index].controls['Probability'].setValue(data[index].probability);
+            this.spinFormGroup.controls[index].controls['IsInteger'].setValue(data[index].isInteger);
+            this.totalPoints += parseInt(data[index].probability);
+          }
+          this.spinFormGroup.controls[0].controls['totalPoints'].setValue(this.totalPoints);
+          let length = data.length;
+          for (let i = 0; i < length; i++) {
+            this.indexwiseCharacters.push({
+              index: i,
+              length: 15 - data[i].arctext.length
+            })
+          }
+        },
+        error: error => {
+
+        }
+      });
   }
 
   resetSpinWheelData() {
@@ -598,36 +577,36 @@ export class PromotionComponent {
     this.BadgeTagForSummary();
   }
 
-  BadgeTagForSummary() {
+  async BadgeTagForSummary() {
     this.sendToCustomers = '';
     if (this.isAllBadgeChecked) {
-      this.sendToCustomers = 'All Badges, ';
+      this.sendToCustomers = 'All Badges';
     }
     else {
       this.badgeDataForStep3.forEach(element => {
         if (element.checked) {
-          this.sendToCustomers += element.badgeName + ', '
+          this.sendToCustomers += (this.sendToCustomers == '' ? element.badgeName : (', ' + element.badgeName));
         }
       });
     }
 
     if (this.isAllTagChecked) {
-      this.sendToCustomers += 'All Tags';
+      this.sendToCustomers += (this.sendToCustomers == '' ? 'All Tags' : ', All Tags');
     }
     else {
       this.tagDataForStep3.forEach(element => {
         if (element.checked) {
-          this.sendToCustomers += element.tagName + ', '
+          this.sendToCustomers += (this.sendToCustomers == '' ? element.tagName : (', ' + element.tagName));
         }
       });
     }
     this.secondFormGroup.controls['sendToCustomers'].setValue(this.sendToCustomers);
   }
 
-  BusinessNameForSummary() {
+  async BusinessNameForSummary() {
     this.selectedBusinessName = '';
     if (this.isAllChecked) {
-      this.selectedBusinessName = 'All';
+      this.selectedBusinessName = 'All Locations';
     }
     else {
       this.bussinessDataForStep3.filter(x => x.id != -1).forEach(element => {
@@ -667,7 +646,7 @@ export class PromotionComponent {
           let date = new Date().getDate();
           this.startDate = year + "-" + (month < 10 ? ("0" + month) : month) + "-" + (date < 10 ? ("0" + date) : date);
 
-          this.firstFormGroup = await this._formBuilder.group({
+          this.firstFormGroup = this._formBuilder.group({
             id: [''],
             promotionalMessage1: [data.promotionalMessage, Validators.required],
             promotionalMessage2: [data.promotionalMessage2],
@@ -710,23 +689,33 @@ export class PromotionComponent {
           });
           this.isAllTagChecked = this.tagDataForStep3.filter(x => x.checked == false).length > 0 ? false : true;
 
-          this.onMembersOfSelected();
-          this.BusinessNameForSummary();
-          this.BadgeTagForSummary();
+          let val = data.redemptionOptionId;
+          if (val != null && val != 0 && val != '') {
+            if (val == -1) {
+              this.selectedRedemtionOption = "Any Location";
+            }
+            else {
+              this.selectedRedemtionOption = this.bussinessDataForRedemption.filter(x => x.id == val)[0].businessName;
+            }
+          }
+          else {
+            this.selectedRedemtionOption = '';
+          }
 
           if (data.promotionalMessage2 != '' && data.promotionalMessage2 != null) {
             this.btnAddPromo();
           }
           this.allowSpinwheel();
 
-          this.secondFormGroup = await this._formBuilder.group({
+          this.secondFormGroup = this._formBuilder.group({
             RedemptionAt: [data.redemptionOptionId, Validators.required],
             membersOf: ['', Validators.required],
             sendToCustomers: ['', Validators.required]
           });
-          await this.BusinessNameForSummary();
 
-          this.secondFormGroup.controls['sendToCustomers'].setValue(this.sendToCustomers);
+          await this.onMembersOfSelected();
+          await this.BusinessNameForSummary();
+          await this.BadgeTagForSummary();
 
           if (data.fileName != null && data.fileName != '') {
             this.isfileUploaded = false;
@@ -793,6 +782,9 @@ export class PromotionComponent {
     this.smsCount = 0;
     this.messageString = ("\n" + "Valid: " + "-" + "\n" + "Redeem at: " + "\n" + "Reply STOP to opt out" + "\n"
       + "Download Revords.com/app to save your reward");
+    this.time.forEach(element => {
+      element.disabled = false;
+    });
   }
 
   showSnackbarAction(message: string, action: string) {
@@ -819,6 +811,7 @@ export class PromotionComponent {
   }
 
   async CreatePromotion() {
+    // this.debouncer.next()
     if (this.iseditmode) {
       let promotion1Subject = this.firstFormGroup.controls['promotionalMessage1'].value;
       let occasion = this.firstFormGroup.controls['occasion'].value;
@@ -840,7 +833,7 @@ export class PromotionComponent {
       this.startDate = year + "-" + (month < 10 ? ("0" + month) : month) + "-" + (date < 10 ? ("0" + date) : date);
       this.firstFormGroup.controls['offerStartDate'].setValue(this.startDate);
       await this.setSpinWheelData();
-      await this.setBusiness();
+      // await this.setBusiness();
       await this.GetMembersData();
       this.iseditmode = true;
       this.submitted = false;

@@ -1,6 +1,4 @@
-import { Component, ViewChild, ChangeDetectorRef } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { Router } from '@angular/router';
+import { Component, ViewChild } from '@angular/core';
 import { MemberService } from '../../../services/MemberService';
 import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -10,12 +8,9 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ToastService } from '../../../services/ToastService';
 import { AppSettings } from '../../../services/Constants';
 import { TagDefinationService } from '../../../services/TagDefinitionService';
-import { CommonService } from '../../../services/CommonService';
 import * as XLSX from 'xlsx';
 import { IDropdownSettings } from 'ng-multiselect-dropdown';
-import { AdminComponent } from 'src/app/theme/layout/admin/admin.component';
 import { UtcConverterService, UtcToLocalTimeFormat } from 'src/app/services/UtcConverterService';
-import { catchError, map, startWith, switchMap, pipe, of as observableOf } from 'rxjs';
 import { ActivityHistoryService } from 'src/app/services/ActivityHistoryService';
 import { BusinessGroupService } from 'src/app/services/BusinessGroupService';
 
@@ -175,13 +170,13 @@ export class MemberProfileComponent {
     email: [''],
     notes: [''],
     currentpoints: [0],
-    dayID: [0],
-    monthID: [0],
+    dayID: [null],
+    monthID: [null],
     pointstobeadded: [''],
     isHighroller: [false],
     isFreeplayer: [false],
-    businessLocationID: ['', Validators.required],
-    phoneNumber: ['', [Validators.required, Validators.maxLength(10), Validators.minLength(10)]]
+    businessLocationID: [null, Validators.required],
+    phoneNumber: [null, [Validators.required, Validators.maxLength(14), Validators.minLength(14)]]
   });
   pageEvent: PageEvent;
   bussinessData: any = [];
@@ -210,7 +205,7 @@ export class MemberProfileComponent {
   freePlayer: boolean = false;
   memberProfileID: any = 0;
   activityHistory: any = [];
-  phoneNumber: any = '';
+  phoneNumber: any = null;
   positiveFlagName: any = '';
   negativeFlagName: any = '';
   isGenerating: any = false;
@@ -233,29 +228,28 @@ export class MemberProfileComponent {
       email: '',
       notes: '',
       currentpoints: 0,
-      dayID: 0,
-      monthID: 0,
+      dayID: null,
+      monthID: null,
       pointstobeadded: '',
       isHighroller: false,
       isFreeplayer: false,
-      businessLocationID: 0,
-      phoneNumber: ['']
+      businessLocationID: null,
+      phoneNumber: null
     });
 
     this.MemeberProfileGroup = fb.group({
       tags: [],
       business: [],
       search: [],
-      phoneNumber: ['', [Validators.required, Validators.maxLength(10), Validators.minLength(10)]]
+      phoneNumber: [null, [Validators.required, Validators.maxLength(14), Validators.minLength(14)]]
     });
   }
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild('paginator') paginator: MatPaginator;
   @ViewChild('closebutton') closebutton;
-  @ViewChild('closebutton1') closebutton1;
+  @ViewChild('closebuttonEdit') closebuttonEdit;
 
   handleHighRollerChange(event) {
-    console.log(event);
     if (event.target.checked) {
       // If High Roller is checked, uncheck Free Player
       // this.freePlayer = false;
@@ -308,19 +302,20 @@ export class MemberProfileComponent {
       email: '',
       notes: '',
       currentpoints: 0,
-      dayID: 0,
-      monthID: 0,
+      dayID: null,
+      monthID: null,
       pointstobeadded: '',
       isHighroller: false,
       isFreeplayer: false,
-      businessLocationID: '',
-      phoneNumber: ['']
+      businessLocationID: null,
+      phoneNumber: null
     });
     this.jobForm.controls['memberName'].enable();
     this.jobForm.controls['monthID'].enable();
     this.jobForm.controls['dayID'].enable();
     this.jobForm.controls['email'].enable();
     this.jobForm.controls['businessLocationID'].enable();
+    this.jobForm.controls['phoneNumber'].enable();
     this.pointstobeadded = '';
     this.currentpoints = '';
     this.lifetimepoints = 0;
@@ -332,7 +327,7 @@ export class MemberProfileComponent {
     this.emailOptin = false;
     this.notificationOptin = false;
     this.memberProfileID = 0;
-    this.phoneNumber = '';
+    this.phoneNumber = null;
   }
   ngOnInit() {
     this.dropdownSettings = {
@@ -417,7 +412,6 @@ export class MemberProfileComponent {
     this.jobForm.controls['phoneNumber'].setValue(newVal);
   }
   async SetData(data) {
-    console.log('data', data);
     let month =
       data[0].birthMonth != null && data[0].birthMonth != ''
         ? this.monthlist.filter((x) => x.name.substring(0, 3).toLowerCase() == data[0].birthMonth.toLowerCase())
@@ -436,12 +430,13 @@ export class MemberProfileComponent {
           ? data[0].birthDay < 10
             ? parseInt(data[0].birthDay.substring(1, 2))
             : parseInt(data[0].birthDay.substring(0, 2))
-          : '',
-      monthID: month.length > 0 ? month[0].id : 0,
+          : null,
+      monthID: month.length > 0 ? month[0].id : null,
       pointstobeadded: '',
       isHighroller: data[0].isHighroller.toString() == 'true' && data[0].isHighroller != null ? true : false,
       isFreeplayer: data[0].isFreePlayer.toString() == 'true' && data[0].isFreePlayer != null ? true : false,
-      businessLocationID: data[0].businessLocationId != null && data[0].businessLocationId != '' ? parseInt(data[0].businessLocationId) : 0,
+      businessLocationID:
+        data[0].businessLocationId != null && data[0].businessLocationId != '' ? parseInt(data[0].businessLocationId) : null,
       phoneNumber: data[0].phone
     });
   }
@@ -450,6 +445,7 @@ export class MemberProfileComponent {
     this.clearControls();
     this.disableMemberName = true;
     this.jobForm.controls['memberName'].disable();
+    this.jobForm.controls['phoneNumber'].disable();
     this.jobForm.controls['monthID'].disable();
     this.jobForm.controls['dayID'].disable();
     this.jobForm.controls['email'].disable();
@@ -499,28 +495,29 @@ export class MemberProfileComponent {
     let monthId = this.jobForm.controls['monthID'].value;
     let bday = null;
     bday =
-      monthId != null && dayID != null && monthId.length > 0 && dayID.length > 0
-        ? new Date().getFullYear() +
-          '-' +
-          (monthId[0].id < 10 ? '0' + monthId[0].id : monthId[0].id) +
-          '-' +
-          (dayID[0].id < 10 ? '0' + dayID[0].id : dayID[0].id)
+      monthId != null && dayID != null
+        ? new Date().getFullYear() + '-' + (monthId < 10 ? '0' + monthId : monthId) + '-' + (dayID < 10 ? '0' + dayID : dayID)
         : null;
     this.isLoading = true;
     if (id == 0) {
       let memberPostDetails = {
         uniqueID: AppSettings.NewGUID(),
         id: 0,
-        memberName: this.jobForm.controls['memberName'].value,
-        birthDate: dayID != 0 && monthId != 0 ? bday : null,
+        memberName:
+          this.jobForm.controls['memberName'].value != null &&
+          this.jobForm.controls['memberName'].value != undefined &&
+          this.jobForm.controls['memberName'].value != ''
+            ? this.jobForm.controls['memberName'].value
+            : 'USER ' + this.jobForm.controls['phoneNumber'].value.replaceAll(/[^a-zA-Z0-9]/g, '').substring(5).toString(),
+        birthDate: dayID != null && monthId != null ? bday : null,
         emailID: this.jobForm.controls['email'].value,
-        phoneNo: this.jobForm.controls['phoneNumber'].value,
+        phoneNo: this.jobForm.controls['phoneNumber'].value.replaceAll(/[^a-zA-Z0-9]/g, ''),
         isActive: AppSettings.Active,
         createdBy: AppSettings.GetCreatedBy(),
         createdDate: AppSettings.GetDate(),
         lastModifiedBy: AppSettings.GetLastModifiedBy(),
         lastModifiedDate: AppSettings.GetDate(),
-        BusinessLocationId: this.jobForm.controls['businessLocationID'].value[0].id,
+        BusinessLocationId: this.jobForm.controls['businessLocationID'].value,
         memberProfile: [
           {
             uniqueId: AppSettings.NewGUID(),
@@ -557,19 +554,15 @@ export class MemberProfileComponent {
             createdDate: AppSettings.GetDate(),
             lastModifiedBy: AppSettings.GetLastModifiedBy(),
             lastModifiedDate: AppSettings.GetDate(),
-            baseLocationID: this.jobForm.controls['businessLocationID'].value[0].id,
+            baseLocationID: this.jobForm.controls['businessLocationID'].value,
             member: null
           }
         ]
       };
-      console.log(memberPostDetails);
       this._memberservice.PostMemberProfileByPhone(memberPostDetails).subscribe({
         next: (data) => {
           if (this.closebutton != null) {
             this.closebutton.nativeElement.click();
-          }
-          if (this.closebutton1 != null) {
-            this.closebutton1.nativeElement.click();
           }
           this.isLoading = false;
           this.isSubmitted = false;
@@ -601,11 +594,9 @@ export class MemberProfileComponent {
             ? this.jobForm.controls['isFreeplayer'].value
             : false
       };
-      console.log(memberDetails);
       this._memberservice.PutMemberProfileInCustomerScreen(memberDetails.id, memberDetails).subscribe({
         next: (data) => {
-          this.closebutton.nativeElement.click();
-          this.closebutton1.nativeElement.click();
+          this.closebuttonEdit.nativeElement.click();
           this.isLoading = false;
           this.clearControls();
           this.GetMembersData();
@@ -767,7 +758,6 @@ export class MemberProfileComponent {
       .pipe()
       .subscribe({
         next: (data1) => {
-          console.log(data1);
           let excelData = data1['table1'];
           let data = new Array<ExportData>();
 
@@ -879,10 +869,26 @@ export class MemberProfileComponent {
     }
     return true;
   }
-  OnPhoneNumberEntererd() {
+  OnPhoneNumberEntererd(event: any) {
     this.memberData = null;
     this.isSubmitted = false;
-    let phoneNumber = this.jobForm.controls['phoneNumber'].value;
+    if (event.inputType != 'deleteContentBackward') {
+      const inputElement = event.target as HTMLInputElement;
+      let inputValue = inputElement.value;
+      const value = inputValue.replace(/[^0-9]/g, '');
+      let format = '(***) ***-****';
+
+      for (let i = 0; i < value.length; i++) {
+        format = format.replace('*', value.charAt(i));
+      }
+
+      if (format.indexOf('*') >= 0) {
+        format = format.substring(0, format.indexOf('*'));
+      }
+
+      inputElement.value = format.trim();
+    }
+    let phoneNumber = this.jobForm.controls['phoneNumber'].value.replaceAll(/[^a-zA-Z0-9]/g, '');
     if (phoneNumber != undefined && phoneNumber != null && phoneNumber != '' && phoneNumber.length == 10) {
       this._memberservice
         .GetMemberByPhoneNo(phoneNumber)
@@ -897,6 +903,7 @@ export class MemberProfileComponent {
         });
     }
   }
+
   //#region BusinessDropdown
   async onItemSelectAll(items) {
     this.MemeberProfileGroup.controls['business'].setValue(items);
@@ -934,7 +941,6 @@ export class MemberProfileComponent {
         next: async (data) => {
           this.activityHistory = data;
           this.phoneNumber = data[0].phone;
-          console.log(this.activityHistory);
         },
         error: (error) => {}
       });

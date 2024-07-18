@@ -17,6 +17,7 @@ import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 import { MatSortModule } from '@angular/material/sort';
 import { UtcToLocalTimePipeModule } from 'src/app/utctolocaltime.pipe.module';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 @NgModule({
   imports: [
@@ -35,6 +36,7 @@ import { UtcToLocalTimePipeModule } from 'src/app/utctolocaltime.pipe.module';
     MatCheckboxModule,
     MatSortModule,
     MatPaginatorModule,
+    NgSelectModule,
     NgMultiSelectDropDownModule.forRoot(),
     NgxSkeletonLoaderModule.forRoot({
       theme: {
