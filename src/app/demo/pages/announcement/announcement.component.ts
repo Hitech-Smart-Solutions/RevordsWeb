@@ -14,6 +14,7 @@ import { MemberService } from 'src/app/services/MemberService';
 import { PromotionService } from 'src/app/services/PromotionService';
 import { BusinessGroupService } from 'src/app/services/BusinessGroupService';
 import { formatDate } from '@angular/common';
+import * as moment from 'moment';
 
 export class Tree {
   root: TreeNode;
@@ -120,7 +121,7 @@ export class AnnouncementComponent {
     fileContentType: [''],
     filePath: [''],
     ImageInput: ['', Validators.required],
-    isSendImmediately: [''],
+    isSendImmediately: ['', Validators.required],
     isScheduledLater: [''],
     date: [''],
     time: [null],
@@ -131,20 +132,19 @@ export class AnnouncementComponent {
     sendToCustomers: ['', Validators.required]
   });
   dropdownSettings: IDropdownSettings = {};
-  time: { name: string, value: number }[] = [
-    { name: '9-10 AM', value: 9 },
-    { name: '10-11 AM', value: 10 },
-    { name: '11-12 PM', value: 11 },
-    { name: '12-1 PM', value: 12 },
-    { name: '1-2 PM', value: 13 },
-    { name: '2-3 PM', value: 14 },
-    { name: '3-4 PM', value: 15 },
-    { name: '4-5 PM', value: 16 },
-    { name: '5-6 PM', value: 17 },
-    { name: '6-7 PM', value: 18 },
-    { name: '7-8 PM', value: 19 },
-    { name: '8-9 PM', value: 20 },
-    { name: '9-10 PM', value: 21 }
+  time: { name: string, value: number, disabled: boolean }[] = [
+    { name: '9-10 AM', value: 9, disabled: false },
+    { name: '10-11 AM', value: 10, disabled: false },
+    { name: '11-12 PM', value: 11, disabled: false },
+    { name: '12-1 PM', value: 12, disabled: false },
+    { name: '1-2 PM', value: 13, disabled: false },
+    { name: '2-3 PM', value: 14, disabled: false },
+    { name: '3-4 PM', value: 15, disabled: false },
+    { name: '4-5 PM', value: 16, disabled: false },
+    { name: '5-6 PM', value: 17, disabled: false },
+    { name: '6-7 PM', value: 18, disabled: false },
+    { name: '7-8 PM', value: 19, disabled: false },
+    { name: '8-9 PM', value: 20, disabled: false }
   ];
   scheduleLaterTime: string = '';
   isLoadingSaveData = false;
@@ -158,6 +158,9 @@ export class AnnouncementComponent {
    * @param dialog dialog box
    * @param sanitizer 
    */
+  minDate = new Date().getFullYear() + '-' + ((new Date().getMonth() + 1) < 10 ? ('0' + (new Date().getMonth() + 1)) :
+    (new Date().getMonth() + 1)) + '-' + (new Date().getDate() < 10 ? ('0' + new Date().getDate()) : new Date().getDate());
+
   constructor(private uploadService: FileUploadService,
     private fb: FormBuilder, private _announcementService: AnnouncementService, private _businessGroupService: BusinessGroupService,
     public toastService: ToastService, private _promotionService: PromotionService,
@@ -180,6 +183,7 @@ export class AnnouncementComponent {
     this.dropdownSettings = {
       idField: 'id',
       textField: 'businessName',
+      itemsShowLimit: 1
     }
   }
   ontextchanged(length: number, control: string) {
@@ -212,6 +216,7 @@ export class AnnouncementComponent {
     this.dropdownSettings = {
       idField: 'id',
       textField: 'businessName',
+      itemsShowLimit: 1
     }
   }
 
@@ -265,10 +270,10 @@ export class AnnouncementComponent {
     this.onMembersOfSelected();
     this.BusinessNameForSummary();
   }
-  BusinessNameForSummary() {
+  async BusinessNameForSummary() {
     this.selectedBusinessName = '';
     if (this.isAllChecked) {
-      this.selectedBusinessName = 'All';
+      this.selectedBusinessName = 'All Locations';
     }
     else {
       this.bussinessDataForStep3.filter(x => x.id != -1).forEach(element => {
@@ -303,14 +308,14 @@ export class AnnouncementComponent {
   /**
    * for add new annocement and clear all fields
    */
-  AddNew() {
+  async AddNew() {
     this.iseditmode = true;
     this.submitted = false;
     this.subjectCharacterCount = 50;
     this.uploadProgress = null;
     this.ClearControlandView();
-    this.GetMembersData();
-    this.setBusiness();
+    await this.GetMembersData();
+    // await this.setBusiness();
   }
   /**
    * for cancle annocement and clear all fields
@@ -331,6 +336,7 @@ export class AnnouncementComponent {
     this.onUpload();
   }
   async GetMembersData() {
+    this.isLoading = true;
     this.membersData = [];
     this.badgeDataForStep3 = [];
     this.tagDataForStep3 = [];
@@ -353,7 +359,7 @@ export class AnnouncementComponent {
       "sendDate": this.jobForm.controls['isSendImmediately'].value == 'true' ? formatDate(new Date(), 'yyyy-MM-dd', 'en-US') : sentDate
     }
 
-    this._memberservice.GetMembersDataForPromotion(details).then(async (data) => {
+    await this._memberservice.GetMembersDataForPromotion(details).then(async (data) => {
       let badgeData = data['table1'];
       let tagData = data['table2'];
       this.membersData = data['table3'];
@@ -375,11 +381,13 @@ export class AnnouncementComponent {
       this.smsCount = summary[0].smsCount;
 
       await this.setBusiness();
+      this.isLoading = false;
     }).catch((error) => {
+      this.isLoading = false;
       console.log(error)
     });;
   }
-  onMembersOfSelected() {
+  async onMembersOfSelected() {
     this.membersData = [];
     this.businessLocationIDs = '';
     let badgeIDs: string = '';
@@ -626,7 +634,7 @@ export class AnnouncementComponent {
       fileContentType: [''],
       filePath: [''],
       ImageInput: ['', Validators.required],
-      isSendImmediately: [''],
+      isSendImmediately: ['', Validators.required],
       isScheduledLater: [''],
       date: [''],
       time: [''],
@@ -653,6 +661,10 @@ export class AnnouncementComponent {
     this.isAllBadgeChecked = false;
     this.isAllTagChecked = false;
     this.GetAnnouncementsData();
+    this.time.forEach(element => {
+      element.disabled = false;
+    });
+    this.senditlater = undefined;
   }
   async ClearForEdit() {
     this.jobForm = this.fb.group({
@@ -663,7 +675,7 @@ export class AnnouncementComponent {
       fileContentType: [''],
       filePath: [''],
       ImageInput: ['', Validators.required],
-      isSendImmediately: [''],
+      isSendImmediately: ['', Validators.required],
       isScheduledLater: [''],
       date: [''],
       time: [''],
@@ -685,6 +697,10 @@ export class AnnouncementComponent {
     this.tagDataForStep3 = [];
     this.bussinessDataForStep3 = [];
     this.bussinessDataForRedemption = [];
+    this.time.forEach(element => {
+      element.disabled = false;
+    });
+    this.senditlater = undefined;
   }
   async showMore() {
     this.isLoadingAnnData = true;
@@ -786,31 +802,39 @@ export class AnnouncementComponent {
             fileContentType: [data.fileContentType],
             filePath: [AppSettings.Root_ENDPOINT + data.fileName],
             ImageInput: [data.fileName, Validators.required],
-            isSendImmediately: [data.isSendImmediately],
-            isScheduledLater: [data.isScheduledLater],
+            isSendImmediately: ['', Validators.required],
+            isScheduledLater: [''],
             date: [''],
             time: [''],
             validDate: ['']
           });
+          this.subjectCharacterCount = 50 - this.jobForm.controls['subject'].value.length;
 
-          // data.locationwiseAnnoucementRedemption.forEach((element: { isSent: any; businessLocationID: any; }) => {
-          //   if (element.isSent) {
-          //     this.bussinessDataForStep3.filter(x => x.id == element.businessLocationID)[0].checked = true;
-          //   }
-          //   else {
-          //     this.bussinessDataForStep3.filter(x => x.id == element.businessLocationID)[0].checked = false;
-          //   }
-          // });
-          // this.isAllChecked = this.bussinessDataForStep3.filter(x => x.checked == false).length > 0 ? false : true;
-
-          this.BusinessNameForSummary();
-          let details = [];
-          details.forEach(element => {
-            if (element.value) {
-              this.sendToCustomers = this.sendToCustomers + element.child + ', ';
-            }
+          data.locationwiseAnnoucementRedemption.filter(x => x.isSent == true).forEach(element => {
+            this.bussinessDataForStep3.filter(d => d.id == element.businessLocationId)[0].checked = true;
           });
-          this.secondFormGroup.controls['sendToCustomers'].setValue(this.sendToCustomers);
+          this.isAllChecked = (this.bussinessDataForStep3.filter(x => x.id != -1).length) ==
+            (this.bussinessDataForStep3.filter(x => x.id != -1 && x.checked == true).length) ? true : false;
+
+          data.announcementDetails.filter(x => x.badgeId != 0).forEach(element => {
+            this.badgeDataForStep3.filter(b => b.id == element.badgeId)[0].checked = true;
+          });
+          this.isAllBadgeChecked = this.badgeDataForStep3.filter(x => x.checked == false).length > 0 ? false : true;
+
+          data.announcementDetails.filter(x => x.tagId != 0).forEach(element => {
+            this.tagDataForStep3.filter(t => t.id == element.tagId)[0].checked = true;
+          });
+          this.isAllTagChecked = this.tagDataForStep3.filter(x => x.checked == false).length > 0 ? false : true;
+
+          this.secondFormGroup = this.fb.group({
+            membersOf: ['', Validators.required],
+            sendToCustomers: ['', Validators.required]
+          });
+
+          await this.onMembersOfSelected();
+          await this.BusinessNameForSummary();
+          await this.BadgeTagForSummary();
+
           if (data.fileName != null && data.fileName != '') {
             this.fileName = data.fileName;
             this.isfileUploaded = false;
@@ -887,26 +911,26 @@ export class AnnouncementComponent {
     this.BadgeTagForSummary();
   }
 
-  BadgeTagForSummary() {
+  async BadgeTagForSummary() {
     this.sendToCustomers = '';
     if (this.isAllBadgeChecked) {
-      this.sendToCustomers = 'All Badges, ';
+      this.sendToCustomers = 'All Badges';
     }
     else {
       this.badgeDataForStep3.forEach(element => {
         if (element.checked) {
-          this.sendToCustomers += element.badgeName + ', '
+          this.sendToCustomers += (this.sendToCustomers == '' ? element.badgeName : (', ' + element.badgeName));
         }
       });
     }
 
     if (this.isAllTagChecked) {
-      this.sendToCustomers += 'All Tags';
+      this.sendToCustomers += (this.sendToCustomers == '' ? 'All Tags' : ', All Tags');
     }
     else {
       this.tagDataForStep3.forEach(element => {
         if (element.checked) {
-          this.sendToCustomers += element.tagName + ', '
+          this.sendToCustomers += (this.sendToCustomers == '' ? element.tagName : (', ' + element.tagName));
         }
       });
     }
@@ -985,5 +1009,27 @@ export class AnnouncementComponent {
       element.openCount = openCount;
       element.openPercentages = parseInt(Math.round(deliveredCount > 0 ? (openCount * 100 / deliveredCount) : 0).toString());
     });
+  }
+
+  onScheduleDateChanged() {
+    let currentHour = new Date().getHours();
+    let selectedDate = this.jobForm.controls['date'].value;
+
+    this.jobForm.controls['time'].setValue('');
+
+    if ((moment().local().date() == moment(selectedDate).local().date()) && ((moment().local().month() + 1) == (moment(selectedDate).local().month() + 1))
+      && (moment().local().year() == moment(selectedDate).local().year())) {
+      this.time.forEach(element => {
+        if (element.value < currentHour) {
+          element.disabled = true;
+        }
+      });
+    }
+    else {
+      this.time.forEach(element => {
+        element.disabled = false;
+      });
+    }
+    this.onMembersOfSelected();
   }
 }

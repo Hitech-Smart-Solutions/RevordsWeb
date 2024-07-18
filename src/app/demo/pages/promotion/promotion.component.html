@@ -49,14 +49,14 @@
                                         <div class="col-md-4">
                                             <div class="row" class="info">{{p.promotionalMessage}}</div>
                                             <div class="row" class="summary">
-                                                <div class="col-md-12 d-flex pr-0 pl-0">
+                                                <div class="col-md-12 d-flex pr-0 pl-0" style="align-items: center;">
                                                     <div class="col-md-8 pl-0 pr-0">
                                                         <div>
-                                                            <span>Sent : </span>
+                                                            <span>Sent: </span>
                                                             {{p.sentDate | utcToLocalTime: 'short'}}
                                                         </div>
                                                         <div>
-                                                            Valid : {{p.offerStartDate | date:'M/d'}} - {{p.offerEndDate
+                                                            Valid: {{p.offerStartDate | date:'M/d'}} - {{p.offerEndDate
                                                             |
                                                             date:'M/d'}}
                                                         </div>
@@ -69,24 +69,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-md-8 d-flex" style="padding: 10px 20px 10px 20px;">
-                                            <!-- <div class="col-md-4">
-                                                <div class=" row d-flex p-3" style="align-items: center;">
-                                                    <div class="col-md-6 col-auto p-0" style="text-align: end;">
-                                                        <div class="p-0 details">
-                                                            {{p.totalDelivered}}
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-6 p-0" style="text-align: center;">
-                                                        <div>
-                                                            <span class="overview-amount ng-binding inner ">
-                                                                Delivered
-                                                            </span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div> -->
-
+                                        <div class="col-md-8 d-flex">
                                             <div class="col-md-4" style="text-align: -webkit-center;">
                                                 <div class="row">
                                                     <div class="col-md-12 d-flex">
@@ -105,23 +88,6 @@
                                                 </div>
                                             </div>
 
-                                            <!-- <div class="col-md-4 ">
-                                                <div class="row d-flex p-3" style="align-items: center;">
-                                                    <div class="col-md-6 col-auto p-0" style="text-align: end;">
-                                                        <div class="p-0 details">
-                                                            {{p.totalEngagements}}
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-6 p-0" style="text-align: center;">
-                                                        <div>
-                                                            <span class="overview-amount ng-binding inner ">
-                                                                Visits
-                                                            </span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div> -->
-
                                             <div class="col-md-4" style="text-align: -webkit-center;">
                                                 <div class="row d-block">
                                                     <div class="col-md-6">
@@ -136,23 +102,6 @@
                                                     </div>
                                                 </div>
                                             </div>
-
-                                            <!-- <div class="col-md-4">
-                                                <div class="row d-flex p-3" style="align-items: center;">
-                                                    <div class="col-md-6 col-auto p-0" style="text-align: end;">
-                                                        <div class="p-0 details ">
-                                                            {{p.totalVisitsRate}}%
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-md-6 p-0" style="text-align: center;">
-                                                        <div>
-                                                            <span class="overview-amount ng-binding inner ">
-                                                                Visit Rate
-                                                            </span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div> -->
 
                                             <div class="col-md-4" style="text-align: -webkit-center;">
                                                 <div class="row d-block">
@@ -174,7 +123,6 @@
                             </mat-expansion-panel-header>
                             <div class="row">
                                 <div class="col-md-4">
-                                    <!-- <p class="detailsummary">{{p.occasion}}</p> -->
                                 </div>
 
                                 <div class="col-md-8 d-flex" style="padding: 10px 38px 10px 20px;">
@@ -246,63 +194,6 @@
                                         </div>
                                     </div>
                                 </div>
-
-
-                                <!-- <div class="col-md-8 d-flex" style="padding-left: 0px !important;">
-                                    <div class="col-md-4 mt-2" style="border-right: 1px solid #d7d3d3;">
-                                        <div class="row d-flex p-0">
-                                            <div class="col-md-4 col-auto p-0">
-                                                <div class="p-0 details ">
-                                                </div>
-                                            </div>
-                                            <div class="col-md-8 p-0 ">
-
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4 mt-2" style="border-right: 1px solid #d7d3d3;">
-                                        <div class="row d-flex p-0">
-                                            <div class="col-md-4 col-auto p-0">
-                                                <div class="p-0 details ">
-                                                </div>
-                                            </div>
-                                            <div class="col-md-8 p-0 ">
-                                                <div class="mt-2 mr-2">
-                                                    <p style="margin-bottom: 0px !important; ">Claim
-                                                        <span class="float-right"> {{p.claims}} </span>
-                                                    </p>
-                                                    <p style="margin-bottom: 0px !important; ">Redemptions
-                                                        <span class="float-right"> {{p.redemptions}} </span>
-                                                    </p>
-                                                    <p style="margin-bottom: 0px !important; ">Opt-Outs
-                                                        <span class="float-right"> {{p.optOuts}} </span>
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4 mt-2">
-                                        <div class="row d-flex p-0">
-                                            <div class="col-md-4 col-auto p-0">
-                                                <div class="p-0 details ">
-                                                </div>
-                                            </div>
-                                            <div class="col-md-8 p-0 ">
-                                                <div class="mt-2 mr-2">
-                                                    <p style="margin-bottom: 0px !important; ">Claim
-                                                        <span class="float-right"> {{p.totalClaimRate}}%</span>
-                                                    </p>
-                                                    <p style="margin-bottom: 0px !important; ">Redemptions
-                                                        <span class="float-right"> {{p.totalredeemRate}}%</span>
-                                                    </p>
-                                                    <p style="margin-bottom: 0px !important; ">Opt-Outs
-                                                        <span class="float-right"> {{p.totaloptoutRate}}% </span>
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div> -->
                             </div>
                         </mat-expansion-panel>
                     </mat-accordion>
@@ -580,14 +471,6 @@
                                                                 </div>
                                                             </div>
                                                             <div style="display: flex;align-items: center;">
-                                                                <!-- <button class="btn btn-success buttonColor"
-                                                                    *ngIf="!uploadProgress" (click)="onUpload()">
-                                                                    Upload
-                                                                    <mat-icon class="filter-green"
-                                                                        style="margin-bottom: -6px;margin-left: 6px;">
-                                                                        cloud_upload
-                                                                    </mat-icon>
-                                                                </button> -->
                                                                 <mat-icon class="cancel-upload" (click)="cancelUpload()"
                                                                     *ngIf="uploadProgress" style="color: red;">
                                                                     delete_forever
@@ -603,15 +486,6 @@
                                                             image.
                                                         </span>
                                                     </div>
-
-                                                    <!-- <div class="progress">
-                                                        <div class="progress-bar bluecolor" role="progressbar"
-                                                            [style.width]="uploadProgress"
-                                                            aria-valuenow="uploadProgress" aria-valuemin="0"
-                                                            aria-valuemax="100">
-                                                            {{uploadProgress}}
-                                                        </div>
-                                                    </div> -->
                                                 </div>
                                             </div>
                                             <div class="row promotionwhite mt-2">
@@ -1527,8 +1401,8 @@
                                                     <b>Redeemable At: </b>
                                                 </div>
                                                 <div class="col-md-4">
-                                                    <ng-select [searchable]="true"
-                                                        placeholder="Choose Redeemable At" formControlName="RedemptionAt"
+                                                    <ng-select [searchable]="true" placeholder="Choose Redeemable At"
+                                                        formControlName="RedemptionAt"
                                                         (change)="onRedemptionOptionChanged()"
                                                         [ngClass]="{ 'is-invalid': submitted && secondFormGroup.controls['RedemptionAt'].errors }">
                                                         <ng-option *ngFor="let option of bussinessDataForRedemption"
@@ -2319,17 +2193,7 @@
 
                                             </div>
                                         </div>
-                                        <!-- <div class="row" style="margin-top:5px;">
-                                            <div class="col-md-12">
-                                                <h4>{{LatestSMSstatus}} </h4>
-                                                <h5>
-                                                    <span
-                                                        [ngClass]="(SMSStatus == 'delivered' || SMSStatus == 'sent') ? 'greendot' : 'reddot' "
-                                                        [class]="greendot">
-                                                    </span>{{LatestSMSstatus2}}
-                                                </h5>
-                                            </div>
-                                        </div> -->
+
                                         <div class="row" style="margin-top:5px;">
                                             <div class="col-md-2">
                                                 <button matStepperPrevious class="btn btn-dark flexcenter">

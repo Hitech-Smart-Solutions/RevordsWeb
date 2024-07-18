@@ -1,13 +1,9 @@
-import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { Component, ViewChild } from '@angular/core';
-import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
-import { MatTable, MatTableDataSource } from '@angular/material/table';
-import { Router } from '@angular/router';
+import { MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
+import { MatTable } from '@angular/material/table';
 import { RewardService } from 'src/app/services/RewardService';
-import { ToastrService } from 'ngx-toastr';
 import { ToastService } from 'src/app/services/ToastService';
 import { AppSettings } from 'src/app/services/Constants';
-import { FormArray, FormControl, FormGroup } from '@angular/forms';
 
 export interface PeriodicElement {
   rewardname: string;
@@ -54,12 +50,12 @@ export class RewardsettingComponent {
   horizontalPosition: MatSnackBarHorizontalPosition = 'right';
   verticalPosition: MatSnackBarVerticalPosition = 'top';
   filteredDataSource: any;
-  subjectCharacterCount: any =[];
+  subjectCharacterCount: any = [];
+  isVisible = true;
 
   @ViewChild(MatTable, { static: false }) table: MatTable<any>  // Initialize
 
-  constructor(private _memberservice: RewardService, public toastService: ToastService,
-    private _Route: Router, private toaster: ToastrService, private _liveAnnouncer: LiveAnnouncer) {
+  constructor(private _memberservice: RewardService, public toastService: ToastService) {
   }
   showSnackbarAction(message: string, action: string) {
     if (action == "1") {
@@ -70,10 +66,10 @@ export class RewardsettingComponent {
   }
   GetRewardDetails() {
     let details = [];
-    let i=0;
+    let i = 0;
     for (let detail of this.dataSource) {
       detail.reclaimHours = this.reclaimHours;
-      detail.claimPoints=this.claimPoints;
+      detail.claimPoints = this.claimPoints;
       this.subjectCharacterCount[i] = detail.rewardName.length;
       if (detail.rewardName != 'undefined' && detail.rewardName != "" && detail.points != 0) {
         let tempdefDetails = {
@@ -94,7 +90,7 @@ export class RewardsettingComponent {
         }
         details.push(tempdefDetails);
       }
-      i=i+1;
+      i = i + 1;
     }
     return details;
   }
@@ -125,16 +121,22 @@ export class RewardsettingComponent {
     this.dataSource = newUsersArray;
     this.filteredDataSource = this.dataSource.filter(x => x.type != 3);
     this.table.renderRows();
+    this.isVisible = true;
   }
   DelDetailsFormGroup(id) {
-    let action: any;
-    const index = this.dataSource.findIndex(image => image.id === id)
+    console.log(id)
+
+    const index = this.dataSource.findIndex(image => image.id === id);
+
+console.log(index)
+console.log(this.dataSource)
+
     if (index !== -1) {
       this.dataSource[index].type = 3;
       this.filteredDataSource = this.dataSource.filter(x => x.type != 3);
       this.table.renderRows();
     }
-    
+    this.isVisible = this.dataSource.filter(x => x.type != 3).length == 1 ? false : true;
   }
   Edit() {
     if (this.iseditmode) {
@@ -200,5 +202,4 @@ export class RewardsettingComponent {
         }
       });
   }
-
 }

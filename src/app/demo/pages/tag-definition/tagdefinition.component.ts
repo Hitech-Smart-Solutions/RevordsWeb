@@ -267,6 +267,7 @@ export class TagDefinitionComponent {
         rewardName: this.rewardName,
         tagdefinations: []
       });
+      this.tagCharacterCount = 19 - this.jobForm.controls['rewardName'].value.length;
       await this.getherData();
       this.iseditmode = true;
     }
@@ -347,7 +348,7 @@ export class TagDefinitionComponent {
   }
 
   ontextchanged(length) {
-      let l = (this.jobForm.controls['rewardName'].value).length;
-      this.tagCharacterCount = length - l;
+    let l = (this.jobForm.controls['rewardName'].value).length;
+    this.tagCharacterCount = length - l;
   }
 }

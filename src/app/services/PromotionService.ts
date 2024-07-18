@@ -96,4 +96,11 @@ export class PromotionService {
                 return member;
             }));
     }
+
+    public GetPreviousPromotionalWheelByBusinessGroupID(bussinessGroupID) {
+        return this._http.get<any>(this.apiUrl + "GetPreviousPromotionalWheelByBusinessGroupID/" + bussinessGroupID)
+            .pipe(map(member => {
+                return member;
+            }));
+    }
 }

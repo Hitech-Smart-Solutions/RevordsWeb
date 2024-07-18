@@ -25,10 +25,9 @@ export class NavBarComponent {
   bussinessName: any;
   bussinessData: any = [];
   businessID: string;
-  _defaultOpts: { indexID: number, arctext: string, colorCode: string, probability: number }[] = [];
   // Constructor
   constructor(public dialog: DialogDataExampleDialog, private _commonService: CommonService,
-    private appService: AdminComponent, private _spinwheel: SpinWheelService) {
+    private appService: AdminComponent) {
     this.windowWidth = window.innerWidth;
     this.navCollapsed = this.windowWidth >= 1025 ? BerryConfig.isCollapse_menu : false;
     this.navCollapsedMob = false;

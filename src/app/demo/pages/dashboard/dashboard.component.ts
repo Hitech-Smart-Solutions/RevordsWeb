@@ -24,7 +24,6 @@ import { DaterangepickerDirective } from 'ngx-daterangepicker-material';
 import { formatDate } from '@angular/common';
 import { Router } from '@angular/router';
 import * as dayjs from 'dayjs';
-import { MemberService } from 'src/app/services/MemberService';
 import { ProfileSettingService } from 'src/app/services/ProfileSettingService';
 import { AppSettings } from 'src/app/services/Constants';
 
@@ -124,7 +123,6 @@ export class DashboardComponent implements OnInit {
   selected: { startDate: any, endDate: any };
   dropdownList = [];
   dropdownSettings: IDropdownSettings = {};
-  dropdownSettingsGroup: IDropdownSettings = {};
   ranges: any = {
     'Today': [moment(), moment()],
     'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
@@ -1226,6 +1224,7 @@ export class DashboardComponent implements OnInit {
       this.dropdownSettings = {
         idField: 'id',
         textField: 'businessName',
+        itemsShowLimit: 1
       };
       let s = formatDate((moment().subtract(6, 'days'))['_d'], 'yyyy-MM-dd', 'en-US');
       let e = formatDate((moment())['_d'], 'yyyy-MM-dd', 'en-US');

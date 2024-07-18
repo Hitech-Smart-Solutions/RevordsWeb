@@ -58,7 +58,7 @@
               *ngIf="iseditmode && element.type !=3" maxlength="50" />
             <span *ngIf="!iseditmode"> {{ element.rewardName }}</span>
             <span class="fa-stack fa-lg ml-2" *ngIf="element.type !=3" style="color:red;cursor: pointer;width: 26px;">
-              <i (click)="DelDetailsFormGroup(element.id);" class="fa fa-minus-circle" *ngIf="iseditmode"></i>
+              <i (click)="DelDetailsFormGroup(element.id);" class="fa fa-minus-circle" *ngIf="iseditmode == true && isVisible == true"></i>
             </span>
             <span class="fa-stack fa-lg" *ngIf="element.type !=3">
               <i (click)="addDetailsFormGroup()" class="fa fa-plus-circle" style="color:green;cursor: pointer;"

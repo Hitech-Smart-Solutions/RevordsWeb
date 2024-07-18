@@ -10,7 +10,6 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatGridListModule } from '@angular/material/grid-list';
-import { WheelComponent } from '../../../spinWheel/wheel/wheel.component';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
@@ -29,8 +28,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
 
 @NgModule({
   declarations: [
-    PromotionComponent,
-    WheelComponent
+    PromotionComponent
   ],
   providers: [
     {
