@@ -128,8 +128,8 @@ export class RewardsettingComponent {
 
     const index = this.dataSource.findIndex(image => image.id === id);
 
-// console.log(index)
-// console.log(this.dataSource)
+console.log(index)
+console.log(this.dataSource)
 
     if (index !== -1) {
       this.dataSource[index].type = 3;
