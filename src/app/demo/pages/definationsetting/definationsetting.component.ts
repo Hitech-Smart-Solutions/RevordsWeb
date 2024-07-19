@@ -206,7 +206,10 @@ export class DefinationsettingComponent {
       this.jobForm.controls['rewardName'].disable();
       this.dataSourceChild = (product.child);
       this.rewardName = product.badgeName;
-      this.selectedColor = product.color;
+      let a = product.color.split(',');
+      let b = a[2].toString().split(' ');
+      let c = b[1];
+      this.selectedColor = c;
       this.jobForm.setValue({
         id: product.badgeID,
         rewardName: this.rewardName,
