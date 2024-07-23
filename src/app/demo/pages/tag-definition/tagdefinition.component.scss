@@ -124,7 +124,7 @@ table {
 }
 
 .tableHeaderCellDiv {
-  resize: horizontal;
+  resize: none;
   overflow: hidden;
   border: lightgray;
 }
@@ -404,4 +404,13 @@ $niceBlue: #6a6ac9;
   font-weight: 700;
   font-size: 13px;
   line-height: 28px;
+}
+
+.heightClass {
+  height: 18px;
+}
+
+.disableicon {
+  height: 18px;
+  display: none;
 }

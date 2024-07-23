@@ -249,7 +249,7 @@ export class DashboardComponent implements OnInit {
     }
     this.GenerateChart(this.selectedbusinessGroup.id, type, start, end);
   }
-  async GenerateDayWiseChart(businessGroupID: any, type: any) {
+  async GenerateDayWiseChart(businessGroupID: any, locationID: any, type: any) {
     this.chartOptions2VisitCountData = [];
     this.chartOptions2NewSignupData = [];
     this.chartOptions2VisitCountXaxis = [];
@@ -261,8 +261,21 @@ export class DashboardComponent implements OnInit {
     this.isLoadingDayWiseChart = true;
     this.isLoadingTotalMembers = true;
     this.isLoadingTotals = true;
+    
+    let businesslocationids: any = '';
+    if (locationID != null && locationID != undefined && locationID != '' && locationID.length > 0) {
+      locationID.forEach(element => {
+        businesslocationids += element.id + ',';
+      });
+    }
 
-    await this._dashBoardservice.GetDayAndWeekInsightsByBusinessGroupId(businessGroupID, type).subscribe({
+    let details = {
+      "businessGroupId": businessGroupID,
+      "p_businesslocationid": businesslocationids,
+      "filterType": type
+    }
+
+    await this._dashBoardservice.GetDayAndWeekInsightsByBusinessGroupId(details).subscribe({
       next: async (data) => {
         this.barchartDataDayWise = data['table1'];
         this.trafficInsightsCumulative = data['table2'];
@@ -855,7 +868,9 @@ export class DashboardComponent implements OnInit {
           else {
             arr.forEach(x => {
               this.insightsDayWise.push({
-                fromHour: x.fromhour,
+                fromHour: (x.fromhour) == 0 ? '12 AM' :
+                  ((x.fromhour > 0 && x.fromhour <= 11) ? (x.fromhour + ' AM') :
+                    ((x.fromhour == 12) ? (x.fromhour + ' PM') : ((Number(x.fromhour) - 12) + ' PM'))),
                 averageCount: x.visitoravgcount,
                 visitorCount: x.visitortodaytotal
               });
@@ -963,6 +978,13 @@ export class DashboardComponent implements OnInit {
         });
       });
 
+      // let location: any = '';
+      // if (this.bussinessData.length > 0 && this.bussinessData != null) {
+      //   this.bussinessData.forEach(element => {
+      //     location += element.id + ',';
+      //   });
+      // }
+
       this.chartOptionsVisitCountData = [];
       this.chartOptionsNewSignupData = [];
       this.chartOptionsVisitCountXaxis = [];
@@ -976,7 +998,7 @@ export class DashboardComponent implements OnInit {
       this.chartOptions.series[0].data = this.chartOptionsVisitCountData;
       this.chartOptions.series[1].data = this.chartOptionsNewSignupData;
       this.BindVisitCountChart();
-      this.GenerateDayWiseChart(this.selectedbusinessGroup.id, this.charttype);
+      this.GenerateDayWiseChart(this.selectedbusinessGroup.id, this.selectedItems, this.charttype);
       this.getfilterReduceDonutElseIf();
     }
   }
@@ -1128,7 +1150,7 @@ export class DashboardComponent implements OnInit {
     });
     this._dashBoardservice.PutMonthlyGoal(Goaldata).subscribe({
       next: async (data) => {
-        await this.GenerateDayWiseChart(this.selectedbusinessGroup.id, this.charttype);
+        await this.GenerateDayWiseChart(this.selectedbusinessGroup.id, this.selectedItems, this.charttype);
       },
       error: (error) => {
         console.log(error);
@@ -1153,11 +1175,11 @@ export class DashboardComponent implements OnInit {
     if (this.charttype == 1) {
       this.charttype = 2;
       this.charttypbool = true;
-      await this.GenerateDayWiseChart(this.selectedbusinessGroup.id, 2);
+      await this.GenerateDayWiseChart(this.selectedbusinessGroup.id, this.selectedItems, 2);
     } else {
       this.charttype = 1;
       this.charttypbool = false;
-      await this.GenerateDayWiseChart(this.selectedbusinessGroup.id, 1);
+      await this.GenerateDayWiseChart(this.selectedbusinessGroup.id, this.selectedItems, 1);
     }
   }
   async getbusinessGroups() {
@@ -1229,7 +1251,7 @@ export class DashboardComponent implements OnInit {
       let s = formatDate((moment().subtract(6, 'days'))['_d'], 'yyyy-MM-dd', 'en-US');
       let e = formatDate((moment())['_d'], 'yyyy-MM-dd', 'en-US');
       this.GenerateChart(this.selectedbusinessGroup.id, 2, s, e);
-      this.GenerateDayWiseChart(this.selectedbusinessGroup.id, this.charttype);
+      this.GenerateDayWiseChart(this.selectedbusinessGroup.id, this.selectedItems, this.charttype);
       this.getActiveDetailData();
 
       this.isLoadingMemberVisitCounts = false;

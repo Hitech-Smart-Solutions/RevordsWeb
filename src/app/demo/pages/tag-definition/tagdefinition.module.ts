@@ -9,6 +9,8 @@ import { MatButtonModule } from "@angular/material/button";
 import { MatListModule } from '@angular/material/list';
 import { TagDefinitionRoutingModule } from './tagdefinition-routing.module';
 import { MatTabsModule } from '@angular/material/tabs';
+import { PhonePipeModule } from 'src/app/phone.pipe.module';
+import { UtcToLocalTimePipeModule } from 'src/app/utctolocaltime.pipe.module';
 
 @NgModule({
   declarations: [],
@@ -23,7 +25,9 @@ import { MatTabsModule } from '@angular/material/tabs';
     MatButtonModule,
     MatSlideToggleModule,
     MatListModule,
-    MatTabsModule
+    MatTabsModule,
+    PhonePipeModule,
+    UtcToLocalTimePipeModule
   ]
 })
 export class TagdefinitionModule { }

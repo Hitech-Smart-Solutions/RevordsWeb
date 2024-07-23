@@ -133,7 +133,7 @@ table {
 }
 
 .tableHeaderCellDiv {
-  resize: horizontal;
+  resize: none;
   overflow: hidden;
   border: lightgray;
 }
@@ -432,4 +432,13 @@ $niceBlue: #6a6ac9;
   font-size: 35px;
   color: darkgoldenrod;
   color: black
+}
+
+.heightClass {
+  height: 18px;
+}
+
+.disableicon {
+  height: 18px;
+  display: none;
 }
