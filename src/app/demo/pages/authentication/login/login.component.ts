@@ -25,8 +25,8 @@ import { UserService } from 'src/app/services/UserService';
 export default class LoginComponent {
   button = 'Login';
   isLoading = false;
-  UserName: string;
-  Password: string;
+  UserName: any;
+  Password: any;
   loading = false;
   show = false;
   bussinessData: any;
@@ -132,25 +132,29 @@ export default class LoginComponent {
     this.UserName = this.form.controls['username'].value;
     this.Password = this.form.controls['password'].value;
 
-    this._loginservice.login(this.UserName, this.Password).pipe()
-      .subscribe({
-        next: async (data) => {
-          localStorage.setItem('PackageDetails', JSON.stringify(data.package));
-          localStorage.setItem('IsSpinRequired', JSON.stringify(data.business[0].isSpinRequired));          
-          localStorage.setItem('UserData', JSON.stringify(data));
-          this.showSnackbarAction("Login successfully", "1");
-          this.loading = false;
-          this.isLoading = false;
-          localStorage.setItem('UserID', JSON.stringify(data.userId));
-          this.button = 'Login';
-          await this.SetBusinessGroup(data.userId);
-         
-        },
-        error: error => {
-          this.showSnackbarAction("Invalid UserName Password", "3");
-          this.isLoading = false;
-          this.button = 'Login';
-        }
-      });
+    let details = {
+      "userName": this.UserName,
+      "password": this.Password
+    }
+
+    this._loginservice.login(details).subscribe({
+      next: async (data) => {
+        localStorage.setItem('PackageDetails', JSON.stringify(data.package));
+        localStorage.setItem('IsSpinRequired', JSON.stringify(data.business[0].isSpinRequired));
+        localStorage.setItem('UserData', JSON.stringify(data));
+        this.showSnackbarAction("Login successfully", "1");
+        this.loading = false;
+        this.isLoading = false;
+        localStorage.setItem('UserID', JSON.stringify(data.userId));
+        this.button = 'Login';
+        await this.SetBusinessGroup(data.userId);
+
+      },
+      error: error => {
+        this.showSnackbarAction("Invalid UserName Password", "3");
+        this.isLoading = false;
+        this.button = 'Login';
+      }
+    });
   }
 }

@@ -1,7 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { catchError, tap } from 'rxjs/operators';
-import { HttpClient, HttpErrorResponse, HttpHeaders, HttpResponse } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { map } from 'rxjs/operators';
 import { AppSettings } from './Constants';
@@ -17,8 +15,8 @@ export class LoginService {
 
     private apiUrl = AppSettings.API_ENDPOINT + "/api/Users/";
 
-    public login(username: string, password: string) {
-        return this._http.get<any>(this.apiUrl + username + "/" + password)
+    public login(details) {
+        return this._http.post<any>(this.apiUrl + "GetUserByUserName", details)
             .pipe(map(user => {
                 localStorage.setItem('currentUser', JSON.stringify(user));
                 return user;

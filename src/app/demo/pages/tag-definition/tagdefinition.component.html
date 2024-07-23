@@ -85,7 +85,7 @@
   <div *ngIf="iseditmode">
     <form [formGroup]="jobForm" (ngSubmit)="Submit()">
       <mat-tab-group class="inner-content-tabs">
-        <mat-tab label="Defination">
+        <mat-tab label="Definition">
           <div class="element-holder box">
             <!-- <div class="element-header">
               <div class="elem-title">
@@ -117,7 +117,7 @@
                     <i (click)="addDetailsFormGroup()" class="fa fa-plus-circle" style="margin-right: 12px;color:green;cursor: pointer;"></i>
                   </span> -->
 
-                  <div class="addbutton" (click)="addDetailsFormGroup()">ADD Condition
+                  <div class="addbutton" (click)="addDetailsFormGroup()">Add Condition
                     <i class="fa fa-plus" style="margin-left: 12px;cursor: pointer;"></i>
                   </div>
                 </div>
@@ -231,115 +231,209 @@
           <div>
             <i (click)="GetMember()" class="fa fa-refresh"
               style="margin-right: 12px;color:green; font-size: 24px; cursor: pointer;"></i>
-            <mat-table class="mat-elevation-z8" mat-table [dataSource]="dataSourceMembers">
-              <ng-container matColumnDef="name">
-                <th style="width: 15%;" mat-header-cell class="custom-mat-header-styling tableHeaderCellDiv"
-                  *matHeaderCellDef mat-sort-header sortActionDescription="Sort by name">
-                  Name
-                </th>
-                <td mat-cell *matCellDef="let element" class="tabletd" style="width: 15%;">
-                  <div style="display: flex;">
-                    <div>
-                      <img src="../../../assets/img/empty-profile.png" />
-                    </div>
-                    <div style="color: #203139;font-weight: 700;cursor: pointer; font-size:14px;padding-left: 5px;">
-                      {{element.name}}
-                      <div style="padding-top: 2px; display:flex;
-                        background-color: #faf3f3;
-                        border-radius: 4px;">
-                        <img src="../../../assets/img/Mobile.png" style="margin: 0px 4px;" />
-                        <img src="../../../assets/img/Envelope.png" />
-                        <img src="../../../assets/img/ChatDots.png" style="margin: 0px 4px;" />
+              <mat-table class="mat-elevation-z8" mat-table [dataSource]="dataSourceMembers">
+                <ng-container matColumnDef="name">
+                  <th
+                    style="text-align: center; width: 15%"
+                    mat-header-cell
+                    class="custom-mat-header-styling tableHeaderCellDiv"
+                    *matHeaderCellDef
+                    mat-sort-header
+                    sortActionDescription="Sort by name"
+                  >
+                    Name
+                  </th>
+                  <td style="width: 15%" mat-cell *matCellDef="let element" class="tabletd">
+                    <div class="row" style="display: flex; align-items: center; padding-left: 10%; overflow-wrap: anywhere">
+                      <div class="col-md-4 pr-0">
+                        <img
+                          *ngIf="element.memberImageFile == null || element.memberImageFile == undefined"
+                          src="../../../assets/img/empty-profile.png"
+                          style="width: 100%"
+                        />
+                        <img
+                          *ngIf="element.memberImageFile != null && element.memberImageFile != undefined"
+                          src="{{ element.memberImageFile }}"
+                          style="width: 100%; border-radius: 50%"
+                        />
+                      </div>
+                      <div class="col-md-8 pl-0">
+                        <div
+                          class="col-md-12"
+                          style="color: #203139; font-weight: 700; cursor: pointer; font-size: 14px; padding-left: 5px"
+                          data-toggle="modal"
+                          data-target="#GoalModal"
+                          (click)="EditProfile(element.id)"
+                        >
+                          {{ element.name }}
+                        </div>
+                        <div class="col-md-12" style="padding-left: 5px">
+                          <img
+                            src="../../../../assets/promotion/textSMS.svg"
+                            style="height: 18px"
+                            [ngClass]="{ heightClass: element.smsOptin == true, 'disableicon heightClass': !element.smsOptin }"
+                          />
+                          <img
+                            src="../../../../assets/img/icons/Email.svg"
+                            style="height: 18px"
+                            [ngClass]="{
+                              heightClass: element.emailOptin == true && element.emailId != null,
+                              'disableicon heightClass': !element.emailOptin || element.emailId == null
+                            }"
+                          />
+                          <img
+                            src="../../../../assets/img/icons/Mobile-App.svg"
+                            style="height: 18px"
+                            [ngClass]="{ heightClass: element.notificationOptIn == true, 'disableicon heightClass': !element.notificationOptIn }"
+                          />
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </td>
-              </ng-container>
-              <!-- Name Column -->
-              <ng-container matColumnDef="phone">
-                <th style="width: 10%;" mat-header-cell class="custom-mat-header-styling tableHeaderCellDiv"
-                  *matHeaderCellDef mat-sort-header sortActionDescription="Sort by phone">
-                  Phone
-                </th>
-                <td mat-cell class="tabletd" *matCellDef="let element" style="width: 10%;"> {{element.phone}}
-                </td>
-              </ng-container>
-
-              <!-- Weight Column -->
-              <ng-container matColumnDef="status">
-                <th style="width: 10%;" mat-header-cell class="custom-mat-header-styling tableHeaderCellDiv"
-                  *matHeaderCellDef mat-sort-header sortActionDescription="Sort by status">
-                  Status
-                </th>
-                <td style="width: 10%;" mat-cell class="tabletd" *matCellDef="let element">
-                  <div class="chip">
-                    <div class="chip-head" [ngStyle]="{'background-image': element.status=='Bronze' ?
-                      'linear-gradient(#B97140, 60%, #d5a480 )' :
-                                 (element.status=='Gold'? 'linear-gradient(#de972f, 60%, #eac95a )':(element.status=='Silver'?
-                                 'linear-gradient(#C0C0C0,60% , #ECECED )':'linear-gradient(#8605C2,60% , #dab9ef )')
-                                 )}">
-                      <i class="fa fa-trophy" style="font-size: 18px; color:white;"></i>
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="phone">
+                  <th
+                    style="text-align: center; width: 10%"
+                    mat-header-cell
+                    class="custom-mat-header-styling tableHeaderCellDiv"
+                    *matHeaderCellDef
+                    mat-sort-header
+                    sortActionDescription="Sort by phone"
+                  >
+                    Phone
+                  </th>
+                  <td style="width: 10%; text-align: center" mat-cell class="tabletd" *matCellDef="let element">
+                    {{ element.phone | phone }}
+                  </td>
+                </ng-container>
+        
+                <ng-container matColumnDef="status">
+                  <th
+                    style="width: 10%; text-align: center"
+                    mat-header-cell
+                    class="custom-mat-header-styling tableHeaderCellDiv"
+                    *matHeaderCellDef
+                    mat-sort-header
+                    sortActionDescription="Sort by status"
+                  >
+                    Badge
+                  </th>
+                  <td mat-cell class="tabletd" *matCellDef="let element" style="width: 10%">
+                    <div class="chip">
+                      <div
+                        class="chip-head"
+                        [ngStyle]="{
+                          'background-image':
+                            element.status == 'Bronze'
+                              ? 'linear-gradient(#B97140, 60%, #d5a480 )'
+                              : element.status == 'Gold'
+                              ? 'linear-gradient(#de972f, 60%, #eac95a )'
+                              : element.status == 'Silver'
+                              ? 'linear-gradient(#C0C0C0,60% , #ECECED )'
+                              : 'linear-gradient(#8605C2,60% , #dab9ef )'
+                        }"
+                      >
+                        <i class="fa fa-trophy" style="font-size: 15px; color: white"></i>
+                      </div>
+                      <div class="chip-content">{{ element.status }}</div>
                     </div>
-                    <div class="chip-content">{{element.status}}</div>
-                  </div>
-                </td>
-              </ng-container>
-
-              <!-- Symbol Column -->
-              <ng-container matColumnDef="source">
-                <th style="width: 15%;" mat-header-cell class="custom-mat-header-styling tableHeaderCellDiv"
-                  *matHeaderCellDef mat-sort-header sortActionDescription="Sort by source">
-                  Source
-                </th>
-                <td style="width: 15%;" mat-cell class="tabletd" *matCellDef="let element"> {{element.source}} </td>
-              </ng-container>
-              <ng-container matColumnDef="currentpoints">
-                <th style="width: 10%;" mat-header-cell class="custom-mat-header-styling tableHeaderCellDiv"
-                  *matHeaderCellDef mat-sort-header sortActionDescription="Sort by currentpoints">
-                  Current Points
-                </th>
-                <td style="width: 10%;" mat-cell class="tabletd" *matCellDef="let element"> {{element.currentpoints}}pt
-                </td>
-              </ng-container>
-              <ng-container matColumnDef="lifetimepoints">
-                <th style="width: 10%;" mat-header-cell class="custom-mat-header-styling tableHeaderCellDiv"
-                  *matHeaderCellDef mat-sort-header sortActionDescription="Sort by lifetimepoints">
-                  Lifetime Points
-                </th>
-                <td style="width: 10%;" mat-cell class="tabletd" *matCellDef="let element"> {{element.lifetimepoints}}pt
-                </td>
-              </ng-container>
-              <ng-container matColumnDef="lastvisit">
-                <th style="width: 10%;" mat-header-cell class="custom-mat-header-styling tableHeaderCellDiv"
-                  *matHeaderCellDef mat-sort-header sortActionDescription="Sort by lastvisit">
-                  Last Visit
-                </th>
-                <td style="width: 10%;" mat-cell class="tabletd" *matCellDef="let element"> {{element.lastvisit |
-                  date:'MMM d,yyyy hh:mm'}} </td>
-              </ng-container>
-              <ng-container matColumnDef="membersince">
-                <th style="width: 10%;" mat-header-cell class="custom-mat-header-styling tableHeaderCellDiv"
-                  *matHeaderCellDef mat-sort-header sortActionDescription="Sort by membersince">
-                  Member Since
-                </th>
-                <td style="width: 10%;" mat-cell class="tabletd" *matCellDef="let element"> {{element.membersince |
-                  date: 'M/d/y' }} </td>
-              </ng-container>
-              <ng-container matColumnDef="istagged">
-                <th style="width: 10%;" mat-header-cell class="custom-mat-header-styling tableHeaderCellDiv"
-                  *matHeaderCellDef mat-sort-header sortActionDescription="Sort by istagged">
-                  Tagged?
-                </th>
-                <td style="width: 10%;" mat-cell class="tabletd" *matCellDef="let element">
-                  <div style="display:flex;">
-                    <div *ngIf="element.tagname" class="badge badge-primary" style="background-color: #7da3ba;">
-                      #{{element.tagname}}</div>
-                  </div>
-                </td>
-              </ng-container>
-              <tr mat-header-row class="tableHeaderCellDiv" *matHeaderRowDef="displayedColumnsMembers"></tr>
-              <tr mat-row *matRowDef="let row; columns: displayedColumnsMembers; "></tr>
-            </mat-table>
+                  </td>
+                </ng-container>
+        
+                <ng-container matColumnDef="source">
+                  <th
+                    style="text-align: center; width: 10%"
+                    mat-header-cell
+                    class="custom-mat-header-styling tableHeaderCellDiv"
+                    *matHeaderCellDef
+                    mat-sort-header
+                    sortActionDescription="Sort by source"
+                  >
+                    Source
+                  </th>
+                  <td mat-cell class="tabletd" *matCellDef="let element" style="width: 10%; overflow-wrap: anywhere"> {{ element.source }} </td>
+                </ng-container>
+        
+                <ng-container matColumnDef="currentpoints">
+                  <th
+                    style="text-align: center; width: 10%; padding: 0 !important"
+                    mat-header-cell
+                    class="custom-mat-header-styling tableHeaderCellDiv"
+                    *matHeaderCellDef
+                    mat-sort-header
+                    sortActionDescription="Sort by currentpoints"
+                  >
+                    Current Points
+                  </th>
+                  <td mat-cell class="tabletd" *matCellDef="let element" style="width: 10%; text-align: center"> {{ element.currentpoints }}pt </td>
+                </ng-container>
+        
+                <ng-container matColumnDef="lifetimepoints">
+                  <th
+                    style="text-align: center; width: 10%"
+                    mat-header-cell
+                    class="custom-mat-header-styling tableHeaderCellDiv"
+                    *matHeaderCellDef
+                    mat-sort-header
+                    sortActionDescription="Sort by lifetimepoints"
+                  >
+                    Lifetime Points
+                  </th>
+                  <td mat-cell class="tabletd" *matCellDef="let element" style="width: 10%; text-align: center">
+                    {{ element.lifetimepoints }}pt
+                  </td>
+                </ng-container>
+        
+                <ng-container matColumnDef="lastvisit">
+                  <th
+                    style="text-align: center; width: 15%"
+                    mat-header-cell
+                    class="custom-mat-header-styling tableHeaderCellDiv"
+                    *matHeaderCellDef
+                    mat-sort-header
+                    sortActionDescription="Sort by lastvisit"
+                  >
+                    Last Visit
+                  </th>
+                  <td mat-cell class="tabletd" *matCellDef="let element" style="width: 15%">{{ element.lastvisit | utcToLocalTime: 'short' }} </td>
+                </ng-container>
+        
+                <ng-container matColumnDef="membersince">
+                  <th
+                    style="text-align: center; width: 10%"
+                    mat-header-cell
+                    class="custom-mat-header-styling tableHeaderCellDiv"
+                    *matHeaderCellDef
+                    mat-sort-header
+                    sortActionDescription="Sort by membersince"
+                  >
+                    Customer Since
+                  </th>
+                  <td mat-cell class="tabletd" *matCellDef="let element" style="width: 10%; text-align: center">
+                    {{ element.membersince | utcToLocalTime: 'shortDate' }}
+                  </td>
+                </ng-container>
+        
+                <ng-container matColumnDef="istagged">
+                  <th
+                    style="text-align: center; width: 10%"
+                    mat-header-cell
+                    class="custom-mat-header-styling tableHeaderCellDiv"
+                    *matHeaderCellDef
+                    mat-sort-header
+                    sortActionDescription="Sort by tagname"
+                  >
+                    Tag
+                  </th>
+                  <td mat-cell class="tabletd" *matCellDef="let element" style="width: 10%; text-align: center">
+                    <div style="display: flex; align-items: center; justify-content: center">
+                      <div *ngIf="element.tagname" class="badge badge-primary" style="background-color: #7da3ba"> #{{ element.tagname }}</div>
+                    </div>
+                  </td>
+                </ng-container>
+                <tr mat-header-row class="tableHeaderCellDiv" *matHeaderRowDef="displayedColumnsMembers"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumnsMembers; "></tr>
+              </mat-table>
             <mat-paginator [pageSizeOptions]="[50]" style-paginator showFirstLastButtons></mat-paginator>
             <!-- <div class="col-lg-12 divmore">
               <button type="button" mat-raised-button color="basic" class="more" [disabled]='disableBtnPrevious' (click)="showPrevious()">Previous</button>

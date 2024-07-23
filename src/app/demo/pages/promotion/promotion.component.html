@@ -1131,7 +1131,7 @@
                                 <form [formGroup]="firstFormGroup">
                                     <div class="row" style="margin-top: 2%;margin-bottom: 1%;">
                                         <div class="col-md-6 text-center"></div>
-                                        <div class="col-md-1 text-center"><b> Show in : </b></div>
+                                        <div class="col-md-1 text-center"><b> Show in: </b></div>
                                         <div class="col-md-3" style="display: inline-flex;    align-items: center;">
                                             <span>Single Visit</span>
                                             <label class="switch"
@@ -1145,9 +1145,9 @@
                                         <div class="col-md-2"
                                             style="margin-left: -14px; display: inline-flex; align-items: center; justify-content: end;">
                                             <button class="btn btn-success text-center" (click)="resetSpinWheelData()">
-                                                <i class="fa fa-refresh" aria-hidden="true">
-                                                    Reset
+                                                <i class="fa fa-refresh" aria-hidden="true" style="margin-right: 5px;">
                                                 </i>
+                                                Reset
                                             </button>
                                         </div>
                                     </div>
@@ -1167,7 +1167,12 @@
                                                                         display: flex;justify-content: center;align-items: end;">
                                                             <p
                                                                 style="color: #403d3d;font-weight: 800;font-size: 14px; text-transform: uppercase; width: 50%;">
-                                                                {{this.spinFormGroup.controls[0].controls['text'].value}}
+                                                                {{
+                                                                this.spinFormGroup.controls[0].controls['IsInteger'].value
+                                                                == true ?
+                                                                this.spinFormGroup.controls[0].controls['text'].value +
+                                                                " Points" :
+                                                                this.spinFormGroup.controls[0].controls['text'].value}}
                                                             </p>
                                                         </span>
                                                         <span
@@ -1184,7 +1189,11 @@
                                                                         display: flex;justify-content: center;align-items: end;">
                                                             <p
                                                                 style="color: #403d3d;font-weight: 800;font-size: 14px; text-transform: uppercase; width: 50%;">
-                                                                {{this.spinFormGroup.controls[7].controls['text'].value}}
+                                                                {{this.spinFormGroup.controls[7].controls['IsInteger'].value
+                                                                == true ?
+                                                                this.spinFormGroup.controls[7].controls['text'].value +
+                                                                " Points" :
+                                                                this.spinFormGroup.controls[7].controls['text'].value}}
                                                             </p>
                                                         </span>
                                                         <span
@@ -1201,7 +1210,11 @@
                                                                         display: flex;justify-content: center;align-items: end;">
                                                             <p
                                                                 style="color: #403d3d;font-weight: 800;font-size: 14px; text-transform: uppercase; width: 50%;">
-                                                                {{this.spinFormGroup.controls[6].controls['text'].value}}
+                                                                {{this.spinFormGroup.controls[6].controls['IsInteger'].value
+                                                                == true ?
+                                                                this.spinFormGroup.controls[6].controls['text'].value +
+                                                                " Points" :
+                                                                this.spinFormGroup.controls[6].controls['text'].value}}
                                                             </p>
                                                         </span>
                                                         <span
@@ -1218,7 +1231,12 @@
                                                                             display: flex;justify-content: center;align-items: end;">
                                                             <p
                                                                 style="color: #403d3d;font-weight: 800;font-size: 14px; text-transform: uppercase; width: 50%;">
-                                                                {{this.spinFormGroup.controls[5].controls['text'].value}}
+                                                                {{
+                                                                this.spinFormGroup.controls[5].controls['IsInteger'].value
+                                                                == true ?
+                                                                this.spinFormGroup.controls[5].controls['text'].value +
+                                                                " Points" :
+                                                                this.spinFormGroup.controls[5].controls['text'].value}}
                                                             </p>
                                                         </span>
                                                         <span
@@ -1235,7 +1253,12 @@
                                                                           display: flex;justify-content: center;align-items: end;">
                                                             <p
                                                                 style="color: #403d3d;font-weight: 800;font-size: 14px; text-transform: uppercase; width: 50%;">
-                                                                {{this.spinFormGroup.controls[4].controls['text'].value}}
+                                                                {{
+                                                                this.spinFormGroup.controls[4].controls['IsInteger'].value
+                                                                == true ?
+                                                                this.spinFormGroup.controls[4].controls['text'].value +
+                                                                " Points" :
+                                                                this.spinFormGroup.controls[4].controls['text'].value}}
                                                             </p>
                                                         </span>
                                                         <span
@@ -1252,7 +1275,11 @@
                                                                             display: flex;justify-content: center;align-items: end;">
                                                             <p
                                                                 style="color: #403d3d;font-weight: 800;font-size: 14px; text-transform: uppercase; width: 50%;">
-                                                                {{this.spinFormGroup.controls[3].controls['text'].value}}
+                                                                {{this.spinFormGroup.controls[3].controls['IsInteger'].value
+                                                                == true ?
+                                                                this.spinFormGroup.controls[3].controls['text'].value +
+                                                                " Points" :
+                                                                this.spinFormGroup.controls[3].controls['text'].value}}
                                                             </p>
                                                         </span>
                                                         <span
@@ -1268,7 +1295,12 @@
                                                                         justify-content: center;align-items: end;">
                                                             <p
                                                                 style="color: #403d3d;font-weight: 800;font-size: 14px; text-transform: uppercase; width: 50%;">
-                                                                {{this.spinFormGroup.controls[2].controls['text'].value}}
+                                                                {{
+                                                                this.spinFormGroup.controls[2].controls['IsInteger'].value
+                                                                == true ?
+                                                                this.spinFormGroup.controls[2].controls['text'].value +
+                                                                " Points" :
+                                                                this.spinFormGroup.controls[2].controls['text'].value}}
                                                             </p>
                                                         </span>
                                                         <span
@@ -1285,7 +1317,11 @@
                                                                             display: flex;justify-content: center;align-items: end;">
                                                             <p
                                                                 style="color: #403d3d;font-weight: 800;font-size: 14px; text-transform: uppercase; width: 50%;">
-                                                                {{this.spinFormGroup.controls[1].controls['text'].value}}
+                                                                {{this.spinFormGroup.controls[1].controls['IsInteger'].value
+                                                                == true ?
+                                                                this.spinFormGroup.controls[1].controls['text'].value +
+                                                                " Points" :
+                                                                this.spinFormGroup.controls[1].controls['text'].value}}
                                                             </p>
                                                         </span>
                                                         <span

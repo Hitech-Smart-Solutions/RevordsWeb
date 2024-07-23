@@ -415,6 +415,24 @@ element.style {
   height: 30px;
 }
 
+.chip-headForModal {
+  display: flex;
+  position: relative;
+  overflow: hidden;
+  font-size: 1.25rem;
+  flex-shrink: 0;
+  align-items: center;
+  user-select: none;
+  border-radius: 50%;
+  justify-content: center;
+  width: 50px;
+  color: #fff;
+  height: 36px;
+  font-size: 20px;
+  margin-right: -4px;
+  height: 50px;
+}
+
 .chip-content {
   cursor: inherit;
   display: flex;
@@ -600,4 +618,8 @@ mat-table {
 
 ::ng-deep .mat-mdc-table .mdc-data-table__row {
   width: 100% !important;
+}
+
+.fontWht700 {
+  font-weight: 700;
 }
