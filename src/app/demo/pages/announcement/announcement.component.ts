@@ -15,6 +15,7 @@ import { PromotionService } from 'src/app/services/PromotionService';
 import { BusinessGroupService } from 'src/app/services/BusinessGroupService';
 import { formatDate } from '@angular/common';
 import * as moment from 'moment';
+import { CustomLoggerService } from 'src/app/services/CustomLoggerService';
 
 export class Tree {
   root: TreeNode;
@@ -164,7 +165,8 @@ export class AnnouncementComponent {
   constructor(private uploadService: FileUploadService,
     private fb: FormBuilder, private _announcementService: AnnouncementService, private _businessGroupService: BusinessGroupService,
     public toastService: ToastService, private _promotionService: PromotionService,
-    public dialog: MatDialog, public sanitizer: DomSanitizer, private _memberservice: MemberService) {
+    public dialog: MatDialog, public sanitizer: DomSanitizer, private _memberservice: MemberService
+    , private _customLoggerService: CustomLoggerService) {
     this.business = JSON.parse(localStorage.getItem('Business'));
     this.packageDetails = JSON.parse(localStorage.getItem('PackageDetails'));
     this.businessGroupID = JSON.parse(localStorage.getItem('BusinessGroup'));
@@ -228,6 +230,7 @@ export class AnnouncementComponent {
             + " to include.";
         },
         error: error => {
+          this._customLoggerService.logError(AppSettings.LoggerAppName ,"Announcement > Method : GetBusinessGroupByID()" , error.message)
         }
       });
   }
@@ -483,6 +486,7 @@ export class AnnouncementComponent {
               this.isfileUploaded = false;
             }
           }, error: error => {
+            this._customLoggerService.logError(AppSettings.LoggerAppName ,"Announcement > Method : onUpload()" , error.message)
             console.log(error);
             alert(error.error);
             this.cancelUpload();
@@ -558,6 +562,7 @@ export class AnnouncementComponent {
           this.iseditmode = false;
         },
         error: error => {
+          this._customLoggerService.logError(AppSettings.LoggerAppName ,"Announcement > Method : Submit()" , error.message)
           this.isLoading = false;
           this.isLoadingSaveData = false;
           this.submitted = false;
@@ -599,6 +604,7 @@ export class AnnouncementComponent {
           this.urlSafe = this.sanitizer.bypassSecurityTrustResourceUrl(this.url);
         },
         error: error => {
+          this._customLoggerService.logError(AppSettings.LoggerAppName ,"Announcement > Method : Preview()" , error.message)
           console.log(error);
         }
       });
@@ -744,6 +750,7 @@ export class AnnouncementComponent {
           this.isLoadingAnnData = false;
         },
         error: error => {
+          this._customLoggerService.logError(AppSettings.LoggerAppName ,"Announcement > Method : GetAnnouncementsData()" , error.message)
           this.isLoadingAnnData = false;
         }
       });
@@ -849,6 +856,7 @@ export class AnnouncementComponent {
           this.isLoadingAnnData = false;
         },
         error: error => {
+          this._customLoggerService.logError(AppSettings.LoggerAppName ,"Announcement > Method : EditReplicate()" , error.message)
           this.isLoadingAnnData = false;
         }
       });

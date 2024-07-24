@@ -3,6 +3,7 @@ import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Valida
 import { SpinWheelService } from 'src/app/services/SpinWheelConfigurationService';
 import { AppSettings } from '../../../services/Constants';
 import { ToastService } from 'src/app/services/ToastService';
+import { CustomLoggerService } from 'src/app/services/CustomLoggerService';
 
 @Component({
   selector: 'app-spinwheelSetting',
@@ -83,7 +84,8 @@ export class SpinwheelSettingComponent {
   totalPoints: number = 0;
   indexwiseCharacters: { index: number; length: number }[] = [];
 
-  constructor(private _formBuilder: FormBuilder, private _spinwheel: SpinWheelService, public toastService: ToastService) {
+  constructor(private _formBuilder: FormBuilder, private _spinwheel: SpinWheelService, public toastService: ToastService,
+    private _customLoggerService: CustomLoggerService) {
     this.businessGroupID = JSON.parse(localStorage.getItem('BusinessGroup'));
   }
 
@@ -114,6 +116,7 @@ export class SpinwheelSettingComponent {
           this.setSpinWheelData();
         },
         error: (error) => {
+          this._customLoggerService.logError(AppSettings.LoggerAppName, "Spinwheel Settings > Method : GetSpinWheeldefaultConfigByBusinessGroupID()", error.message);
           console.log(error);
         }
       });
@@ -245,6 +248,7 @@ export class SpinwheelSettingComponent {
         this.GetSpinWheeldefaultConfigByBusinessGroupID();
       },
       error: (error) => {
+        this._customLoggerService.logError(AppSettings.LoggerAppName, "Spinwheel Settings > Method : Save()", error.message);
         this.isLoading = false;
       }
     });

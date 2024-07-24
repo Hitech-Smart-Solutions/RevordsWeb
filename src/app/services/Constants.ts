@@ -14,6 +14,7 @@ export class AppSettings {
     public static Silver = 2;
     public static Gold = 3;
     public static Platinum = 4;
+    public static LoggerAppName = "DashboardApp";
     public static userData: any = JSON.parse(localStorage.getItem('UserData'));
     public static RefreshLocalStorage(){
         this.userData = JSON.parse(localStorage.getItem('UserData'));
