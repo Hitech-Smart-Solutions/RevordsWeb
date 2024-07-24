@@ -563,9 +563,10 @@ export class AnnouncementComponent {
         },
         error: error => {
           this._customLoggerService.logError(AppSettings.LoggerAppName ,"Announcement > Method : Submit()" , error.message)
+          this.ClearControlandView();
           this.isLoading = false;
           this.isLoadingSaveData = false;
-          this.submitted = false;
+          this.iseditmode = false;
         }
       });
   }
