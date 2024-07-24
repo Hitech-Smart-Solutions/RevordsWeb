@@ -20,6 +20,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { formatDate } from '@angular/common';
 import { BusinessGroupService } from 'src/app/services/BusinessGroupService';
 import { debounceTime } from 'rxjs/operators';
+import { CustomLoggerService } from 'src/app/services/CustomLoggerService';
 
 @Component({
   selector: 'app-promotion',
@@ -244,7 +245,7 @@ export class PromotionComponent {
   constructor(private _liveAnnouncer: LiveAnnouncer, private _promotionService: PromotionService,
     public toastService: ToastService, private modalService: NgbModal, private _businessGroupService: BusinessGroupService,
     private _formBuilder: FormBuilder, private _memberservice: MemberService, public sanitizer: DomSanitizer,
-    private _spinwheel: SpinWheelService, private datePipe: DatePipe) {
+    private _spinwheel: SpinWheelService, private datePipe: DatePipe, private _customLoggerService: CustomLoggerService) {
     this.isSpinRequired = JSON.parse(localStorage.getItem('IsSpinRequired'))
     this.business = JSON.parse(localStorage.getItem('Business'));
     this.businessGroupID = JSON.parse(localStorage.getItem('BusinessGroup'));
@@ -315,11 +316,6 @@ export class PromotionComponent {
       textField: 'businessName',
       itemsShowLimit: 1
     }
-
-    // this.debouncer.pipe(debounceTime(300)).subscribe(() => {
-    //   console.log("in")
-    //   this.handleButtonClick(); // Replace with your actual method name
-    // });
   }
 
   GetBusinessGroupByID() {
@@ -330,6 +326,7 @@ export class PromotionComponent {
             + " to include.";
         },
         error: error => {
+          this._customLoggerService.logError(AppSettings.LoggerAppName ,"Promotion > Method : GetBusinessGroupID()" , error.message)
         }
       });
   }
@@ -410,7 +407,7 @@ export class PromotionComponent {
           }
         },
         error: error => {
-
+          this._customLoggerService.logError(AppSettings.LoggerAppName ,"Promotion > Method : SetSpinWheelData()" , error.message)
         }
       });
   }
@@ -730,6 +727,7 @@ export class PromotionComponent {
           this.isLoadingAnnData = false;
         },
         error: error => {
+          this._customLoggerService.logError(AppSettings.LoggerAppName ,"Promotion > Method : EditReplicate()" , error.message)
           this.isLoadingAnnData = false;
         }
       });
@@ -805,6 +803,8 @@ export class PromotionComponent {
           this.isLoadingAnnData = false;
         },
         error: error => {
+          console.log(error);
+          this._customLoggerService.logError(AppSettings.LoggerAppName, "Promotion > Method : GetPromotions()", error.message)
           this.isLoadingAnnData = false;
         }
       });
@@ -1322,9 +1322,12 @@ export class PromotionComponent {
           this.ClearControlandView();
         },
         error: error => {
-          this.isLoadingSaveData = false;
+          this._customLoggerService.logError(AppSettings.LoggerAppName, "Promotion > Method : Submit()", error.message)
           this.isLoading = false;
+          this.isLoadingSaveData = false;
+          this.iseditmode = false;
           this.submitted = false;
+          this.ClearControlandView();
         }
       });
   }
@@ -1677,6 +1680,7 @@ export class PromotionComponent {
           },
           error: error => {
             console.log("This is on upload error", error);
+            this._customLoggerService.logError(AppSettings.LoggerAppName, "Promotion > Method : Upload()", error.message)
             this.errorMessage = error.error;
             this.modalService.open(this.errorMessage, {
               animation: true,

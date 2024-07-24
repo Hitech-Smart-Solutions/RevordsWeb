@@ -85,6 +85,7 @@ import { BusinessProfileComponent } from './demo/pages/BusinessProfile/BusinessP
 import { GoogleMapsModule } from '@angular/google-maps';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { LicenseApplicantService } from './services/LicenseApplicantService';
+import { CustomLoggerService } from './services/CustomLoggerService';
 
 @NgModule({
   declarations: [
@@ -204,6 +205,7 @@ import { LicenseApplicantService } from './services/LicenseApplicantService';
     SourceService,
     UserService,
     LicenseApplicantService,
+    CustomLoggerService,
     { provide: LOCALE_ID, useValue: 'en-US' }
   ],
   bootstrap: [AppComponent]
