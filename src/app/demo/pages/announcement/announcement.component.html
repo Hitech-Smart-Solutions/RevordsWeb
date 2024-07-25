@@ -252,7 +252,15 @@
                                                     <div class="col-lg-12" style="display: flex;padding: 0px;">
                                                         <div class="col-md-6">
                                                             <input type="date" class="form-control"
-                                                                formControlName="validDate" [min]="minDate">
+                                                                formControlName="validDate" [min]="minDate"
+                                                                [ngClass]="{ 'is-invalid': submitted && f['validDate'].errors }">
+
+                                                            <div *ngIf="submitted && f['validDate'].errors"
+                                                                class="invalid-feedback">
+                                                                <div *ngIf="f['validDate'].errors['required']">
+                                                                    Valid Date is required
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                         <div class="col-md-6">
 
@@ -279,8 +287,7 @@
                                                     </div>
                                                     <div *ngIf="submitted && f['isSendImmediately'].errors"
                                                         class="invalid-feedback">
-                                                        <div
-                                                            *ngIf="f['isSendImmediately'].errors['required']">
+                                                        <div *ngIf="f['isSendImmediately'].errors['required']">
                                                             Send now/Schedule later is required
                                                         </div>
                                                     </div>
@@ -363,8 +370,7 @@
                                                                                                                         <tr>
                                                                                                                             <td align="center"
                                                                                                                                 style="font-size: 0px">
-                                                                                                                                <a target="_blank"
-                                                                                                                                    href="https://viewstripo.email">
+                                                                                                                                <a target="_blank">
                                                                                                                                     <img align="center"
                                                                                                                                         border="0"
                                                                                                                                         src="../../../../assets/images/fortune.png"
@@ -451,8 +457,7 @@
                                                                                                                                         <td align="center"
                                                                                                                                             class="es-p15r"
                                                                                                                                             style="font-size: 0px">
-                                                                                                                                            <a target="_blank"
-                                                                                                                                                href="https://viewstripo.email">
+                                                                                                                                            <a target="_blank">
                                                                                                                                                 <img align="center"
                                                                                                                                                     border="0"
                                                                                                                                                     src="{{filePath}}"
@@ -602,8 +607,7 @@
                                                                                                                                     process
                                                                                                                                     on
                                                                                                                                     <a target="_blank"
-                                                                                                                                        style="color: #00a8e2;"
-                                                                                                                                        href="https://viewstripo.email">revords.com</a>
+                                                                                                                                        style="color: #00a8e2;">revords.com</a>
                                                                                                                                     <br>
                                                                                                                                     <br>Revords&nbsp;LLC
                                                                                                                                     <br>
@@ -1013,8 +1017,7 @@
                                                                                                                         <tr>
                                                                                                                             <td align="center"
                                                                                                                                 style="font-size: 0px">
-                                                                                                                                <a target="_blank"
-                                                                                                                                    href="https://viewstripo.email">
+                                                                                                                                <a target="_blank">
                                                                                                                                     <img align="center"
                                                                                                                                         border="0"
                                                                                                                                         src="../../../../assets/images/fortune.png"
@@ -1101,8 +1104,7 @@
                                                                                                                                         <td align="center"
                                                                                                                                             class="es-p15r"
                                                                                                                                             style="font-size: 0px">
-                                                                                                                                            <a target="_blank"
-                                                                                                                                                href="https://viewstripo.email">
+                                                                                                                                            <a target="_blank">
                                                                                                                                                 <img align="center"
                                                                                                                                                     border="0"
                                                                                                                                                     src="{{filePath}}"
@@ -1252,8 +1254,7 @@
                                                                                                                                     process
                                                                                                                                     on
                                                                                                                                     <a target="_blank"
-                                                                                                                                        style="color: #00a8e2;"
-                                                                                                                                        href="https://viewstripo.email">revords.com</a>
+                                                                                                                                        style="color: #00a8e2;">revords.com</a>
                                                                                                                                     <br>
                                                                                                                                     <br>Revords&nbsp;LLC
                                                                                                                                     <br>

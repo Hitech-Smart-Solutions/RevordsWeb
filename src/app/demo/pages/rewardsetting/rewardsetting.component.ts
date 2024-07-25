@@ -4,6 +4,7 @@ import { MatTable } from '@angular/material/table';
 import { RewardService } from 'src/app/services/RewardService';
 import { ToastService } from 'src/app/services/ToastService';
 import { AppSettings } from 'src/app/services/Constants';
+import { CustomLoggerService } from 'src/app/services/CustomLoggerService';
 
 export interface PeriodicElement {
   rewardname: string;
@@ -55,7 +56,8 @@ export class RewardsettingComponent {
 
   @ViewChild(MatTable, { static: false }) table: MatTable<any>  // Initialize
 
-  constructor(private _memberservice: RewardService, public toastService: ToastService) {
+  constructor(private _memberservice: RewardService, public toastService: ToastService, private _customLoggerService: CustomLoggerService) {
+
   }
   showSnackbarAction(message: string, action: string) {
     if (action == "1") {
@@ -128,8 +130,8 @@ export class RewardsettingComponent {
 
     const index = this.dataSource.findIndex(image => image.id === id);
 
-console.log(index)
-console.log(this.dataSource)
+    console.log(index)
+    console.log(this.dataSource)
 
     if (index !== -1) {
       this.dataSource[index].type = 3;
@@ -151,6 +153,7 @@ console.log(this.dataSource)
             this.isLoading = false;
           },
           error: error => {
+            this._customLoggerService.logError(AppSettings.LoggerAppName ,"Reward Settings > Method : Edit()" , error.message);
             this.isLoading = false;
           }
         });
@@ -198,6 +201,7 @@ console.log(this.dataSource)
           this.isLoading = false;
         },
         error: error => {
+          this._customLoggerService.logError(AppSettings.LoggerAppName ,"Reward Settings > Method : GetRewardsData()" , error.message);
           this.isLoading = false;
         }
       });

@@ -6,6 +6,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { AppSettings } from 'src/app/services/Constants';
+import { CustomLoggerService } from 'src/app/services/CustomLoggerService';
 
 export interface PeriodicElement {
   name: string;
@@ -65,7 +66,7 @@ export class DefinationsettingComponent {
   disableBtnNext: boolean = true;
 
   constructor(private _definationservice: DefinationService, public toastService: ToastService,
-    private fb: FormBuilder) {
+    private fb: FormBuilder, private _customLoggerService: CustomLoggerService) {
     this.businessGroupID = JSON.parse(localStorage.getItem('BusinessGroup'));
     this.jobForm.controls['rewardName'].disable();
   }
@@ -143,6 +144,7 @@ export class DefinationsettingComponent {
           this.getExportProgress(data)
         },
         error: error => {
+          this._customLoggerService.logError(AppSettings.LoggerAppName, "Badge Definition > Method : Submit()", error.message);
           this.isLoading = false;
           this.submitted = false;
         }
@@ -272,6 +274,7 @@ export class DefinationsettingComponent {
           this.isLoadingMember = false;
         },
         error: error => {
+          this._customLoggerService.logError(AppSettings.LoggerAppName, "Badge Definition > Method : GetMember()", error.message);
           // this.showSnackbarAction(error.statusText, "2");
           this.isLoadingMember = false;
         }
@@ -302,6 +305,7 @@ export class DefinationsettingComponent {
           this.dataSource = data;
         },
         error: error => {
+          this._customLoggerService.logError(AppSettings.LoggerAppName, "Badge Definition > Method : GetRewardsData()", error.message);
         }
       });
   }

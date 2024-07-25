@@ -10,6 +10,8 @@ import { FormBuilder } from '@angular/forms';
 import { IDropdownSettings, } from 'ng-multiselect-dropdown';
 import * as dayjs from 'dayjs';
 import { AutopilotConfigService } from 'src/app/services/AutopilotConfigService';
+import { CustomLoggerService } from 'src/app/services/CustomLoggerService';
+import { AppSettings } from 'src/app/services/Constants';
 
 export class AnalyticsDetails {
   businessLocationID: number;
@@ -82,7 +84,8 @@ export class AutopilotComponent {
   dropdown: string[] = [];
 
   constructor(private _promotionService: PromotionService, private _commonService: CommonService,
-    private _formBuilder: FormBuilder, private _autopilotService: AutopilotConfigService) {
+    private _formBuilder: FormBuilder, private _autopilotService: AutopilotConfigService,
+    private _customLoggerService: CustomLoggerService) {
     this.businessGroupID = JSON.parse(localStorage.getItem('BusinessGroup'));
     this.selected = {
       startDate: dayjs().subtract(6, 'days'),
@@ -197,6 +200,7 @@ export class AutopilotComponent {
           this.isLoading = false;
         },
         error: error => {
+          this._customLoggerService.logError(AppSettings.LoggerAppName ,"Autopilot Dashboard > Method : GetAutopilotHistory()" , error.message)
           console.log(error);
           this.isLoading = false;
         }

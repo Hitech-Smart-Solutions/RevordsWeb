@@ -20,6 +20,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { formatDate } from '@angular/common';
 import { BusinessGroupService } from 'src/app/services/BusinessGroupService';
 import { debounceTime } from 'rxjs/operators';
+import { CustomLoggerService } from 'src/app/services/CustomLoggerService';
 
 @Component({
   selector: 'app-promotion',
@@ -244,7 +245,7 @@ export class PromotionComponent {
   constructor(private _liveAnnouncer: LiveAnnouncer, private _promotionService: PromotionService,
     public toastService: ToastService, private modalService: NgbModal, private _businessGroupService: BusinessGroupService,
     private _formBuilder: FormBuilder, private _memberservice: MemberService, public sanitizer: DomSanitizer,
-    private _spinwheel: SpinWheelService, private datePipe: DatePipe) {
+    private _spinwheel: SpinWheelService, private datePipe: DatePipe, private _customLoggerService: CustomLoggerService) {
     this.isSpinRequired = JSON.parse(localStorage.getItem('IsSpinRequired'))
     this.business = JSON.parse(localStorage.getItem('Business'));
     this.businessGroupID = JSON.parse(localStorage.getItem('BusinessGroup'));
@@ -263,6 +264,8 @@ export class PromotionComponent {
       this.location += element.id + ',';
       this.businessLocationIDs += element.id + ',';
     });
+
+    console.log(new Date())
   }
 
   onDateChange(): void {
@@ -275,7 +278,7 @@ export class PromotionComponent {
     this.endDate = this.datePipe.transform(this.endDate, dateFormat);
 
     this.maxDate = null;
-    this.firstFormGroup.controls['date'].setValue('');
+    this.firstFormGroup.controls['date'].setValue(this.startDate);
     let val = this.firstFormGroup.controls["isSendSoon"].value;
     if (val == '2') {
       this.maxDate = this.firstFormGroup.controls["offerStartDate"].value;
@@ -315,11 +318,6 @@ export class PromotionComponent {
       textField: 'businessName',
       itemsShowLimit: 1
     }
-
-    // this.debouncer.pipe(debounceTime(300)).subscribe(() => {
-    //   console.log("in")
-    //   this.handleButtonClick(); // Replace with your actual method name
-    // });
   }
 
   GetBusinessGroupByID() {
@@ -330,6 +328,7 @@ export class PromotionComponent {
             + " to include.";
         },
         error: error => {
+          this._customLoggerService.logError(AppSettings.LoggerAppName ,"Promotion > Method : GetBusinessGroupID()" , error.message)
         }
       });
   }
@@ -410,7 +409,7 @@ export class PromotionComponent {
           }
         },
         error: error => {
-
+          this._customLoggerService.logError(AppSettings.LoggerAppName ,"Promotion > Method : SetSpinWheelData()" , error.message)
         }
       });
   }
@@ -730,6 +729,7 @@ export class PromotionComponent {
           this.isLoadingAnnData = false;
         },
         error: error => {
+          this._customLoggerService.logError(AppSettings.LoggerAppName ,"Promotion > Method : EditReplicate()" , error.message)
           this.isLoadingAnnData = false;
         }
       });
@@ -805,6 +805,8 @@ export class PromotionComponent {
           this.isLoadingAnnData = false;
         },
         error: error => {
+          console.log(error);
+          this._customLoggerService.logError(AppSettings.LoggerAppName, "Promotion > Method : GetPromotions()", error.message)
           this.isLoadingAnnData = false;
         }
       });
@@ -1311,7 +1313,6 @@ export class PromotionComponent {
     this.isLoadingSaveData = true;
 
     let model = this.createModel();
-    console.log(model)
     this._promotionService.MultiPromotions(model)
       .subscribe({
         next: (data) => {
@@ -1322,9 +1323,12 @@ export class PromotionComponent {
           this.ClearControlandView();
         },
         error: error => {
-          this.isLoadingSaveData = false;
+          this._customLoggerService.logError(AppSettings.LoggerAppName, "Promotion > Method : Submit()", error.message)
           this.isLoading = false;
+          this.isLoadingSaveData = false;
+          this.iseditmode = false;
           this.submitted = false;
+          this.ClearControlandView();
         }
       });
   }
@@ -1377,7 +1381,7 @@ export class PromotionComponent {
         "lastModifiedDate": AppSettings.GetDate(),
         "businessGroupID": this.businessGroupID.id,
         "redemptionOptionID": val != null ? val : 0,
-        "fileName": this.file != null && this.file != undefined ? this.file.name : "",
+        "fileName": this.fileName != null && this.fileName != undefined ? this.fileName : "",
         "fileContentType": this.file != null && this.file != undefined ? this.file.type : "",
         "filePath": AppSettings.Root_ENDPOINT + this.fileName,
         "stateID": 3,
@@ -1415,7 +1419,7 @@ export class PromotionComponent {
         "lastModifiedDate": AppSettings.GetDate(),
         "businessGroupID": this.businessGroupID.id,
         "redemptionOptionID": val != null ? val : 0,
-        "fileName": this.file != null && this.file != undefined ? this.file.name : "",
+        "fileName": this.fileName != null && this.fileName != undefined ? this.fileName : "",
         "fileContentType": this.file != null && this.file != undefined ? this.file.type : "",
         "filePath": AppSettings.Root_ENDPOINT + this.fileName,
         "stateID": 3,
@@ -1677,6 +1681,7 @@ export class PromotionComponent {
           },
           error: error => {
             console.log("This is on upload error", error);
+            this._customLoggerService.logError(AppSettings.LoggerAppName, "Promotion > Method : Upload()", error.message)
             this.errorMessage = error.error;
             this.modalService.open(this.errorMessage, {
               animation: true,
@@ -1796,7 +1801,6 @@ export class PromotionComponent {
     }
 
     this.GetPromotions();
-    this.displayData = this.promotions.sort((a, b) => b.id - a.id).slice(0, this.pagesize);
   }
 
   async closePopup() {
@@ -1814,7 +1818,6 @@ export class PromotionComponent {
       this.location += element.id + ',';
     });
     this.GetPromotions();
-    this.displayData = this.promotions.sort((a, b) => b.id - a.id).slice(0, this.pagesize);
   }
 
   async onDeSelectAll(items) {
@@ -1824,7 +1827,6 @@ export class PromotionComponent {
       this.location += element.id + ',';
     });
     this.GetPromotions();
-    this.displayData = this.promotions.sort((a, b) => b.id - a.id).slice(0, this.pagesize);
   }
   //#endregion
 

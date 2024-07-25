@@ -42,6 +42,7 @@
     "ng-circle-progress": "^1.7.1",
     "ng-multiselect-dropdown": "^0.3.9",
     "ngx-daterangepicker-material": "^6.0.4",
+    "ngx-logger": "^5.0.12",
     "ngx-pagination": "^6.0.3",
     "ngx-scrollbar": "^10.0.1",
     "ngx-skeleton-loader": "^7.0.0",

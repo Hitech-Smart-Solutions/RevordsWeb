@@ -15,6 +15,7 @@ import { PromotionService } from 'src/app/services/PromotionService';
 import { BusinessGroupService } from 'src/app/services/BusinessGroupService';
 import { formatDate } from '@angular/common';
 import * as moment from 'moment';
+import { CustomLoggerService } from 'src/app/services/CustomLoggerService';
 
 export class Tree {
   root: TreeNode;
@@ -125,7 +126,7 @@ export class AnnouncementComponent {
     isScheduledLater: [''],
     date: [''],
     time: [null],
-    validDate: ['']
+    validDate: ['', Validators.required]
   });
   secondFormGroup = this.fb.group({
     membersOf: ['', Validators.required],
@@ -164,7 +165,8 @@ export class AnnouncementComponent {
   constructor(private uploadService: FileUploadService,
     private fb: FormBuilder, private _announcementService: AnnouncementService, private _businessGroupService: BusinessGroupService,
     public toastService: ToastService, private _promotionService: PromotionService,
-    public dialog: MatDialog, public sanitizer: DomSanitizer, private _memberservice: MemberService) {
+    public dialog: MatDialog, public sanitizer: DomSanitizer, private _memberservice: MemberService
+    , private _customLoggerService: CustomLoggerService) {
     this.business = JSON.parse(localStorage.getItem('Business'));
     this.packageDetails = JSON.parse(localStorage.getItem('PackageDetails'));
     this.businessGroupID = JSON.parse(localStorage.getItem('BusinessGroup'));
@@ -228,6 +230,7 @@ export class AnnouncementComponent {
             + " to include.";
         },
         error: error => {
+          this._customLoggerService.logError(AppSettings.LoggerAppName, "Announcement > Method : GetBusinessGroupByID()", error.message)
         }
       });
   }
@@ -483,6 +486,7 @@ export class AnnouncementComponent {
               this.isfileUploaded = false;
             }
           }, error: error => {
+            this._customLoggerService.logError(AppSettings.LoggerAppName, "Announcement > Method : onUpload()", error.message)
             console.log(error);
             alert(error.error);
             this.cancelUpload();
@@ -531,7 +535,7 @@ export class AnnouncementComponent {
       "id": 0,
       "subject": this.jobForm.controls['subject'].value,
       "description": this.jobForm.controls['description'].value,
-      "fileName": this.file != null && this.file != undefined ? this.file.name : "",
+      "fileName": this.fileName != null && this.fileName != undefined ? this.fileName : "",
       "fileContentType": this.file != null && this.file != undefined ? this.file.type : "",
       "filePath": AppSettings.Root_ENDPOINT + this.fileName,
       "isSendImmediately": !this.senditlater,
@@ -558,9 +562,11 @@ export class AnnouncementComponent {
           this.iseditmode = false;
         },
         error: error => {
+          this._customLoggerService.logError(AppSettings.LoggerAppName, "Announcement > Method : Submit()", error.message)
+          this.ClearControlandView();
           this.isLoading = false;
           this.isLoadingSaveData = false;
-          this.submitted = false;
+          this.iseditmode = false;
         }
       });
   }
@@ -599,6 +605,7 @@ export class AnnouncementComponent {
           this.urlSafe = this.sanitizer.bypassSecurityTrustResourceUrl(this.url);
         },
         error: error => {
+          this._customLoggerService.logError(AppSettings.LoggerAppName, "Announcement > Method : Preview()", error.message)
           console.log(error);
         }
       });
@@ -638,7 +645,7 @@ export class AnnouncementComponent {
       isScheduledLater: [''],
       date: [''],
       time: [''],
-      validDate: ['']
+      validDate: ['', Validators.required]
     });
     this.secondFormGroup = this.fb.group({
       membersOf: ['', Validators.required],
@@ -679,7 +686,7 @@ export class AnnouncementComponent {
       isScheduledLater: [''],
       date: [''],
       time: [''],
-      validDate: ['']
+      validDate: ['', Validators.required]
     });
     this.secondFormGroup = this.fb.group({
       membersOf: ['', Validators.required],
@@ -705,8 +712,7 @@ export class AnnouncementComponent {
   async showMore() {
     this.isLoadingAnnData = true;
     let newLength = this.displayData.length + parseInt(this.pagesize);
-    await this.common();
-    this.displayData = this.displayData.sort((a, b) => b.id - a.id).slice(0, newLength);
+    this.displayData = this.dataSourceAnnouncement.sort((a, b) => b.id - a.id).slice(0, newLength);
     this.isLoadingAnnData = false;
   }
   handleChange(evt: string) {
@@ -718,32 +724,12 @@ export class AnnouncementComponent {
     this._announcementService.GetAnnouncementsByBusinessID(this.businessGroupID.id, this.location).pipe()
       .subscribe({
         next: (data) => {
-
           this.dataSourceAnnouncement = JSON.parse(JSON.stringify(data));
-
-          this.displayData = data.filter(
-            (thing, i, arr) => arr.findIndex(t => t.id === thing.id) === i
-          );
-
-          this.displayData.forEach((element: any) => {
-            let deliveredCount = 0;
-            let openCount = 0;
-
-            data.forEach((x: any) => {
-              if (x.id == element.id) {
-                deliveredCount += x.deliveredCount;
-                openCount += x.openCount;
-              }
-            });
-
-            element.deliveredCount = deliveredCount;
-            element.openCount = openCount;
-            element.openPercentages = parseInt(Math.round(deliveredCount > 0 ? (openCount * 100 / deliveredCount) : 0).toString());
-          });
-          this.displayData = this.displayData.sort((a, b) => b.id - a.id).slice(0, this.pagesize);
+          this.displayData = this.dataSourceAnnouncement.sort((a, b) => b.id - a.id).slice(0, this.pagesize);
           this.isLoadingAnnData = false;
         },
         error: error => {
+          this._customLoggerService.logError(AppSettings.LoggerAppName, "Announcement > Method : GetAnnouncementsData()", error.message)
           this.isLoadingAnnData = false;
         }
       });
@@ -806,7 +792,7 @@ export class AnnouncementComponent {
             isScheduledLater: [''],
             date: [''],
             time: [''],
-            validDate: ['']
+            validDate: ['', Validators.required]
           });
           this.subjectCharacterCount = 50 - this.jobForm.controls['subject'].value.length;
 
@@ -849,6 +835,7 @@ export class AnnouncementComponent {
           this.isLoadingAnnData = false;
         },
         error: error => {
+          this._customLoggerService.logError(AppSettings.LoggerAppName, "Announcement > Method : EditReplicate()", error.message)
           this.isLoadingAnnData = false;
         }
       });
@@ -965,50 +952,38 @@ export class AnnouncementComponent {
   //#region BusinessDropdown
   async onItemSelectAll(items) {
     this.dashBoardFormControl.controls['businessID'].setValue(items);
-    this.common();
+    this.location = "";
+    items.forEach(element => {
+      this.location += element.id + ',';
+    });
+    this.GetAnnouncementsData();
   }
 
   async onDeSelectAll(items) {
     this.dashBoardFormControl.controls['businessID'].setValue(items);
-    this.common();
+    this.location = "";
+    items.forEach(element => {
+      this.location += element.id + ',';
+    });
+    this.GetAnnouncementsData();
   }
   //#endregion
 
   async common() {
-    let businessInput = this.dashBoardFormControl.controls['businessID'].value;
-    this.filtereddata = [];
-    this.displayData = [];
-    this.filtereddata = JSON.parse(JSON.stringify(this.dataSourceAnnouncement));
-
-    if (businessInput != null && businessInput != undefined && businessInput.length > 0) {
-      for (let index = 0; index < businessInput.length; index++) {
-        if (index == 0) {
-          this.filtereddata = this.filtereddata.filter((t: any) => t.businessLocationID == businessInput[index].id.toString());
-        } else {
-          this.filtereddata = this.filtereddata.concat(this.dataSourceAnnouncement.filter((t) => t.businessLocationID == businessInput[index].id));
-        }
-      }
+    let businesslocationID = this.dashBoardFormControl.controls['businessID'].value;
+    this.location = "";
+    if (businesslocationID.length > 0 && businesslocationID != null) {
+      businesslocationID.forEach(element => {
+        this.location += element.id + ',';
+      });
+    } else {
+      this.business = JSON.parse(localStorage.getItem('Business'));
+      this.business.forEach(element => {
+        this.location += element.id + ',';
+      });
     }
 
-    this.displayData = this.filtereddata.filter(
-      (thing, i, arr) => arr.findIndex(t => t.id === thing.id) === i
-    );
-
-    this.displayData.forEach((element: any) => {
-      let deliveredCount = 0;
-      let openCount = 0;
-
-      this.filtereddata.forEach((x: any) => {
-        if (x.id == element.id) {
-          deliveredCount += x.deliveredCount;
-          openCount += x.openCount;
-        }
-      });
-
-      element.deliveredCount = deliveredCount;
-      element.openCount = openCount;
-      element.openPercentages = parseInt(Math.round(deliveredCount > 0 ? (openCount * 100 / deliveredCount) : 0).toString());
-    });
+    this.GetAnnouncementsData();
   }
 
   onScheduleDateChanged() {

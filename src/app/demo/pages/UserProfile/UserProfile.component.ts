@@ -11,6 +11,7 @@ import { FormGroup, Validators, FormControl } from '@angular/forms';
 import { ToastService } from '../../../services/ToastService';
 import { AppSettings } from '../../../services/Constants';
 import { IDropdownSettings, } from 'ng-multiselect-dropdown';
+import { CustomLoggerService } from 'src/app/services/CustomLoggerService';
 
 export interface PeriodicElement {
     userId: string;
@@ -58,8 +59,9 @@ export class UserProfileComponent {
     IsAdmin: any = 0;
     constructor(private _userservice: UserService, public toastService: ToastService,
         private _liveAnnouncer: LiveAnnouncer, private _businessGroupService: BusinessGroupService,
-        private _profileSettingService: ProfileSettingService, private _sourceService: SourceService) {
-         this.GetBusinessGroupData();
+        private _profileSettingService: ProfileSettingService, private _sourceService: SourceService
+        , private _customLoggerService: CustomLoggerService) {
+        this.GetBusinessGroupData();
         this.ProfileFormGroup = new FormGroup({
             userId: new FormControl(''),
             userName: new FormControl('', Validators.required),
@@ -87,7 +89,7 @@ export class UserProfileComponent {
         this.GetUsersData();
         this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;
-         this.GetBusinessGroupData();
+        this.GetBusinessGroupData();
         this.dropdownSettingsSingleBusiness = {
             idField: 'id',
             textField: 'businessName',
@@ -136,6 +138,7 @@ export class UserProfileComponent {
                     console.log(this.bussinessGroupData);
                 },
                 error: error => {
+                    this._customLoggerService.logError(AppSettings.LoggerAppName, "User Profile > Method : GetBusinessGroupData()", error.message);
                     console.log(error);
                 }
             });
@@ -163,6 +166,7 @@ export class UserProfileComponent {
                     this.isLoading = false;
                 },
                 error: error => {
+                    this._customLoggerService.logError(AppSettings.LoggerAppName, "User Profile > Method : GetUsersData()", error.message);
                     console.log(error);
                     this.isLoading = false;
                 }
@@ -252,6 +256,7 @@ export class UserProfileComponent {
                         this.GetUsersData();
                     },
                     error: error => {
+                        this._customLoggerService.logError(AppSettings.LoggerAppName, "User Profile > Method : Save()", error.message);
                         this.isLoading = false;
                         this.iseditmode = true;
                         this.submitted = false;
@@ -269,6 +274,7 @@ export class UserProfileComponent {
                         this.GetUsersData();
                     },
                     error: error => {
+                        this._customLoggerService.logError(AppSettings.LoggerAppName, "User Profile > Method : Save()", error.message);
                         this.isLoading = false;
                         this.iseditmode = true;
                         this.submitted = false;
@@ -302,6 +308,7 @@ export class UserProfileComponent {
 
                 },
                 error: error => {
+                    this._customLoggerService.logError(AppSettings.LoggerAppName, "User Profile > Method : Edit()", error.message);
                     this.iseditmode = true;
                 }
             });
@@ -358,6 +365,7 @@ export class UserProfileComponent {
 
                 },
                 error: error => {
+                    this._customLoggerService.logError(AppSettings.LoggerAppName, "User Profile > Method : onChangeBusinessGroup()", error.message);
                 }
             });
     }
@@ -371,6 +379,7 @@ export class UserProfileComponent {
                     this.SourceData = data.filter(item => (item.businessLocationID == LocationID));
                 },
                 error: error => {
+                    this._customLoggerService.logError(AppSettings.LoggerAppName, "User Profile > Method : onChangeBusinessLocation()", error.message);
                 }
             });
     }

@@ -6,6 +6,7 @@ import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { TagDefinationService } from 'src/app/services/TagDefinitionService';
 import { AppSettings } from 'src/app/services/Constants';
+import { CustomLoggerService } from 'src/app/services/CustomLoggerService';
 
 export interface PeriodicElement {
   name: string;
@@ -66,7 +67,8 @@ export class TagDefinitionComponent {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   @ViewChild('paginatorPageSize') paginatorPageSize: MatPaginator;
 
-  constructor(public toastService: ToastService, private fb: FormBuilder, private _tagDefinationService: TagDefinationService) { }
+  constructor(public toastService: ToastService, private fb: FormBuilder,
+    private _tagDefinationService: TagDefinationService, private _customLoggerService: CustomLoggerService) { }
 
   AddNew() {
     this.iseditmode = true;
@@ -178,6 +180,8 @@ export class TagDefinitionComponent {
             });
           },
           error: error => {
+            this._customLoggerService.logError(AppSettings.LoggerAppName, "Tag Definition > Method : Submit()", error.message);
+
             this.isLoading = false;
             this.submitted = false;
           }
@@ -199,6 +203,7 @@ export class TagDefinitionComponent {
             });
           },
           error: error => {
+            this._customLoggerService.logError(AppSettings.LoggerAppName, "Tag Definition > Method : Submit()", error.message);
             this.isLoading = false;
             this.submitted = false;
           }
@@ -285,6 +290,8 @@ export class TagDefinitionComponent {
             this.GetRewardsData();
           },
           error: error => {
+            this._customLoggerService.logError(AppSettings.LoggerAppName, "Tag Definition > Method : clickMethod()", error.message);
+
             this.isLoading = false;
             this.submitted = false;
           }
@@ -324,6 +331,7 @@ export class TagDefinitionComponent {
           this.isLoadingMember = false;
         },
         error: error => {
+          this._customLoggerService.logError(AppSettings.LoggerAppName, "Tag Definition > Method : GetMember()", error.message);
           this.isLoadingMember = false;
         }
       });
@@ -342,7 +350,7 @@ export class TagDefinitionComponent {
           this.dataSource = data;
         },
         error: error => {
-
+          this._customLoggerService.logError(AppSettings.LoggerAppName, "Tag Definition > Method : GetRewardsData()", error.message);
         }
       });
   }

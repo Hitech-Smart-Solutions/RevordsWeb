@@ -20,6 +20,8 @@ import { DaterangepickerDirective } from 'ngx-daterangepicker-material';
 import * as XLSX from 'xlsx';
 import { UtcConverterService, UtcToLocalTimeFormat } from 'src/app/services/UtcConverterService';
 import * as dayjs from 'dayjs';
+import { CustomLoggerService } from 'src/app/services/CustomLoggerService';
+import { AppSettings } from 'src/app/services/Constants';
 
 export interface PeriodicElement {
   membername: string;
@@ -109,7 +111,8 @@ export class ActivitydashboardComponent {
   isGenerating: any = false;
 
   constructor(public _activityTypeService: ActivityTypeService, private _activityHistoryService: ActivityHistoryService,
-    public toastService: ToastService, private _liveAnnouncer: LiveAnnouncer, private _dateConverter: UtcConverterService) {
+    public toastService: ToastService, private _liveAnnouncer: LiveAnnouncer, 
+    private _dateConverter: UtcConverterService ,private _customLoggerService: CustomLoggerService) {
     this.businessGroupID = JSON.parse(localStorage.getItem('BusinessGroup'));
     this.ActivityDashboardGroup = new FormGroup({
       activity: new FormControl(),
@@ -433,6 +436,7 @@ export class ActivitydashboardComponent {
           this.isLoading = false;
         },
         error: error => {
+          this._customLoggerService.logError(AppSettings.LoggerAppName ,"Activity History > Method : GetMembersData()" , error.message)
           this.earned = 0;
           this.redeemed = 0;
           this.apredeemed = 0;
