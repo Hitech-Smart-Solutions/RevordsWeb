@@ -263,6 +263,8 @@ export class PromotionComponent {
       this.location += element.id + ',';
       this.businessLocationIDs += element.id + ',';
     });
+
+    console.log(new Date())
   }
 
   onDateChange(): void {
@@ -1377,7 +1379,7 @@ export class PromotionComponent {
         "lastModifiedDate": AppSettings.GetDate(),
         "businessGroupID": this.businessGroupID.id,
         "redemptionOptionID": val != null ? val : 0,
-        "fileName": this.file != null && this.file != undefined ? this.file.name : "",
+        "fileName": this.fileName != null && this.fileName != undefined ? this.fileName : "",
         "fileContentType": this.file != null && this.file != undefined ? this.file.type : "",
         "filePath": AppSettings.Root_ENDPOINT + this.fileName,
         "stateID": 3,
@@ -1415,7 +1417,7 @@ export class PromotionComponent {
         "lastModifiedDate": AppSettings.GetDate(),
         "businessGroupID": this.businessGroupID.id,
         "redemptionOptionID": val != null ? val : 0,
-        "fileName": this.file != null && this.file != undefined ? this.file.name : "",
+        "fileName": this.fileName != null && this.fileName != undefined ? this.fileName : "",
         "fileContentType": this.file != null && this.file != undefined ? this.file.type : "",
         "filePath": AppSettings.Root_ENDPOINT + this.fileName,
         "stateID": 3,
@@ -1796,7 +1798,6 @@ export class PromotionComponent {
     }
 
     this.GetPromotions();
-    this.displayData = this.promotions.sort((a, b) => b.id - a.id).slice(0, this.pagesize);
   }
 
   async closePopup() {
@@ -1814,7 +1815,6 @@ export class PromotionComponent {
       this.location += element.id + ',';
     });
     this.GetPromotions();
-    this.displayData = this.promotions.sort((a, b) => b.id - a.id).slice(0, this.pagesize);
   }
 
   async onDeSelectAll(items) {
@@ -1824,7 +1824,6 @@ export class PromotionComponent {
       this.location += element.id + ',';
     });
     this.GetPromotions();
-    this.displayData = this.promotions.sort((a, b) => b.id - a.id).slice(0, this.pagesize);
   }
   //#endregion
 

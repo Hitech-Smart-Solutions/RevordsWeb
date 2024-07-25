@@ -531,7 +531,7 @@ export class AnnouncementComponent {
       "id": 0,
       "subject": this.jobForm.controls['subject'].value,
       "description": this.jobForm.controls['description'].value,
-      "fileName": this.file != null && this.file != undefined ? this.file.name : "",
+      "fileName": this.fileName != null && this.fileName != undefined ? this.fileName : "",
       "fileContentType": this.file != null && this.file != undefined ? this.file.type : "",
       "filePath": AppSettings.Root_ENDPOINT + this.fileName,
       "isSendImmediately": !this.senditlater,
@@ -718,29 +718,8 @@ export class AnnouncementComponent {
     this._announcementService.GetAnnouncementsByBusinessID(this.businessGroupID.id, this.location).pipe()
       .subscribe({
         next: (data) => {
-
           this.dataSourceAnnouncement = JSON.parse(JSON.stringify(data));
-
-          this.displayData = data.filter(
-            (thing, i, arr) => arr.findIndex(t => t.id === thing.id) === i
-          );
-
-          this.displayData.forEach((element: any) => {
-            let deliveredCount = 0;
-            let openCount = 0;
-
-            data.forEach((x: any) => {
-              if (x.id == element.id) {
-                deliveredCount += x.deliveredCount;
-                openCount += x.openCount;
-              }
-            });
-
-            element.deliveredCount = deliveredCount;
-            element.openCount = openCount;
-            element.openPercentages = parseInt(Math.round(deliveredCount > 0 ? (openCount * 100 / deliveredCount) : 0).toString());
-          });
-          this.displayData = this.displayData.sort((a, b) => b.id - a.id).slice(0, this.pagesize);
+          this.displayData = this.dataSourceAnnouncement.sort((a, b) => b.id - a.id).slice(0, this.pagesize);
           this.isLoadingAnnData = false;
         },
         error: error => {
@@ -965,50 +944,38 @@ export class AnnouncementComponent {
   //#region BusinessDropdown
   async onItemSelectAll(items) {
     this.dashBoardFormControl.controls['businessID'].setValue(items);
-    this.common();
+    this.location = "";
+    items.forEach(element => {
+      this.location += element.id + ',';
+    });
+    this.GetAnnouncementsData();
   }
 
   async onDeSelectAll(items) {
     this.dashBoardFormControl.controls['businessID'].setValue(items);
-    this.common();
+    this.location = "";
+    items.forEach(element => {
+      this.location += element.id + ',';
+    });
+    this.GetAnnouncementsData();
   }
   //#endregion
 
   async common() {
-    let businessInput = this.dashBoardFormControl.controls['businessID'].value;
-    this.filtereddata = [];
-    this.displayData = [];
-    this.filtereddata = JSON.parse(JSON.stringify(this.dataSourceAnnouncement));
-
-    if (businessInput != null && businessInput != undefined && businessInput.length > 0) {
-      for (let index = 0; index < businessInput.length; index++) {
-        if (index == 0) {
-          this.filtereddata = this.filtereddata.filter((t: any) => t.businessLocationID == businessInput[index].id.toString());
-        } else {
-          this.filtereddata = this.filtereddata.concat(this.dataSourceAnnouncement.filter((t) => t.businessLocationID == businessInput[index].id));
-        }
-      }
+    let businesslocationID = this.dashBoardFormControl.controls['businessID'].value;
+    this.location = "";
+    if (businesslocationID.length > 0 && businesslocationID != null) {
+      businesslocationID.forEach(element => {
+        this.location += element.id + ',';
+      });
+    } else {
+      this.business = JSON.parse(localStorage.getItem('Business'));
+      this.business.forEach(element => {
+        this.location += element.id + ',';
+      });
     }
 
-    this.displayData = this.filtereddata.filter(
-      (thing, i, arr) => arr.findIndex(t => t.id === thing.id) === i
-    );
-
-    this.displayData.forEach((element: any) => {
-      let deliveredCount = 0;
-      let openCount = 0;
-
-      this.filtereddata.forEach((x: any) => {
-        if (x.id == element.id) {
-          deliveredCount += x.deliveredCount;
-          openCount += x.openCount;
-        }
-      });
-
-      element.deliveredCount = deliveredCount;
-      element.openCount = openCount;
-      element.openPercentages = parseInt(Math.round(deliveredCount > 0 ? (openCount * 100 / deliveredCount) : 0).toString());
-    });
+    this.GetAnnouncementsData();
   }
 
   onScheduleDateChanged() {
