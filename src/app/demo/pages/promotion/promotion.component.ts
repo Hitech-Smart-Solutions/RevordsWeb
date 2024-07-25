@@ -278,7 +278,7 @@ export class PromotionComponent {
     this.endDate = this.datePipe.transform(this.endDate, dateFormat);
 
     this.maxDate = null;
-    this.firstFormGroup.controls['date'].setValue('');
+    this.firstFormGroup.controls['date'].setValue(this.startDate);
     let val = this.firstFormGroup.controls["isSendSoon"].value;
     if (val == '2') {
       this.maxDate = this.firstFormGroup.controls["offerStartDate"].value;
@@ -1313,7 +1313,6 @@ export class PromotionComponent {
     this.isLoadingSaveData = true;
 
     let model = this.createModel();
-    console.log(model)
     this._promotionService.MultiPromotions(model)
       .subscribe({
         next: (data) => {

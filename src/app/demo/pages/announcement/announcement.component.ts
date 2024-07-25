@@ -126,7 +126,7 @@ export class AnnouncementComponent {
     isScheduledLater: [''],
     date: [''],
     time: [null],
-    validDate: ['']
+    validDate: ['', Validators.required]
   });
   secondFormGroup = this.fb.group({
     membersOf: ['', Validators.required],
@@ -230,7 +230,7 @@ export class AnnouncementComponent {
             + " to include.";
         },
         error: error => {
-          this._customLoggerService.logError(AppSettings.LoggerAppName ,"Announcement > Method : GetBusinessGroupByID()" , error.message)
+          this._customLoggerService.logError(AppSettings.LoggerAppName, "Announcement > Method : GetBusinessGroupByID()", error.message)
         }
       });
   }
@@ -486,7 +486,7 @@ export class AnnouncementComponent {
               this.isfileUploaded = false;
             }
           }, error: error => {
-            this._customLoggerService.logError(AppSettings.LoggerAppName ,"Announcement > Method : onUpload()" , error.message)
+            this._customLoggerService.logError(AppSettings.LoggerAppName, "Announcement > Method : onUpload()", error.message)
             console.log(error);
             alert(error.error);
             this.cancelUpload();
@@ -562,7 +562,7 @@ export class AnnouncementComponent {
           this.iseditmode = false;
         },
         error: error => {
-          this._customLoggerService.logError(AppSettings.LoggerAppName ,"Announcement > Method : Submit()" , error.message)
+          this._customLoggerService.logError(AppSettings.LoggerAppName, "Announcement > Method : Submit()", error.message)
           this.ClearControlandView();
           this.isLoading = false;
           this.isLoadingSaveData = false;
@@ -605,7 +605,7 @@ export class AnnouncementComponent {
           this.urlSafe = this.sanitizer.bypassSecurityTrustResourceUrl(this.url);
         },
         error: error => {
-          this._customLoggerService.logError(AppSettings.LoggerAppName ,"Announcement > Method : Preview()" , error.message)
+          this._customLoggerService.logError(AppSettings.LoggerAppName, "Announcement > Method : Preview()", error.message)
           console.log(error);
         }
       });
@@ -645,7 +645,7 @@ export class AnnouncementComponent {
       isScheduledLater: [''],
       date: [''],
       time: [''],
-      validDate: ['']
+      validDate: ['', Validators.required]
     });
     this.secondFormGroup = this.fb.group({
       membersOf: ['', Validators.required],
@@ -686,7 +686,7 @@ export class AnnouncementComponent {
       isScheduledLater: [''],
       date: [''],
       time: [''],
-      validDate: ['']
+      validDate: ['', Validators.required]
     });
     this.secondFormGroup = this.fb.group({
       membersOf: ['', Validators.required],
@@ -712,8 +712,7 @@ export class AnnouncementComponent {
   async showMore() {
     this.isLoadingAnnData = true;
     let newLength = this.displayData.length + parseInt(this.pagesize);
-    await this.common();
-    this.displayData = this.displayData.sort((a, b) => b.id - a.id).slice(0, newLength);
+    this.displayData = this.dataSourceAnnouncement.sort((a, b) => b.id - a.id).slice(0, newLength);
     this.isLoadingAnnData = false;
   }
   handleChange(evt: string) {
@@ -730,7 +729,7 @@ export class AnnouncementComponent {
           this.isLoadingAnnData = false;
         },
         error: error => {
-          this._customLoggerService.logError(AppSettings.LoggerAppName ,"Announcement > Method : GetAnnouncementsData()" , error.message)
+          this._customLoggerService.logError(AppSettings.LoggerAppName, "Announcement > Method : GetAnnouncementsData()", error.message)
           this.isLoadingAnnData = false;
         }
       });
@@ -793,7 +792,7 @@ export class AnnouncementComponent {
             isScheduledLater: [''],
             date: [''],
             time: [''],
-            validDate: ['']
+            validDate: ['', Validators.required]
           });
           this.subjectCharacterCount = 50 - this.jobForm.controls['subject'].value.length;
 
@@ -836,7 +835,7 @@ export class AnnouncementComponent {
           this.isLoadingAnnData = false;
         },
         error: error => {
-          this._customLoggerService.logError(AppSettings.LoggerAppName ,"Announcement > Method : EditReplicate()" , error.message)
+          this._customLoggerService.logError(AppSettings.LoggerAppName, "Announcement > Method : EditReplicate()", error.message)
           this.isLoadingAnnData = false;
         }
       });

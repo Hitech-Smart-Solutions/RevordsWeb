@@ -210,6 +210,7 @@ export class MemberProfileComponent {
   positiveFlagName: any = '';
   negativeFlagName: any = '';
   isGenerating: any = false;
+  showErrorMessage: boolean = false;
 
   constructor(
     private _memberservice: MemberService,
@@ -372,8 +373,8 @@ export class MemberProfileComponent {
         next: (data) => {
           this.tagList = data;
         },
-        error: (error) => { 
-          this._customLoggerService.logError(AppSettings.LoggerAppName ,"Member Profile > Method : GetTagData()" , error.message)
+        error: (error) => {
+          this._customLoggerService.logError(AppSettings.LoggerAppName, "Member Profile > Method : GetTagData()", error.message)
         }
       });
   }
@@ -386,8 +387,8 @@ export class MemberProfileComponent {
           this.positiveFlagName = data.positiveFlagName;
           this.negativeFlagName = data.negativeFlagName;
         },
-        error: (error) => { 
-          this._customLoggerService.logError(AppSettings.LoggerAppName ,"Member Profile > Method : GetBusinessGroupByID()" , error.message)
+        error: (error) => {
+          this._customLoggerService.logError(AppSettings.LoggerAppName, "Member Profile > Method : GetBusinessGroupByID()", error.message)
         }
       });
   }
@@ -478,7 +479,7 @@ export class MemberProfileComponent {
           this.notificationOptin = data[0].notificationOptin != null ? data[0].notificationOptin : false;
         },
         error: (error) => {
-          this._customLoggerService.logError(AppSettings.LoggerAppName ,"Member Profile > Method : EditProfile()" , error.message)
+          this._customLoggerService.logError(AppSettings.LoggerAppName, "Member Profile > Method : EditProfile()", error.message)
           this.formdataLoaded = true;
         }
       });
@@ -496,6 +497,14 @@ export class MemberProfileComponent {
     if (this.jobForm.invalid) {
       return;
     }
+
+    if (!/^[1-9][0-9]*$/.test(this.jobForm.controls['phoneNumber'].value.replaceAll(/[^a-zA-Z0-9]/g, ''))) {
+      this.showErrorMessage = true;
+      return;
+    } else {
+      this.showErrorMessage = false;
+    }
+
     let id =
       this.jobForm.controls['id'].value != undefined && this.jobForm.controls['id'].value != '' ? this.jobForm.controls['id'].value : 0;
     let dayID = this.jobForm.controls['dayID'].value;
@@ -577,7 +586,7 @@ export class MemberProfileComponent {
           this.GetMembersData();
         },
         error: (error) => {
-          this._customLoggerService.logError(AppSettings.LoggerAppName ,"Member Profile > Method : Submit()" , error.message)
+          this._customLoggerService.logError(AppSettings.LoggerAppName, "Member Profile > Method : Submit()", error.message)
           this.isLoading = false;
         }
       });
@@ -610,7 +619,7 @@ export class MemberProfileComponent {
           this.GetMembersData();
         },
         error: (error) => {
-          this._customLoggerService.logError(AppSettings.LoggerAppName ,"Member Profile > Method : Submit()" , error.message)
+          this._customLoggerService.logError(AppSettings.LoggerAppName, "Member Profile > Method : Submit()", error.message)
           console.log(error);
           this.isLoading = false;
         }
@@ -719,7 +728,7 @@ export class MemberProfileComponent {
           this.isLoading = false;
         },
         error: (error) => {
-          this._customLoggerService.logError(AppSettings.LoggerAppName ,"Member Profile > Method : GetMembersData()" , error.message)
+          this._customLoggerService.logError(AppSettings.LoggerAppName, "Member Profile > Method : GetMembersData()", error.message)
           this.bronze = 0;
           this.gold = 0;
           this.silver = 0;
@@ -866,7 +875,7 @@ export class MemberProfileComponent {
           this.isGenerating = false;
         },
         error: (error) => {
-          this._customLoggerService.logError(AppSettings.LoggerAppName ,"Member Profile > Method : exportexcel()" , error.message)
+          this._customLoggerService.logError(AppSettings.LoggerAppName, "Member Profile > Method : exportexcel()", error.message)
           console.log(error);
           this.isLoading = false;
           this.isGenerating = false;
@@ -909,7 +918,7 @@ export class MemberProfileComponent {
             this.memberData = data;
           },
           error: (error) => {
-            this._customLoggerService.logError(AppSettings.LoggerAppName ,"Member Profile > Method : OnPhoneNumberEntererd()" , error.message)
+            this._customLoggerService.logError(AppSettings.LoggerAppName, "Member Profile > Method : OnPhoneNumberEntererd()", error.message)
             console.log(error);
           }
         });
@@ -954,8 +963,8 @@ export class MemberProfileComponent {
           this.activityHistory = data;
           this.phoneNumber = data[0].phone;
         },
-        error: (error) => { 
-          this._customLoggerService.logError(AppSettings.LoggerAppName ,"Member Profile > Method : getActivityHistoryByMemberID()" , error.message)
+        error: (error) => {
+          this._customLoggerService.logError(AppSettings.LoggerAppName, "Member Profile > Method : getActivityHistoryByMemberID()", error.message)
         }
       });
   }
