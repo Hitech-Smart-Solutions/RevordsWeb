@@ -13,6 +13,7 @@ import { IDropdownSettings } from 'ng-multiselect-dropdown';
 import { UtcConverterService, UtcToLocalTimeFormat } from 'src/app/services/UtcConverterService';
 import { ActivityHistoryService } from 'src/app/services/ActivityHistoryService';
 import { BusinessGroupService } from 'src/app/services/BusinessGroupService';
+import { CustomLoggerService } from 'src/app/services/CustomLoggerService';
 
 export interface PeriodicElement {
   name: string;
@@ -218,7 +219,8 @@ export class MemberProfileComponent {
     private _liveAnnouncer: LiveAnnouncer,
     private fb: FormBuilder,
     private _tagservice: TagDefinationService,
-    private _dateConverter: UtcConverterService
+    private _dateConverter: UtcConverterService,
+    private _customLoggerService: CustomLoggerService
   ) {
     this.businessGroupID = JSON.parse(localStorage.getItem('BusinessGroup'));
     this.jobForm.setValue({
@@ -370,7 +372,9 @@ export class MemberProfileComponent {
         next: (data) => {
           this.tagList = data;
         },
-        error: (error) => {}
+        error: (error) => { 
+          this._customLoggerService.logError(AppSettings.LoggerAppName ,"Member Profile > Method : GetTagData()" , error.message)
+        }
       });
   }
   GetBusinessGroupByID() {
@@ -382,7 +386,9 @@ export class MemberProfileComponent {
           this.positiveFlagName = data.positiveFlagName;
           this.negativeFlagName = data.negativeFlagName;
         },
-        error: (error) => {}
+        error: (error) => { 
+          this._customLoggerService.logError(AppSettings.LoggerAppName ,"Member Profile > Method : GetBusinessGroupByID()" , error.message)
+        }
       });
   }
   announceSortChange(sortState: Sort) {
@@ -472,6 +478,7 @@ export class MemberProfileComponent {
           this.notificationOptin = data[0].notificationOptin != null ? data[0].notificationOptin : false;
         },
         error: (error) => {
+          this._customLoggerService.logError(AppSettings.LoggerAppName ,"Member Profile > Method : EditProfile()" , error.message)
           this.formdataLoaded = true;
         }
       });
@@ -505,8 +512,8 @@ export class MemberProfileComponent {
         id: 0,
         memberName:
           this.jobForm.controls['memberName'].value != null &&
-          this.jobForm.controls['memberName'].value != undefined &&
-          this.jobForm.controls['memberName'].value != ''
+            this.jobForm.controls['memberName'].value != undefined &&
+            this.jobForm.controls['memberName'].value != ''
             ? this.jobForm.controls['memberName'].value
             : 'USER ' + this.jobForm.controls['phoneNumber'].value.replaceAll(/[^a-zA-Z0-9]/g, '').substring(5).toString(),
         birthDate: dayID != null && monthId != null ? bday : null,
@@ -543,8 +550,8 @@ export class MemberProfileComponent {
                 : false,
             currentPoints:
               this.jobForm.controls['pointstobeadded'] != null &&
-              this.jobForm.controls['pointstobeadded'].value != '' &&
-              this.jobForm.controls['pointstobeadded'].value != null
+                this.jobForm.controls['pointstobeadded'].value != '' &&
+                this.jobForm.controls['pointstobeadded'].value != null
                 ? this.jobForm.controls['pointstobeadded'].value
                 : 0,
             sourceId: 1, // 1 for web - Dashboard source
@@ -570,6 +577,7 @@ export class MemberProfileComponent {
           this.GetMembersData();
         },
         error: (error) => {
+          this._customLoggerService.logError(AppSettings.LoggerAppName ,"Member Profile > Method : Submit()" , error.message)
           this.isLoading = false;
         }
       });
@@ -581,8 +589,8 @@ export class MemberProfileComponent {
         lastModifiedDate: AppSettings.GetDate(),
         points:
           this.jobForm.controls['pointstobeadded'] != null &&
-          this.jobForm.controls['pointstobeadded'].value != '' &&
-          this.jobForm.controls['pointstobeadded'].value != null
+            this.jobForm.controls['pointstobeadded'].value != '' &&
+            this.jobForm.controls['pointstobeadded'].value != null
             ? this.jobForm.controls['pointstobeadded'].value
             : 0,
         isHighroller:
@@ -602,6 +610,7 @@ export class MemberProfileComponent {
           this.GetMembersData();
         },
         error: (error) => {
+          this._customLoggerService.logError(AppSettings.LoggerAppName ,"Member Profile > Method : Submit()" , error.message)
           console.log(error);
           this.isLoading = false;
         }
@@ -710,6 +719,7 @@ export class MemberProfileComponent {
           this.isLoading = false;
         },
         error: (error) => {
+          this._customLoggerService.logError(AppSettings.LoggerAppName ,"Member Profile > Method : GetMembersData()" , error.message)
           this.bronze = 0;
           this.gold = 0;
           this.silver = 0;
@@ -856,6 +866,7 @@ export class MemberProfileComponent {
           this.isGenerating = false;
         },
         error: (error) => {
+          this._customLoggerService.logError(AppSettings.LoggerAppName ,"Member Profile > Method : exportexcel()" , error.message)
           console.log(error);
           this.isLoading = false;
           this.isGenerating = false;
@@ -898,6 +909,7 @@ export class MemberProfileComponent {
             this.memberData = data;
           },
           error: (error) => {
+            this._customLoggerService.logError(AppSettings.LoggerAppName ,"Member Profile > Method : OnPhoneNumberEntererd()" , error.message)
             console.log(error);
           }
         });
@@ -942,7 +954,9 @@ export class MemberProfileComponent {
           this.activityHistory = data;
           this.phoneNumber = data[0].phone;
         },
-        error: (error) => {}
+        error: (error) => { 
+          this._customLoggerService.logError(AppSettings.LoggerAppName ,"Member Profile > Method : getActivityHistoryByMemberID()" , error.message)
+        }
       });
   }
 }

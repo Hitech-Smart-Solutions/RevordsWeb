@@ -12,6 +12,8 @@ import { BrowserModule } from '@angular/platform-browser';
 import { ProfileSettingService } from 'src/app/services/ProfileSettingService';
 import { AdminComponent } from 'src/app/theme/layout/admin/admin.component';
 import { UserService } from 'src/app/services/UserService';
+import { CustomLoggerService } from 'src/app/services/CustomLoggerService';
+import { AppSettings } from 'src/app/services/Constants';
 
 @Component({
   selector: 'app-login',
@@ -41,7 +43,7 @@ export default class LoginComponent {
   constructor(private _loginservice: LoginService, public toastService: ToastService,
     private _Route: Router, private _snackBar: MatSnackBar,
     private _userservice: UserService, private formBuilder: FormBuilder,
-    private _profileService: ProfileSettingService) {
+    private _profileService: ProfileSettingService, private _customLoggerService: CustomLoggerService) {
     this.form = this.formBuilder.group(
       {
         username: [
@@ -84,7 +86,7 @@ export default class LoginComponent {
           this._Route.navigate(['dashboard']);
         },
         error: error => {
-
+          this._customLoggerService.logError(AppSettings.LoggerAppName ,"Login > Method : SetBusinessGroup()" , error.message);
         }
       });
   }
@@ -111,6 +113,7 @@ export default class LoginComponent {
                 this.isLoading = false;
                 this.showSnackbarAction("User doesn't exist!", "3");
               }
+              this._customLoggerService.logError(AppSettings.LoggerAppName ,"Login > Method : forgotPassword()" , error.message);
             }
           });
       } else {
@@ -151,6 +154,7 @@ export default class LoginComponent {
 
       },
       error: error => {
+        this._customLoggerService.logError(AppSettings.LoggerAppName ,"Login > Method : DoLogin()" , error.message);
         this.showSnackbarAction("Invalid UserName Password", "3");
         this.isLoading = false;
         this.button = 'Login';

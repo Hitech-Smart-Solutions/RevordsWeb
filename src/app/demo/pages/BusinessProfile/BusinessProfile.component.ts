@@ -14,6 +14,7 @@ import { BusinessGroupService } from '../../../services/BusinessGroupService';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { CustomLoggerService } from 'src/app/services/CustomLoggerService';
 
 export interface PeriodicElement {
     BusinessGroupName: string;
@@ -104,7 +105,8 @@ export class BusinessProfileComponent {
 
     constructor(private profileSettingService: ProfileSettingService, private stateService: StateService,
         private businessLabelService: BusinessLabelService, private uploadService: FileUploadService,
-        public toastService: ToastService, private _businessGroupService: BusinessGroupService) {
+        public toastService: ToastService, private _businessGroupService: BusinessGroupService,
+        private _customLoggerService: CustomLoggerService) {
         // this.businessGroupID = JSON.parse(localStorage.getItem('BusinessGroup'));
         this.ProfileFormGroup = new FormGroup({
             businessName: new FormControl('', Validators.required),
@@ -200,6 +202,7 @@ export class BusinessProfileComponent {
                     this.bussinessGroupData = data;
                 },
                 error: error => {
+                    this._customLoggerService.logError(AppSettings.LoggerAppName, "Business Profile > Method : GetBusinessGroupData()", error.message);
                     console.log(error);
                 }
             });
@@ -377,7 +380,7 @@ export class BusinessProfileComponent {
                 this.filteredBusiness = this.businessLabels;
             },
             error: error => {
-
+                this._customLoggerService.logError(AppSettings.LoggerAppName, "Business Profile > Method : GetBusinessLabelsByBusinessID()", error.message);
             }
         })
     }
@@ -619,8 +622,12 @@ export class BusinessProfileComponent {
                         this.GetBusinessProfilesByGroupID();
                     },
                     error: error => {
+                        this._customLoggerService.logError(AppSettings.LoggerAppName, "Business Profile > Method : Submit()", error.message);
                         this.isLoading = false;
-                        this.iseditmode = true;
+                        this.iseditmode = false;
+                        this.isAgeRestriction = false;
+                        this.ProfileFormGroup.reset();
+                        this.GetBusinessProfilesByGroupID();
                         this.submitted = false;
                     }
                 });
@@ -637,8 +644,12 @@ export class BusinessProfileComponent {
                         this.GetBusinessProfilesByGroupID();
                     },
                     error: error => {
+                        this._customLoggerService.logError(AppSettings.LoggerAppName, "Business Profile > Method : Submit()", error.message);
                         this.isLoading = false;
-                        this.iseditmode = true;
+                        this.iseditmode = false;
+                        this.isAgeRestriction = false;
+                        this.ProfileFormGroup.reset();
+                        this.GetBusinessProfilesByGroupID();
                         this.submitted = false;
                     }
                 });
@@ -652,33 +663,37 @@ export class BusinessProfileComponent {
         // this.galleryuploadProgress1 = "100";
         if (this.galleryFile1) {
             this.loadingLoading = true;
-            this.galleryuploadSub1 = this.uploadService.uploadBusinessImage(this.galleryFile1).subscribe((event: any) => {
-                if (event.type == HttpEventType.UploadProgress) {
-                    let ProgressValue = Math.round(100 * (event.loaded / event.total)).toString() + "%";
-                    if (this.galleryuploadProgress1 == null || this.galleryuploadProgress1 == "" || this.galleryuploadProgress1 == 'undefined') {
-                        this.galleryuploadProgress1 = ProgressValue;
-                    }
-                }
-                if (event.partialText == "file uploaded") {
-                    this.loadingLoading = false; // Flag variable
-                    this.isfileUploaded = true;
-
-                    // Add code for preview uploaded image by shahi
-                    const reader = new FileReader();
-                    reader.onload = (e: any) => {
-                        if (this.GalleryPath1 == null || this.GalleryPath1 == "" || this.GalleryPath1 == 'undefined') {
-                            this.GalleryPath1 = this.galleryFile1.name;
-                            this.GalleryImageUrl1 = e.target.result;
+            this.galleryuploadSub1 = this.uploadService.uploadBusinessImage(this.galleryFile1)
+                .subscribe((event: any) => {
+                    if (event.type == HttpEventType.UploadProgress) {
+                        let ProgressValue = Math.round(100 * (event.loaded / event.total)).toString() + "%";
+                        if (this.galleryuploadProgress1 == null || this.galleryuploadProgress1 == "" || this.galleryuploadProgress1 == 'undefined') {
+                            this.galleryuploadProgress1 = ProgressValue;
                         }
-                    };
-                    reader.readAsDataURL(this.galleryFile1);
+                    }
+                    if (event.partialText == "file uploaded") {
+                        this.loadingLoading = false; // Flag variable
+                        this.isfileUploaded = true;
 
-                }
-                else {
-                    this.loadingLoading = false;
-                    this.isfileUploaded = false;
-                }
-            });
+                        // Add code for preview uploaded image by shahi
+                        const reader = new FileReader();
+                        reader.onload = (e: any) => {
+                            if (this.GalleryPath1 == null || this.GalleryPath1 == "" || this.GalleryPath1 == 'undefined') {
+                                this.GalleryPath1 = this.galleryFile1.name;
+                                this.GalleryImageUrl1 = e.target.result;
+                            }
+                        };
+                        reader.readAsDataURL(this.galleryFile1);
+
+                    }
+                    else {
+                        this.loadingLoading = false;
+                        this.isfileUploaded = false;
+                    }
+                },
+                    ((error: any) => {
+                        this._customLoggerService.logError(AppSettings.LoggerAppName, "Business Profile > Method : onUploadgallery1()", error.message)
+                    }));
         }
         this.loadingLoading = false;
     }
@@ -736,7 +751,9 @@ export class BusinessProfileComponent {
                     this.loadingLoading = false;
                     this.isfileUploaded = false;
                 }
-            });
+            }, ((error: any) => {
+                this._customLoggerService.logError(AppSettings.LoggerAppName, "Business Profile > Method : onUploadgallery2()", error.message)
+            }));
         }
         this.loadingLoading = false;
     }
@@ -781,7 +798,9 @@ export class BusinessProfileComponent {
                     this.loadingLoading = false;
                     this.isfileUploaded = false;
                 }
-            });
+            }, ((error: any) => {
+                this._customLoggerService.logError(AppSettings.LoggerAppName, "Business Profile > Method : onUploadgallery3()", error.message)
+            }));
         }
         this.loadingLoading = false;
     }
@@ -829,7 +848,9 @@ export class BusinessProfileComponent {
                     this.loadingLoading = false;
                     this.isfileUploaded = false;
                 }
-            });
+            }, ((error: any) => {
+                this._customLoggerService.logError(AppSettings.LoggerAppName, "Business Profile > Method : onUploadgallery4()", error.message)
+            }));
         }
         this.loadingLoading = false;
     }
