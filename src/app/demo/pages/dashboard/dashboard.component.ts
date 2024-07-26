@@ -261,7 +261,7 @@ export class DashboardComponent implements OnInit {
     this.isLoadingDayWiseChart = true;
     this.isLoadingTotalMembers = true;
     this.isLoadingTotals = true;
-    
+
     let businesslocationids: any = '';
     if (locationID != null && locationID != undefined && locationID != '' && locationID.length > 0) {
       locationID.forEach(element => {
@@ -281,7 +281,7 @@ export class DashboardComponent implements OnInit {
         this.trafficInsightsCumulative = data['table2'];
         this.dataSource = data['table3'];
         this.dashboardData = data['table4'];
-
+        console.log(this.dashboardData);
         await this.ClearNumbers();
         this.dataSource.filter((t) => t.businesslocationid == -1).forEach(element => {
           this.totalmembers += element.membercount;

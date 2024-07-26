@@ -497,14 +497,6 @@ export class MemberProfileComponent {
     if (this.jobForm.invalid) {
       return;
     }
-
-    if (!/^[1-9][0-9]*$/.test(this.jobForm.controls['phoneNumber'].value.replaceAll(/[^a-zA-Z0-9]/g, ''))) {
-      this.showErrorMessage = true;
-      return;
-    } else {
-      this.showErrorMessage = false;
-    }
-
     let id =
       this.jobForm.controls['id'].value != undefined && this.jobForm.controls['id'].value != '' ? this.jobForm.controls['id'].value : 0;
     let dayID = this.jobForm.controls['dayID'].value;
@@ -514,8 +506,17 @@ export class MemberProfileComponent {
       monthId != null && dayID != null
         ? new Date().getFullYear() + '-' + (monthId < 10 ? '0' + monthId : monthId) + '-' + (dayID < 10 ? '0' + dayID : dayID)
         : null;
+    if (id == 0) {
+      if (!/^[1-9][0-9]*$/.test(this.jobForm.controls['phoneNumber'].value.replaceAll(/[^a-zA-Z0-9]/g, ''))) {
+        this.showErrorMessage = true;
+        return;
+      } else {
+        this.showErrorMessage = false;
+      }
+    }
     this.isLoading = true;
     if (id == 0) {
+
       let memberPostDetails = {
         uniqueID: AppSettings.NewGUID(),
         id: 0,

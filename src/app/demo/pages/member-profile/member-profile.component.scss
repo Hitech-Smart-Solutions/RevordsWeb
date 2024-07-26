@@ -623,3 +623,17 @@ mat-table {
 .fontWht700 {
   font-weight: 700;
 }
+
+.memberFormInput::placeholder {
+  font-size: 1rem;
+}
+
+:host ::ng-deep .ng-select .ng-select-container .ng-value-container .ng-placeholder {
+  font-size: 1rem;
+}
+:host ::ng-deep .ng-select .ng-select-container .ng-value-container .ng-input>input {
+  font-size: 1rem;
+}
+textarea::placeholder {
+  font-size: 1rem;
+}

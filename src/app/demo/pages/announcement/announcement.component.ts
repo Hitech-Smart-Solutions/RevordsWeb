@@ -358,11 +358,10 @@ export class AnnouncementComponent {
       "businessGroupId": this.businessGroupID.id,
       "businessLocationIDs": this.businessLocationIDs,
       "badgeIDs": '',
-      "tagIDs": '',
-      "sendDate": this.jobForm.controls['isSendImmediately'].value == 'true' ? formatDate(new Date(), 'yyyy-MM-dd', 'en-US') : sentDate
+      "tagIDs": ''
     }
 
-    await this._memberservice.GetMembersDataForPromotion(details).then(async (data) => {
+    await this._memberservice.GetMembersDataForAnnouncement(details).then(async (data) => {
       let badgeData = data['table1'];
       let tagData = data['table2'];
       this.membersData = data['table3'];
@@ -425,11 +424,10 @@ export class AnnouncementComponent {
       "businessGroupId": this.businessGroupID.id,
       "businessLocationIDs": this.businessLocationIDs,
       "badgeIDs": badgeIDs,
-      "tagIDs": tagIDs,
-      "sendDate": this.jobForm.controls['isSendImmediately'].value == 'true' ? formatDate(new Date(), 'yyyy-MM-dd', 'en-US') : sentDate
+      "tagIDs": tagIDs
     }
 
-    this._memberservice.GetMembersDataForPromotion(details).then(async (data) => {
+    this._memberservice.GetMembersDataForAnnouncement(details).then(async (data) => {
       let badgeData = data['table1'];
       let tagData = data['table2'];
       this.membersData = data['table3'];
