@@ -164,7 +164,7 @@
           <div class="modal-body">
             <div class="row" style="margin-bottom: 8px">
               <div class="col">
-                <input type="text" class="form-control" autocomplete="off" formControlName="phoneNumber" id="phoneNo"
+                <input type="text" class="form-control memberFormInput" autocomplete="off" formControlName="phoneNumber" id="phoneNo"
                   placeholder="Enter mobile number" (keypress)="numberOnly($event)"
                   (input)="OnPhoneNumberEntererd($event)" maxlength="14" minlength="14"
                   [ngClass]="{ 'is-invalid': isSubmitted && jobForm.controls['phoneNumber'].errors }" />
@@ -186,21 +186,21 @@
 
               </div>
               <div class="col">
-                <input type="number" class="form-control" id="points" (keypress)="numberOnly($event)" min="0"
+                <input type="number" class="form-control memberFormInput" id="points" (keypress)="numberOnly($event)" min="0"
                   formControlName="pointstobeadded" placeholder="Add points" autocomplete="off" />
               </div>
             </div>
 
             <div class="row" style="margin-bottom: 8px">
               <div class="col">
-                <input type="text" class="form-control" id="name" [disabled]="disableMemberName"
+                <input type="text" class="form-control memberFormInput" id="name" [disabled]="disableMemberName"
                   formControlName="memberName" placeholder="Name" autocomplete="off" />
               </div>
             </div>
 
             <div class="row" style="margin-bottom: 8px">
               <div class="col">
-                <input type="email" class="form-control" id="emailid" formControlName="email" placeholder="Email"
+                <input type="email" class="form-control memberFormInput" id="emailid" formControlName="email" placeholder="Email"
                   autocomplete="off" />
               </div>
             </div>
@@ -247,12 +247,12 @@
 
             <div class="row" style="margin-bottom: 8px">
               <div class="col d-flex align-items-center">
-                <label for="highroller" class="col-form-label mr-1">{{ positiveFlagName }}:</label> &nbsp;
+                <label for="highroller" class="col-form-label mr-1" style="font-size: 1rem;">{{ positiveFlagName }}:</label> &nbsp;
                 <input type="checkbox" id="highroller" (change)="handleHighRollerChange($event)"
                   formControlName="isHighroller" style="height: 16px" class="mt-1" />
               </div>
               <div class="col d-flex align-items-center">
-                <label for="freeplayer" class="col-form-label mr-1">{{ negativeFlagName }}:</label> &nbsp;
+                <label for="freeplayer" class="col-form-label mr-1" style="font-size: 1rem;">{{ negativeFlagName }}:</label> &nbsp;
                 <input type="checkbox" id="freeplayer" formControlName="isFreeplayer"
                   (change)="handleFreePlayerChange($event)" style="height: 16px" class="mt-1" />
               </div>
@@ -377,17 +377,17 @@
               <div class="col d-flex justify-content-space-between">
 
                 <div class="member-overview"
-                  style="width: 33%; display: grid; text-align: center; border-right: 1px solid #7da3ba">
+                  style="width: 34%; display: grid; text-align: center; border-right: 1px solid #7da3ba">
                   <span class="expanded fontWht700">Lifetime Points</span>
                   <span class="lifetime-points count ng-binding">{{ lifetimepoints }}</span>
                 </div>
                 <div class="member-overview"
-                  style="width: 34%; display: grid; text-align: center; border-right: 1px solid #7da3ba">
+                  style="width: 33%; display: grid; text-align: center; border-right: 1px solid #7da3ba">
                   <span class="expanded fontWht700">Current Points</span>
                   <span class="lifetime-points count ng-binding">{{ currentpoints }}</span>
                 </div>
                 <div class="member-overview d-flex justify-content-center" style="width: 33%; text-align: center;">
-                  <input style="width: 80%" type="number" class="form-control" id="points"
+                  <input style="width: 80%" type="number" class="form-control memberFormInput" id="points"
                     (keypress)="numberOnly($event)" min="0" formControlName="pointstobeadded" placeholder="Add points"
                     autocomplete="off" />
                 </div>
@@ -396,7 +396,7 @@
 
             <div class="row" style="margin-bottom: 8px">
               <div class="col">
-                <input type="email" class="form-control" id="emailid" formControlName="email" placeholder="Email"
+                <input type="email" class="form-control memberFormInput" id="emailid" formControlName="email" placeholder="Email"
                   style="color: #4a6779; background-color: #f9f9f9" />
               </div>
             </div>
@@ -443,12 +443,12 @@
 
             <div class="row" style="margin-bottom: 8px">
               <div class="col d-flex align-items-center">
-                <label for="highroller" class="col-form-label mr-1">{{ positiveFlagName }}:</label> &nbsp;
+                <label for="highroller" class="col-form-label mr-1" style="font-size: 1rem;">{{ positiveFlagName }}:</label> &nbsp;
                 <input type="checkbox" id="highroller" (change)="handleHighRollerChange($event)"
                   formControlName="isHighroller" style="height: 16px" class="mt-1" />
               </div>
               <div class="col d-flex align-items-center">
-                <label for="freeplayer" class="col-form-label mr-1">{{ negativeFlagName }}:</label> &nbsp;
+                <label for="freeplayer" class="col-form-label mr-1" style="font-size: 1rem;">{{ negativeFlagName }}:</label> &nbsp;
                 <input type="checkbox" id="freeplayer" formControlName="isFreeplayer"
                   (change)="handleFreePlayerChange($event)" style="height: 16px" class="mt-1" />
               </div>
