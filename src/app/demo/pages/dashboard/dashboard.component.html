@@ -95,7 +95,7 @@
                 style="display: inline-flex;align-items: center;justify-content: end;padding-right: 0px;">
                 <span>Hourly</span>
                 <label class="switch" for="checkbox" style="margin-left: 5px;margin-right: 5px;margin-bottom: 0;">
-                  <input type="checkbox" id="checkbox" (change)="btnAddPromo()" [(ngModel)]="charttypbool" />
+                  <input type="checkbox" id="checkbox" (change)="btnAddPromo()" [(ngModel)]="charttypbool" [disabled]="isLoadingDayWiseChart" />
                   <span class="slider round"></span>
                   <span class="texter" style="visibility: hidden !important;"></span>
                 </label>

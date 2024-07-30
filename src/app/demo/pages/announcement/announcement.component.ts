@@ -2,7 +2,6 @@ import { Component, ViewChild } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { AngularEditorConfig } from '@kolkov/angular-editor';
 import { HttpEventType } from '@angular/common/http';
-import { FileUploadService } from '../../../services/fileuploadservie';
 import { FormBuilder, Validators, AbstractControl, FormGroup, FormControl } from '@angular/forms';
 import { AnnouncementService } from '../../../services/AnnouncementService';
 import { ToastService } from '../../../services/ToastService';
@@ -13,7 +12,6 @@ import { IDropdownSettings } from 'ng-multiselect-dropdown';
 import { MemberService } from 'src/app/services/MemberService';
 import { PromotionService } from 'src/app/services/PromotionService';
 import { BusinessGroupService } from 'src/app/services/BusinessGroupService';
-import { formatDate } from '@angular/common';
 import * as moment from 'moment';
 import { CustomLoggerService } from 'src/app/services/CustomLoggerService';
 
@@ -98,7 +96,6 @@ export class AnnouncementComponent {
   url: string = "";
   notificationCount: number = 0;
   emailCount: number = 0;
-  smsCount: number = 0;
   descriptionCharacterCount: number = 145;
   isAllChecked: Boolean = false;
   bussinessDataForRedemption: { id: any, businessName: string, checked: boolean, memberCount: number }[] = [];
@@ -162,11 +159,10 @@ export class AnnouncementComponent {
   minDate = new Date().getFullYear() + '-' + ((new Date().getMonth() + 1) < 10 ? ('0' + (new Date().getMonth() + 1)) :
     (new Date().getMonth() + 1)) + '-' + (new Date().getDate() < 10 ? ('0' + new Date().getDate()) : new Date().getDate());
 
-  constructor(private uploadService: FileUploadService,
-    private fb: FormBuilder, private _announcementService: AnnouncementService, private _businessGroupService: BusinessGroupService,
+  constructor(private fb: FormBuilder, private _announcementService: AnnouncementService, private _businessGroupService: BusinessGroupService,
     public toastService: ToastService, private _promotionService: PromotionService,
-    public dialog: MatDialog, public sanitizer: DomSanitizer, private _memberservice: MemberService
-    , private _customLoggerService: CustomLoggerService) {
+    public dialog: MatDialog, public sanitizer: DomSanitizer, private _memberservice: MemberService,
+    private _customLoggerService: CustomLoggerService) {
     this.business = JSON.parse(localStorage.getItem('Business'));
     this.packageDetails = JSON.parse(localStorage.getItem('PackageDetails'));
     this.businessGroupID = JSON.parse(localStorage.getItem('BusinessGroup'));
@@ -346,13 +342,6 @@ export class AnnouncementComponent {
     this.totalDelivered = 0;
     this.notificationCount = 0;
     this.emailCount = 0;
-    this.smsCount = 0;
-
-    let date = this.jobForm.controls['date'].value;
-    let time = this.jobForm.controls['time'].value;
-    var sentDate = (date != "" && time != "") ?
-      formatDate(new Date(new Date(date).getFullYear(), new Date(date).getMonth(), new Date(date).getDate(), time, 0, 0), 'yyyy-MM-dd', 'en-US')
-      : formatDate(new Date(), 'yyyy-MM-dd', 'en-US');
 
     let details = {
       "businessGroupId": this.businessGroupID.id,
@@ -380,7 +369,6 @@ export class AnnouncementComponent {
       this.totalDelivered = summary[0].totalDelivered;
       this.notificationCount = summary[0].notificationCount
       this.emailCount = summary[0].emailCount;
-      this.smsCount = summary[0].smsCount;
 
       await this.setBusiness();
       this.isLoading = false;
@@ -397,7 +385,6 @@ export class AnnouncementComponent {
     this.totalDelivered = 0;
     this.notificationCount = 0;
     this.emailCount = 0;
-    this.smsCount = 0;
 
     this.bussinessDataForStep3.filter(x => x.id != -1).forEach(element => {
       if (element.checked)
@@ -413,12 +400,6 @@ export class AnnouncementComponent {
       if (element.checked)
         tagIDs += element.id + ',';
     });
-
-    let date = this.jobForm.controls['date'].value;
-    let time = this.jobForm.controls['time'].value;
-    var sentDate = (date != "" && time != "") ?
-      formatDate(new Date(new Date(date).getFullYear(), new Date(date).getMonth(), new Date(date).getDate(), time, 0, 0), 'yyyy-MM-dd', 'en-US')
-      : formatDate(new Date(), 'yyyy-MM-dd', 'en-US');
 
     let details = {
       "businessGroupId": this.businessGroupID.id,
@@ -443,7 +424,6 @@ export class AnnouncementComponent {
       this.totalDelivered = summary[0].totalDelivered;
       this.notificationCount = summary[0].notificationCount;
       this.emailCount = summary[0].emailCount;
-      this.smsCount = summary[0].smsCount;
 
       let business = JSON.parse(localStorage.getItem('Business'));
       this.bussinessDataForStep3 = [];
@@ -455,7 +435,7 @@ export class AnnouncementComponent {
       this.bussinessDataForStep3 = this.bussinessDataForRedemption;
     }).catch((error) => {
       console.log(error)
-    });;
+    });
   }
 
   // onUpload of button Upload
@@ -833,7 +813,7 @@ export class AnnouncementComponent {
           this.isLoadingAnnData = false;
         },
         error: error => {
-          this._customLoggerService.logError(AppSettings.LoggerAppName, "Announcement > Method : EditReplicate()", error.message)
+          this._customLoggerService.logError(AppSettings.LoggerAppName, "Announcement > Method : EditReplicate()", error.message);
           this.isLoadingAnnData = false;
         }
       });
