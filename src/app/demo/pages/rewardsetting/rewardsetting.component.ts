@@ -96,18 +96,16 @@ export class RewardsettingComponent {
     }
     return details;
   }
-  getRandomId() {
-    return Math.floor((Math.random() * 6) + 15);
+
+  getMaxId(): number {
+    return (Math.max(...this.dataSource.map(item => item.id)) + 1);
   }
 
   addDetailsFormGroup() {
     const newUsersArray = this.dataSource;
-
-// console.log(newUsersArray)
-
     let tempdefDetails = {
       "uniqueId": AppSettings.NewGUID(),
-      "id": this.getRandomId(),
+      "id": this.getMaxId(),
       "rewardName": "",
       "points": 0,
       "businessGroupId": this.businessGroupID.id,
@@ -128,13 +126,7 @@ export class RewardsettingComponent {
     this.isVisible = true;
   }
   DelDetailsFormGroup(id) {
-    // console.log(id)
-
     const index = this.dataSource.findIndex(image => image.id === id);
-
-    // console.log(index)
-    // console.log(this.dataSource)
-
     if (index !== -1) {
       this.dataSource[index].type = 3;
       this.filteredDataSource = this.dataSource.filter(x => x.type != 3);
@@ -155,7 +147,7 @@ export class RewardsettingComponent {
             this.isLoading = false;
           },
           error: error => {
-            this._customLoggerService.logError(AppSettings.LoggerAppName ,"Reward Settings > Method : Edit()" , error.message);
+            this._customLoggerService.logError(AppSettings.LoggerAppName, "Reward Settings > Method : Edit()", error.message);
             this.isLoading = false;
           }
         });
@@ -203,7 +195,7 @@ export class RewardsettingComponent {
           this.isLoading = false;
         },
         error: error => {
-          this._customLoggerService.logError(AppSettings.LoggerAppName ,"Reward Settings > Method : GetRewardsData()" , error.message);
+          this._customLoggerService.logError(AppSettings.LoggerAppName, "Reward Settings > Method : GetRewardsData()", error.message);
           this.isLoading = false;
         }
       });
