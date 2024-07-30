@@ -354,11 +354,13 @@ export class DashboardComponent implements OnInit {
           this.chartOptions2VisitCountXaxis.push(element.fromHour);
         });
         this.isLoadingDayWiseChart = false;
+        this.isLoadingTotalMembers = false;
         this.isLoadingTotals = false;
       },
       error: error => {
         this.isLoadingDayWiseChart = false;
         this.isLoadingTotalMembers = false;
+        this.isLoadingTotals = false;
       }
     });
     this.BindDayWiseVisitCountChart();

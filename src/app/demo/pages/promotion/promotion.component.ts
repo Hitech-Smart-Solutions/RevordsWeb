@@ -1,5 +1,5 @@
 import { Component, TemplateRef, ViewChild } from '@angular/core';
-import { Subject, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { HttpEventType } from '@angular/common/http';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { PromotionService } from '../../../services/PromotionService';
@@ -12,14 +12,12 @@ import { MatSelect } from '@angular/material/select';
 import { MatOption } from '@angular/material/core';
 import { AngularEditorConfig } from '@kolkov/angular-editor';
 import { IDropdownSettings } from 'ng-multiselect-dropdown';
-import { SpinWheelService } from 'src/app/services/SpinWheelConfigurationService';
 import { DatePipe } from '@angular/common';
 import * as moment from 'moment';
 import { MemberService } from 'src/app/services/MemberService';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { formatDate } from '@angular/common';
 import { BusinessGroupService } from 'src/app/services/BusinessGroupService';
-import { debounceTime } from 'rxjs/operators';
 import { CustomLoggerService } from 'src/app/services/CustomLoggerService';
 
 @Component({
@@ -239,13 +237,12 @@ export class PromotionComponent {
   lastSmsSentNotes: any = '';
   @ViewChild('select') select: MatSelect;
   @ViewChild('editor') editor;
-  private debouncer: Subject<void> = new Subject<void>();
 
   dropdownSettings: IDropdownSettings = {};
   constructor(private _liveAnnouncer: LiveAnnouncer, private _promotionService: PromotionService,
     public toastService: ToastService, private modalService: NgbModal, private _businessGroupService: BusinessGroupService,
     private _formBuilder: FormBuilder, private _memberservice: MemberService, public sanitizer: DomSanitizer,
-    private _spinwheel: SpinWheelService, private datePipe: DatePipe, private _customLoggerService: CustomLoggerService) {
+    private datePipe: DatePipe, private _customLoggerService: CustomLoggerService) {
     this.isSpinRequired = JSON.parse(localStorage.getItem('IsSpinRequired'))
     this.business = JSON.parse(localStorage.getItem('Business'));
     this.businessGroupID = JSON.parse(localStorage.getItem('BusinessGroup'));
@@ -264,8 +261,6 @@ export class PromotionComponent {
       this.location += element.id + ',';
       this.businessLocationIDs += element.id + ',';
     });
-
-    console.log(new Date())
   }
 
   onDateChange(): void {
@@ -328,7 +323,7 @@ export class PromotionComponent {
             + " to include.";
         },
         error: error => {
-          this._customLoggerService.logError(AppSettings.LoggerAppName ,"Promotion > Method : GetBusinessGroupID()" , error.message)
+          this._customLoggerService.logError(AppSettings.LoggerAppName, "Promotion > Method : GetBusinessGroupID()", error.message)
         }
       });
   }
@@ -409,7 +404,7 @@ export class PromotionComponent {
           }
         },
         error: error => {
-          this._customLoggerService.logError(AppSettings.LoggerAppName ,"Promotion > Method : SetSpinWheelData()" , error.message)
+          this._customLoggerService.logError(AppSettings.LoggerAppName, "Promotion > Method : SetSpinWheelData()", error.message)
         }
       });
   }
@@ -626,7 +621,6 @@ export class PromotionComponent {
 
   async EditReplicate(id) {
     this.isLoadingAnnData = true;
-
     await this.ClearForEdit();
     await this.GetMembersData();
 
@@ -729,7 +723,7 @@ export class PromotionComponent {
           this.isLoadingAnnData = false;
         },
         error: error => {
-          this._customLoggerService.logError(AppSettings.LoggerAppName ,"Promotion > Method : EditReplicate()" , error.message)
+          this._customLoggerService.logError(AppSettings.LoggerAppName, "Promotion > Method : EditReplicate()", error.message);
           this.isLoadingAnnData = false;
         }
       });
@@ -912,6 +906,12 @@ export class PromotionComponent {
                 setstring = "$" + setstring + " off ALL Beer Reward!";
               } else if (!x.toLowerCase().includes('beer') && x.toLowerCase().includes('wine') && x.toLowerCase().includes('$') && x.toLowerCase().includes('off')) {
                 setstring = "$" + setstring + " off ALL Wine for Reward!";
+              } else if (x.toLowerCase().includes('beer') && x.toLowerCase().includes('wine') && x.toLowerCase().includes('$') && x.toLowerCase().includes('discount')) {
+                setstring = "$" + setstring + " discount on ALL Beer and Wine Reward!";
+              } else if (x.toLowerCase().includes('beer') && !x.toLowerCase().includes('wine') && x.toLowerCase().includes('$') && x.toLowerCase().includes('discount')) {
+                setstring = "$" + setstring + " discount on ALL Beer Reward!";
+              } else if (!x.toLowerCase().includes('beer') && x.toLowerCase().includes('wine') && x.toLowerCase().includes('$') && x.toLowerCase().includes('discount')) {
+                setstring = "$" + setstring + " discount on ALL Wine Reward!";
               } else if (x.toLowerCase().includes('beer') && x.toLowerCase().includes('wine') && x.toLowerCase().includes('$')) {
                 setstring = "ALL Beer and Wine for $" + setstring + " Reward!";
               } else if (x.toLowerCase().includes('beer') && !x.toLowerCase().includes('wine') && x.toLowerCase().includes('$')) {
@@ -1048,6 +1048,12 @@ export class PromotionComponent {
                 setstring = "$" + setstring + " off ALL Beer Reward!";
               } else if (!x.toLowerCase().includes('beer') && x.toLowerCase().includes('wine') && x.toLowerCase().includes('$') && x.toLowerCase().includes('off')) {
                 setstring = "$" + setstring + " off ALL Wine for Reward!";
+              } else if (x.toLowerCase().includes('beer') && x.toLowerCase().includes('wine') && x.toLowerCase().includes('$') && x.toLowerCase().includes('discount')) {
+                setstring = "$" + setstring + " discount on ALL Beer and Wine Reward!";
+              } else if (x.toLowerCase().includes('beer') && !x.toLowerCase().includes('wine') && x.toLowerCase().includes('$') && x.toLowerCase().includes('discount')) {
+                setstring = "$" + setstring + " discount on ALL Beer Reward!";
+              } else if (!x.toLowerCase().includes('beer') && x.toLowerCase().includes('wine') && x.toLowerCase().includes('$') && x.toLowerCase().includes('discount')) {
+                setstring = "$" + setstring + " discount on ALL Wine Reward!";
               } else if (x.toLowerCase().includes('beer') && x.toLowerCase().includes('wine') && x.toLowerCase().includes('$')) {
                 setstring = "ALL Beer and Wine for $" + setstring + " Reward!";
               } else if (x.toLowerCase().includes('beer') && !x.toLowerCase().includes('wine') && x.toLowerCase().includes('$')) {
@@ -1184,6 +1190,12 @@ export class PromotionComponent {
                 setstring = "$" + setstring + " off ALL Beer Reward!";
               } else if (!x.toLowerCase().includes('beer') && x.toLowerCase().includes('wine') && x.toLowerCase().includes('$') && x.toLowerCase().includes('off')) {
                 setstring = "$" + setstring + " off ALL Wine for Reward!";
+              } else if (x.toLowerCase().includes('beer') && x.toLowerCase().includes('wine') && x.toLowerCase().includes('$') && x.toLowerCase().includes('discount')) {
+                setstring = "$" + setstring + " discount on ALL Beer and Wine Reward!";
+              } else if (x.toLowerCase().includes('beer') && !x.toLowerCase().includes('wine') && x.toLowerCase().includes('$') && x.toLowerCase().includes('discount')) {
+                setstring = "$" + setstring + " discount on ALL Beer Reward!";
+              } else if (!x.toLowerCase().includes('beer') && x.toLowerCase().includes('wine') && x.toLowerCase().includes('$') && x.toLowerCase().includes('discount')) {
+                setstring = "$" + setstring + " discount on ALL Wine Reward!";
               } else if (x.toLowerCase().includes('beer') && x.toLowerCase().includes('wine') && x.toLowerCase().includes('$')) {
                 setstring = "ALL Beer and Wine for $" + setstring + " Reward!";
               } else if (x.toLowerCase().includes('beer') && !x.toLowerCase().includes('wine') && x.toLowerCase().includes('$')) {
@@ -1307,6 +1319,9 @@ export class PromotionComponent {
   Submit(): void {
     this.submitted = true;
     if (this.firstFormGroup.invalid || this.secondFormGroup.invalid || this.spinFormGroup.invalid) {
+
+      console.log(this.firstFormGroup)
+
       return;
     }
     this.isLoading = true;
@@ -1625,11 +1640,14 @@ export class PromotionComponent {
       this.firstFormGroup.controls['isSpinWheelAllowed2'].setValue(false);
       this.firstFormGroup.controls['isSpinWheelAllowed1'].enable();
       this.firstFormGroup.controls['promotionalMessage2'].setValue('');
+      this.firstFormGroup.controls['promotionalMessage2'].removeValidators([Validators.required]);
     }
     else {
       this.showPromo2 = true;
       this.firstFormGroup.controls['promotionalMessage2'].enable();
+      this.firstFormGroup.controls['promotionalMessage2'].setValidators([Validators.required]);
     }
+    this.firstFormGroup.controls['promotionalMessage2'].updateValueAndValidity();
     await this.getRewardstring();
   }
   scheduleTimeChanged() {

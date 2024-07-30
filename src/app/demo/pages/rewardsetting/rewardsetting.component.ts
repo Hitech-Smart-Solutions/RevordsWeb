@@ -103,6 +103,8 @@ export class RewardsettingComponent {
   addDetailsFormGroup() {
     const newUsersArray = this.dataSource;
 
+// console.log(newUsersArray)
+
     let tempdefDetails = {
       "uniqueId": AppSettings.NewGUID(),
       "id": this.getRandomId(),
@@ -126,12 +128,12 @@ export class RewardsettingComponent {
     this.isVisible = true;
   }
   DelDetailsFormGroup(id) {
-    console.log(id)
+    // console.log(id)
 
     const index = this.dataSource.findIndex(image => image.id === id);
 
-    console.log(index)
-    console.log(this.dataSource)
+    // console.log(index)
+    // console.log(this.dataSource)
 
     if (index !== -1) {
       this.dataSource[index].type = 3;

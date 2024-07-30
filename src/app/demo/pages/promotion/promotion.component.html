@@ -63,8 +63,7 @@
                                                     </div>
                                                     <div class="col-md-4 d-flex"
                                                         style="align-items: center;justify-content: center;">
-                                                        <span id='summaryLabel'
-                                                            (click)="EditReplicate(p.id)">Replicate</span>
+                                                        <button id='summaryLabel' [disabled]="isLoadingAnnData" (click)="EditReplicate(p.id)">Replicate</button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -616,7 +615,8 @@
                                                                                                                     <tr>
                                                                                                                         <td align="center"
                                                                                                                             style="font-size: 0px">
-                                                                                                                            <a target="_blank">
+                                                                                                                            <a
+                                                                                                                                target="_blank">
                                                                                                                                 <img align="center"
                                                                                                                                     border="0"
                                                                                                                                     src="../../../../assets/images/fortune.png"
@@ -741,7 +741,8 @@
                                                                                                                                     <td align="center"
                                                                                                                                         class="es-p15r"
                                                                                                                                         style="font-size: 0px">
-                                                                                                                                        <a target="_blank">
+                                                                                                                                        <a
+                                                                                                                                            target="_blank">
                                                                                                                                             <img align="center"
                                                                                                                                                 border="0"
                                                                                                                                                 src="{{filePath}}"
@@ -1892,7 +1893,8 @@
                                                                                                                         <tr>
                                                                                                                             <td align="center"
                                                                                                                                 style="font-size: 0px">
-                                                                                                                                <a target="_blank">
+                                                                                                                                <a
+                                                                                                                                    target="_blank">
                                                                                                                                     <img align="center"
                                                                                                                                         border="0"
                                                                                                                                         src="../../../../assets/images/fortune.png"
@@ -2020,7 +2022,8 @@
                                                                                                                                         <td align="center"
                                                                                                                                             class="es-p15r"
                                                                                                                                             style="font-size: 0px">
-                                                                                                                                            <a target="_blank">
+                                                                                                                                            <a
+                                                                                                                                                target="_blank">
                                                                                                                                                 <img align="center"
                                                                                                                                                     border="0"
                                                                                                                                                     src="{{filePath}}"

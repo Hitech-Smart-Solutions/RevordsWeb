@@ -58,7 +58,7 @@
                                             </div>
                                             <div class="col-md-4 d-flex"
                                                 style="align-items: center;justify-content: center;">
-                                                <span id='summaryLabel' (click)="EditReplicate(p.id)">Replicate</span>
+                                                <button id='summaryLabel' [disabled]="isLoadingAnnData" (click)="EditReplicate(p.id)">Replicate</button>
                                             </div>
                                         </div>
                                     </div>
@@ -826,10 +826,6 @@
                                                         [checked]="b.checked" (click)="onTagSelected(b.id)">
                                                         {{b.tagName}} <span class="itemSpan">(Up to {{b.counts}}
                                                             Customers)</span>
-                                                        <i class="icon-fs-info ng-scope"
-                                                            [ngbTooltip]="negativeFlagTooltip"
-                                                            *ngIf="b.isNegativeFlag == true">
-                                                        </i>
                                                     </mat-checkbox>
                                                 </div>
                                             </div>
