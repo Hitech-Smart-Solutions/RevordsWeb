@@ -1,10 +1,10 @@
 # Workflow name
-name: Reword Web Build
+name: Reword Dev - Web Build
 
 # This allows manual start of the pipeline as needed.
 on:
   push:
-    branches: [main, dev]
+    branches: [dev]
 
 # The list of jobs to run 
 jobs:
