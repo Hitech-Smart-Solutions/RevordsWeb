@@ -1,7 +1,7 @@
 import * as uuid from "uuid";
 
 export class AppSettings {
-    public static API_ENDPOINT = "https://app.revords.com";
+    public static API_ENDPOINT = "https://api.revords.com";
     // public static API_ENDPOINT = "https://dashboard.revords.com/liveapi";
     public static DocAPI_ENDPOINT = "/wwwroot/Templates";
     // public static Root_ENDPOINT = "/wwwroot"; 
