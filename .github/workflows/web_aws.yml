@@ -54,7 +54,7 @@ jobs:
         uses: reggionick/s3-deploy@v3
         with:
           folder: dist
-          bucket: dashboard.revords.com
+          bucket: dashboard.dev.revords.com
           bucket-region: eu-west-1
           dist-id: E23EZL5A1TYJLZ
           invalidation: /
